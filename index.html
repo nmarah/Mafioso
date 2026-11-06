@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مافيوسو</title>
+    <style>
+        :root {
+            --bg-color: #0c0f17;
+            --card-bg: #161b26;
+            --accent-color: #e50914;
+            --accent-hover: #b20710;
+            --text-main: #f0f6fc;
+            --text-muted: #8b949e;
+            --border-color: #30363d;
+            --gold: #d4af37;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+            padding: 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            padding: 20px;
+            margin: auto;
+        }
+
+        /* Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #1a233a 0%, #0c0f17 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.8s ease;
+        }
+
+        .splash-logo {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--accent-color);
+            text-shadow: 0 0 20px rgba(229, 9, 20, 0.6);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        .splash-subtitle {
+            font-size: 1.2rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--border-color);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-progress {
+            position: absolute;
+            height: 100%;
+            width: 0%;
+            background: var(--accent-color);
+            animation: load 5s linear forwards;
+        }
+
+        @keyframes load {
+            to { width: 100%; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); text-shadow: 0 0 10px rgba(229, 9, 20, 0.4); }
+            100% { transform: scale(1.05); text-shadow: 0 0 25px rgba(229, 9, 20, 0.8); }
+        }
+
+        /* Card / Box UI */
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--text-main);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-main);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+        }
+
+        /* Buttons */
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            box-shadow: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+
+        /* Player Tag Inputs */
+        .players-inputs-container {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding-right: 5px;
+        }
+
+        .player-input-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(229, 9, 20, 0.15);
+            color: var(--accent-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .clue-box {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px dashed var(--gold);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: right;
+        }
+
+        .clue-box h4 {
+            color: var(--gold);
+            margin-bottom: 5px;
+            text-align: right;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .secret-reveal {
+            background: #1f1215;
+            border: 2px solid var(--accent-color);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .judge-dashboard {
+            background: #121926;
+            border: 2px solid var(--gold);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-box {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 16px;
+            margin: 15px 0;
+            text-align: right;
+            line-height: 1.7;
+            color: var(--text-main);
+        }
+
+        .roles-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            justify-content: flex-start;
+        }
+
+        .role-chip {
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.35);
+            color: var(--gold);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .assigned-roles-box {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px;
+            margin: 15px 0;
+            text-align: right;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .assigned-role-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .assigned-role-row:last-child {
+            border-bottom: none;
+        }
+
+        .mafioso-tag {
+            background: rgba(229, 9, 20, 0.2);
+            color: var(--accent-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .motive-box {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 12px;
+            text-align: right;
+            color: var(--gold);
+            font-size: 0.95rem;
+        }
+
+        .vote-round-badge {
+            display: inline-block;
+            background: rgba(229, 9, 20, 0.15);
+            color: var(--accent-color);
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Splash Screen (5 seconds) -->
+    <div id="splash-screen">
+        <div class="splash-logo">مافيوسو</div>
+        <div class="splash-subtitle">لعبة الغموض والتحقيق الاستراتيجي</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 1. Case Selection Screen -->
+        <div id="screen-case-select" class="card hidden">
+            <h1>مافيوسو</h1>
+            <p>اختر القضية التي ترغب في التحقيق فيها لهذه الجلسة:</p>
+            
+            <div class="form-group">
+                <label for="case-select-dropdown">قائمة القضايا (20 قضية):</label>
+                <select id="case-select-dropdown"></select>
+            </div>
+
+            <button class="btn" onclick="goToScenario()">التالي: عرض السيناريو الكامل</button>
+        </div>
+
+        <!-- Scenario Briefing (for Judge) -->
+        <div id="screen-scenario" class="card hidden">
+            <h2>السيناريو الكامل للقضية</h2>
+            <p style="color: var(--gold); font-weight: 600;">هذا النص مخصص للحكم ليقرأه أو يحكيه للاعبين قبل توزيع الأدوار</p>
+            
+            <div style="text-align: center; margin-bottom: 10px;">
+                <span id="scenario-category" class="badge">تصنيف</span>
+            </div>
+            <h3 id="scenario-title" style="color: var(--accent-color); margin-bottom: 12px;">عنوان القضية</h3>
+            
+            <div class="scenario-box" id="scenario-desc">
+                وصف الجريمة...
+            </div>
+
+            <h3 style="text-align: right; margin-top: 18px; margin-bottom: 8px;">الشخصيات الموجودة في هذه القضية:</h3>
+            <div class="roles-list" id="scenario-roles"></div>
+
+            <p style="font-size: 0.9rem; margin-top: 18px; color: var(--text-muted);">
+                الحكم يقدر يقرأ السيناريو والشخصيات بصوت عالي قبل ما يبدأ توزيع الأدوار.
+            </p>
+
+            <button class="btn" onclick="goToPlayerSetup()">التالي: إدخال اللاعبين والحكم</button>
+            <button class="btn btn-secondary" onclick="showScreen('screen-case-select')">← رجوع لاختيار قضية أخرى</button>
+        </div>
+
+        <!-- 2. Player & Judge Setup Screen -->
+        <div id="screen-setup" class="card hidden">
+            <h2>إعداد اللاعبين والحكم</h2>
+            <p>حدد حكم اللعبة (الذي سيدير الجلسة ويملك كافة أسرار القضية)، وأدخل أسماء اللاعبين (من 3 إلى 15 لاعب).</p>
+            
+            <div class="form-group">
+                <label for="player-count">عدد اللاعبين:</label>
+                <select id="player-count" onchange="generatePlayerInputs()">
+                    <!-- Generated via JS -->
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="judge-name-input">اسم حكم اللعبة (يدير الأدلة ويعرف المجرم):</label>
+                <input type="text" id="judge-name-input" value="الحكم">
+            </div>
+
+            <label style="text-align: right; margin-bottom: 5px;">أسماء المشاركين:</label>
+            <div id="players-inputs" class="players-inputs-container">
+                <!-- Inputs generated dynamically -->
+            </div>
+
+            <button class="btn" onclick="startRoleDistribution()">بدء توزيع الأدوار السرية</button>
+            <button class="btn btn-secondary" onclick="showScreen('screen-scenario')">← رجوع لسيناريو القضية</button>
+        </div>
+
+        <!-- Role Secret Pass Screen -->
+        <div id="screen-role-pass" class="card hidden">
+            <h2>تمرير الجهاز</h2>
+            <p id="pass-instruction">أعطِ الجهاز للاعب الآتي:</p>
+            <h3 id="current-player-name" style="color: var(--accent-color); font-size: 1.8rem; margin: 20px 0;">اسم اللاعب</h3>
+            <p style="font-size: 0.9rem; color: #ff5555;">تأكد أن اللاعب وحده من يمسك الجهاز دون إظهاره لأحد!</p>
+            <button class="btn" onclick="revealMyRole()">كشف شخصيتي سراً</button>
+        </div>
+
+        <!-- Role Reveal Card (Private) -->
+        <div id="screen-role-reveal" class="card hidden">
+            <h2>دورك وشخصيتك في القصة</h2>
+            <div class="secret-reveal">
+                <h3 id="my-story-role" style="color: var(--gold); font-size: 1.5rem; margin-bottom: 10px;">الشخصية</h3>
+                <p id="my-secret-mafioso-status" style="font-weight: bold; font-size: 1.1rem; color: var(--accent-color);"></p>
+                <div class="motive-box" id="my-motive-box" style="display:none;">
+                    <strong>دافعك المحتمل:</strong>
+                    <span id="my-motive-text"></span>
+                </div>
+            </div>
+            <p style="font-size: 0.95rem; margin-bottom: 20px;">احفظ شخصيتك ودافعك جيداً ولا تخبر أحداً إذا كنت المافيوسو! اضغط تأكيد عندما تحفظ دورك.</p>
+            <button class="btn" onclick="nextPlayerRole()">حفظت دوري، التالي</button>
+        </div>
+
+        <!-- Judge Handover Screen -->
+        <div id="screen-judge-handover" class="card hidden">
+            <h2>انتهى توزيع الأدوار! ⚖️</h2>
+            <p>تم توزيع الشخصيات على جميع اللاعبين سراً، وأصبح كل لاعب يعرف شخصيته داخل القضية.</p>
+            <div class="secret-reveal" style="border-color: var(--gold);">
+                <h3 style="color: var(--gold);">تسليم الجهاز لحكم اللعبة</h3>
+                <p id="judge-handover-text" style="color: var(--text-main); font-size: 1.1rem; margin-top: 10px;"></p>
+            </div>
+            <button class="btn" onclick="enterJudgeHub()">دخول لوحة تحكم الحكم</button>
+        </div>
+
+        <!-- Main Judge Game Hub -->
+        <div id="screen-game-hub" class="card hidden">
+            <div class="judge-dashboard">
+                <h3 style="color: var(--gold); margin-bottom: 5px;">👑 لوحة تحكم حكم اللعبة (<span id="judge-display-name">الحكم</span>)</h3>
+                <p style="font-size: 0.9rem; margin-bottom: 8px; color: #ff7b72;">🚨 السر المطلق: المافيوسو في هذه الجولة هو: <strong id="judge-secret-mafioso" style="color: var(--accent-color); font-size: 1.1rem;"></strong></p>
+            </div>
+
+            <div style="text-align: center;">
+                <span id="case-category-badge" class="badge">تصنيف القضية</span>
+            </div>
+            <h2 id="case-title">عنوان القضية</h2>
+            <p id="case-description" style="text-align: right; background: var(--bg-color); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);"></p>
+
+            <h3 style="text-align: right; margin-top: 10px;">توزيع الشخصيات على اللاعبين (سري للحكم فقط):</h3>
+            <div class="assigned-roles-box" id="assigned-roles-list"></div>
+            <p id="eliminated-info" style="text-align:right; color:var(--text-muted); font-size:0.9rem; margin-top:8px;"></p>
+
+            <div id="clues-container"></div>
+            <button class="btn btn-secondary" onclick="revealNextClue()" id="btn-next-clue">كشف دليل جديد للحكم واللاعبين 🔍</button>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
+
+            <h3>سؤال التحقيق الموجه للجلسة:</h3>
+            <p id="current-question" style="color: var(--gold); font-weight: bold; font-size: 1.1rem; margin-bottom: 20px;"></p>
+
+            <button class="btn" onclick="goToVoting()">الانتقال لمرحلة الاتهام والتصويت النهائي ⚖️</button>
+        </div>
+
+        <!-- Voting Screen -->
+        <div id="screen-voting" class="card hidden">
+            <h2>محكمة مافيوسو - جولة تصويت</h2>
+            <div style="text-align:center;">
+                <span class="vote-round-badge" id="vote-round-label">الجولة 1</span>
+            </div>
+            <p>من هو برأيكم الشخص الذي يمثّل دور "المافيوسو" والمتورط الحقيقي؟</p>
+            
+            <div class="form-group">
+                <label for="accused-select">اختر المشتبه به:</label>
+                <select id="accused-select"></select>
+            </div>
+
+            <button class="btn" onclick="submitVoteRound()">تأكيد اتهام هذه الجولة</button>
+            <button class="btn btn-secondary" onclick="showScreen('screen-game-hub')">← رجوع للوحة الحكم (الأدلة)</button>
+        </div>
+
+        <!-- Intermediate Vote Result (no truth reveal) -->
+        <div id="screen-vote-result" class="card hidden">
+            <h2>نتيجة جولة التصويت</h2>
+            <p id="vote-round-result-text" style="font-size: 1.15rem; margin: 20px 0;"></p>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">لم يتم كشف الحقيقة بعد. الحكم يقرر إذا بدكم جولة تصويت جديدة أو كشف النتيجة النهائية.</p>
+            <button class="btn" onclick="showScreen('screen-game-hub')">← رجوع للوحة الحكم (كشف أدلة أو تصويت جديد)</button>
+            <button class="btn btn-secondary" onclick="startNewVoteRound()">بدء جولة تصويت جديدة مباشرة 🔄</button>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="screen-result" class="card hidden">
+            <h2 id="result-title" style="font-size: 2rem; margin-bottom: 15px;">النتيجة النهائية</h2>
+            <p id="result-description" style="font-size: 1.1rem; margin-bottom: 20px;"></p>
+
+            <div id="final-scenario-section" style="display:none;">
+                <h3 style="color: var(--gold); text-align: right; margin-bottom: 10px;">📜 السيناريو الكامل للجريمة (للحكم ليشرحه للجميع)</h3>
+                <div class="scenario-box" id="final-scenario-text" style="margin-bottom: 12px;"></div>
+                <div style="text-align: right; margin-bottom: 8px;">
+                    <span class="badge" id="final-scenario-category"></span>
+                </div>
+                <h4 style="text-align: right; color: var(--text-muted); margin-bottom: 8px;">الشخصيات التي كانت موجودة:</h4>
+                <div class="roles-list" id="final-scenario-roles"></div>
+            </div>
+
+            <button class="btn" onclick="resetGame()" style="margin-top: 20px;">إعادة اللعب بقضية جديدة 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        // 20 Unique Cases, each with 15 specific in-story characters, 10 specific questions, and progressive clues (with false clues)
+        const casesData = [
+            {
+                title: "جريمة فندق القمة الفاخر",
+                category: "فنادق وسياحة",
+                desc: "في الجناح الملكي بالفندق، وُجد رجل أعمال ثري فاقداً للحياة. الغرفة مغلقة من الداخل، وتناثرت الأوراق المالية والخزنة مفتوحة.",
+                roles: [
+                    "مدير الفندق", "عاملة الغرف", "حارس الأمن", "رئيس الطهاة", "خدمة الغرف", 
+                    "المحاسب المالي", "النزيل المجاور", "مسؤول الكاميرات", "عامل الصيانة", "مدير الحجوزات",
+                    "مسؤول الاستقبال", "عامل المغسلة", "مسؤول الجراج", "السكرتير الخاص", "رئيس الأطقم"
+                ],
+                clues: [
+                    { text: "الدليل الأول: تم العثور على بصمات أصابع تخص 'عاملة الغرف' قرب الخزنة.", isFalse: false },
+                    { text: "الدليل الثاني: بطاقة الدخول الخاصة بـ 'حارس الأمن' سُجلت تفتح الباب الساعة 2:00 صباحاً.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) شهادة تؤكد أن الكاميرات التقطت 'مدير الفندق' يغادر الفندق بكامله الساعة 12 منتصف الليل.", isFalse: true },
+                    { text: "الدليل الرابع: سُمع صوت شجار خفيف وتكسير زجاج من الغرفة قبيل انقطاع التيار الكهربائي بدقيقة.", isFalse: false }
+                ],
+                questions: [
+                    "بصفتك شخصيتك في الفندق، أين كنت بالتحديد وقت انقطاع التيار الكهربائي؟",
+                    "لماذا وُجدت مفتاح ماستر الغرف في غير مكانه المعتاد؟",
+                    "من من الزملاء لاحظت عليه توتراً غير مبرر قبل وقوع الحادثة بساعات؟",
+                    "ما هي التعليمات الأخيرة التي تلقيتها من الإدارة قبل مناوبتك الليلية؟",
+                    "هل سمعت أي أصوات غريبة أو حركات مشبوهة في ممر الجناح الملكي؟",
+                    "ما تفسيرك لتعطل كاميرا المراقبة رقم 4 الموجهة نحو باب الجناح؟",
+                    "هل قام أي شخص غريب بطلب مفتاح الجناح الملكي منك بشكل استثنائي؟",
+                    "ما هو السبب الحقيقي لتأخرك في الاستجابة لطلب الخدمة في تلك الليلة؟",
+                    "كيف تفسر وجود أوراق مالية ممزقة بالقرب من طاولة مكتبك؟",
+                    "من هو الشخص المستفيد الأكبر برأيك من الفوضى الحاصلة في الفندق؟"
+                ]
+            },
+            {
+                title: "لغز المزرعة الريفية العتيقة",
+                category: "أرياف ومزارع",
+                desc: "في أطراف القرية الهادئة، اختفى صندوق الذهب الأثري الخاص بالعمدة من داخل البيت الريفي المحصّن.",
+                roles: [
+                    "مربي الدواجن", "المزارع الرئيسي", "عمدة القرية", "حارس البوابة", "راعي الأغنام",
+                    "الطبيب البيطري", "ابن العمدة", "تاجر الأعلاف", "طاهية المزرعة", "عامل البناء المحلي",
+                    "مراقب السواقي", "سائس الخيل", "بائع الألبان", "حطاب القرية", "حارس المخازن"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت آثار أقدام طينية تمتد من حظيرة الحيوانات وحتى باب البيت الريفي.", isFalse: false },
+                    { text: "الدليل الثاني: سُرق مفتاح الباب الخلفي المصنوع من النحاس الخالص.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) وُجد قفل الباب الرئيسي مكسوراً بعنف من الخارج.", isFalse: true },
+                    { text: "الدليل الرابع: سُمع صوت عربة تجرها الخيول تسرع باتجاه الجبل في وقت متأخر من الليل.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا كنت متواجداً بالقرب من البيت الريفي في وقت متأخر بعد منتصف الليل؟",
+                    "من لديه إمكانية الوصول إلى المفتاح النحاسي الخلفي بخلاف العمدة؟",
+                    "ما هي طبيعة الخلاف البسيط الذي حدث بينك وبين العمدة في الصباح؟",
+                    "من من العمال لاحظت عليه شراء أشياء باهظة الثمن مؤخراً؟",
+                    "هل رأيت أي شخص غريب يتجول قرب حظيرة الحيوانات؟",
+                    "ما تفسيرك لوجود أدوات الزراعة الخاصة بك ملقاة بالقرب من مسرح الجريمة؟",
+                    "هل تلقيت أي طلبات سرية من العمدة لتسليم أغراض في تلك الليلة؟",
+                    "من أين لك بقطعة النحاس الصغيرة التي سقطت منك في ساحة الدار؟",
+                    "لماذا تعطلت إضاءة الفناء الخارجي للمزرعة في توقيت الحادث؟",
+                    "من برأيك كان يعرف مكان الصندوق السري تحت البلاطة الخشبية؟"
+                ]
+            },
+            {
+                title: "جريمة مسرح النجوم القديم",
+                category: "فنون وثقافة",
+                desc: "في ليلة العرض الأخير، وُجد المخرج المسرحي البارز ملقىً خلف الكواليس، واختفت مسودّة النص السري الذي يحوي أسراراً مدوية.",
+                roles: [
+                    "الممثل الرئيسي", "فني الإضاءة", "مسؤول الصوت", "مصمم الأزياء", "عامل نظافة المسرح",
+                    "مساعد المخرج", "المنتج المنفذ", "حارس الخشبة", "الكاتب المسرحي", "الممثلة المساعدة",
+                    "مسؤول التذاكر", "مصفف الشعر", "فني الديكور", "عامل الستائر", "مدير المسرح"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجد قناع مسرحي مخضب بطلاء أحمر بجوار الضحية.", isFalse: false },
+                    { text: "الدليل الثاني: تم العثور على أوراق مزقة من النص الأصلي في سلة مهملات غرفة الكواليس.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) شهد الجميع أن 'الممثل الرئيسي' كان على خشبة المسرح يتدرب طوال الليل دون انقطاع.", isFalse: true },
+                    { text: "الدليل الرابع: انقطع التيار الكهربائي عن الكواليس لمدة دقيقتين فقط أثناء المشهد الأخير.", isFalse: false }
+                ],
+                questions: [
+                    "ما هي طبيعة مشاجرتك الحادة مع المخرج قبل العرض بساعات قليلة؟",
+                    "لماذا تم تغيير إضاءة الكواليس بشكل مفاجئ قبل انقطاع التيار بدقيقة؟",
+                    "من من طاقم العمل كان يمتلك نسخة ثانية من مسودّة النص المسرحي؟",
+                    "أين كنت عندما سُمع صوت السقوط العنيف خلف كواليس المسرح؟",
+                    "ما تفسيرك لوجود أداة المكياج الخاصة بك في مكان الجريمة؟",
+                    "هل حاول أي شخص الضغط عليك لتغيير نهاية المسرحية؟",
+                    "من هو الشخص المستفيد من توقف هذا العرض المسرحي تحديداً؟",
+                    "لماذا لم يلاحظ حارس الخشبة أي شخص غريب يمر من الباب الخلفي؟",
+                    "هل تلقيت تهديدات بالانسحاب من العمل مؤخراً؟",
+                    "من برأيك لديه الدافع الأقوى للتخلص من المخرج واسرار النص؟"
+                ]
+            },
+            {
+                title: "غموض المختبر العلمي المحصّن",
+                category: "علوم وأبحاث",
+                desc: "في مختبر الأبحاث الكيميائية المتقدمة، سُرقت تركيبة الدواء السري الخطير ووُجدت قنينة الكاشف مكسورة.",
+                roles: [
+                    "رئيس الباحثين", "مساعد المختبر", "حارس الأمن الليلي", "فني الصيانة", "مدير المشتريات",
+                    "أخصائي التعقيم", "مسؤول الخزنة", "الباحث الضيف", "سكرتير الإدارة", "عامل النظافة",
+                    "فني الأجهزة", "مسؤول التخلص من النفايات", "مساعد الكيمياء", "محاسب المشروع", "حارس البوابة"
+                ],
+                clues: [
+                    { text: "الدليل الأول: بصمات 'مساعد المختبر' مسجلة على قفل الخزنة الزجاجية المكسورة.", isFalse: false },
+                    { text: "الدليل الثاني: سُجل دخول غير مصرح به باستخدام بطاقة 'حارس الأمن' عند الساعة 3:15 فجراً.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) تشير السجلات إلى أن الباب الرئيسي للمختبر ظل مغلقاً بالكامل طوال الليل.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت آثار مادة كيميائية مضيئة على مقبض باب المخزن السري.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا كانت بطاقتك الشخصية مفعلة لفتح باب المخزن المحظور في هذا الوقت؟",
+                    "من من العلماء كان مهتماً بمعرفة نتائج التركيبة الكيميائية مؤخراً؟",
+                    "ما تفسيرك لوجود عينة من مادة الأبحاث المسروقة في درج مكتبك؟",
+                    "أين كان حارس الأمن عندما تم تعطيل جهاز الإنذار الإلكتروني؟",
+                    "هل لاحظت أي محاولات اختراق أو تجسس رقمي على أجهزة المختبر؟",
+                    "لماذا تغيبت عن اجتماع الصباح الطارئ لمناقشة سرقة التركيبة؟",
+                    "من لديه صلاحية الدخول لغرفة الخزنة دون إدخال الرمز السري؟",
+                    "ما طبيعة النقاش العلمي الحاد الذي دار بينك وبين رئيس الباحثين بالأمس؟",
+                    "هل قام أي شخص بطلب نسخ مفاتيح إضافية للمختبر منك؟",
+                    "من برأيك يمتلك العلم الكافي لاستخدام التركيبة المسروقة؟"
+                ]
+            },
+            {
+                title: "جريمة اليخوت الملكية في الميناء",
+                category: "بحري وساحلي",
+                desc: "على متن يخت فاخر راسٍ في مرسى الميناء، وُجدت وثائق ملاحية مسروقة مع اختفاء قبطان اليخت في ظروف غامضة.",
+                roles: [
+                    "مساعد القبطان", "مهندس المحركات", "حارس المرسى", "مسؤول التموين", "الضيافة البحرية",
+                    "مدير الميناء", "صاحب اليخت", "فني الأجهزة", "صياد محلي", "حامل الأمتعة",
+                    "مسؤول الوقود", "بحار السطح", "فني الرادار", "طاهي اليخت", "مراقب الملاحة"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت سترة الإنجاز الخاصة بـ 'مساعد القبطان' منسية على سطح اليخت.", isFalse: false },
+                    { text: "الدليل الثاني: سُجل تشغيل محرك القارب السريع الملحق باليخت الساعة 1:30 فجراً.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أفاد تقرير حرس الميناء بأن حركة الملاحة كانت متوقفة تماماً طوال الليل.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت الخريطة الملاحية الأصلية ملقاة في مياه المرسى بجوار اليخت.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا تم تحريك القارب السريع الملحق باليخت دون إذن رسمي؟",
+                    "أين كنت وقت اختفاء الوثائق الملاحية المهمة من خزانة القبطان؟",
+                    "من من الطاقم كان يعاني من أزمات مالية حادة وطالب بسلفة ضخمة؟",
+                    "هل سمعت أصوات محركات قوارب قريبة من اليخت في وقت الحادثة؟",
+                    "لماذا وُجدت مفاتيح غرفة القيادة معلقة في مكان غير معتاد؟",
+                    "ما تفسيرك لوجود بقع زيت محركات على ملابسك الخاصة؟",
+                    "هل حاول شخص ما الاستفسار منك عن خط سير اليخت القادم؟",
+                    "من هو المسؤول عن مراقبة بوابات المرسى البحرية في تلك الليلة؟",
+                    "من برأيك يملك القدرة على قيادة اليخت والهروب به في عرض البحر؟",
+                    "هل ساعدت أي شخص في نقل حقائب ثقيلة إلى خارج اليخت مساءً؟"
+                ]
+            },
+            {
+                title: "لغز متحف الآثار الفرعونية",
+                category: "آثار ومتاحف",
+                desc: "في قاعة المومياوات الملكية، سُرق تمثال ذهبي أثري نادر رغم وجود أنظمة إنذار والحراسة مشددة.",
+                roles: [
+                    "مدير المتحف", "حارس القاعة", "أمين المتاحف", "مرشد سياحي", "خبير الترميم",
+                    "عامل النظافة", "مسؤول كاميرات المراقبة", "ساعي البريد", "الباحث الأثري", "جامع تحف",
+                    "مسؤول البطاقات", "فني الإضاءة", "عامل الصيانة", "حارس البوابة", "أمين المخزن"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجد قفاز حريري يحمل شعار قسم الترميم بالقرب من قاعدة التمثال المسروق.", isFalse: false },
+                    { text: "الدليل الثاني: تم قطع أسلاك كاميرا المراقبة رقم 1 بدقة متناهية باستخدام أداة حادة.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أظهرت السجلات أن جميع زوار المتحف غادروا في الموعد المحدد دون استثناء.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت أتربة غريبة في مدخل القاعة لا تنتمي لبيئة المتحف الطبيعية.", isFalse: false }
+                ],
+                questions: [
+                    "كيف تم تجاوز نظام الإنذار الليلي دون إطلاق صافرة الإنذار الرئيسية؟",
+                    "ما هو سبب تواجدك في قاعة المومياوات خارج ساعات العمل الرسمية؟",
+                    "من من الموظفين كان مهتمًا بمعرفة قيمّة التمثال الذهبي المالية؟",
+                    "ما تفسيرك لوجود أدوات الترميم الخاصة بك بجانب القاعدة الفارغة؟",
+                    "هل لاحظت أي شخص يصور زوايا القاعة والكاميرات بتركيز شديد؟",
+                    "من لديه مفتاح الباب الجانبي الخاص بغرفة التحكم والمراقبة؟",
+                    "لماذا تعطلت شاشة المراقبة الرئيسية لمدة 10 دقائق بالضبط؟",
+                    "هل تلقيت عروضاً مالية من جهات خارجية لشراء قطع أثرية سراً؟",
+                    "ما هي آخر محادثة جمعتك بأمين المتحف قبل إغلاق الأبواب؟",
+                    "من برأيك يمتلك المعرفة بتأمين المتاحف لتنفيذ مثل هذه السرقة؟"
+                ]
+            },
+            {
+                title: "جريمة محطة القطار المركزية",
+                category: "نقل ومواصلات",
+                desc: "في مستودع الشحن التابع لمحطة القطار الكبرى، وُجدت شحنة ألماس مدفونة وسط صناديق البضائع بعد اختفائها من العربة الأخيرة.",
+                roles: [
+                    "مراقب المحطة", "سائق القطار", "عامل الشحن", "حارس المستودع", "مسؤول التذاكر",
+                    "عامل الصيانة", "مدير المحطة", "مسؤول الأمتعة", "تاجر بضائع", "بائع متجول",
+                    "مساعد السائق", "مسؤول الفرامل", "عامل النظافة", "حارس الرصيف", "مراقب التحويلة"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت قفازات عمل تخص 'عامل الشحن' ملقاة خلف صناديق الشحن.", isFalse: false },
+                    { text: "الدليل الثاني: سُجل فتح باب المستودع الجانبي بواسطة مفتاح إداري الساعة 4:00 فجراً.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أكد جدول القطارات أن جميع رحلات الشحن انطلقت في مواعيدها بدقة.", isFalse: true },
+                    { text: "الدليل الرابع: سُمع صوت إغلاق محكم لباب حديدي ثقيل قبل وصول الشرطة بدقائق.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا تم تحويل مسار عربة الشحن إلى المستودع الفرعي بشكل استثنائي؟",
+                    "أين كنت وقت نقل صناديق الألماس من العربة الرئيسية؟",
+                    "من من العمال كان يراقب جدول قطارات الشحن بعناية شديدة؟",
+                    "ما تفسيرك لوجود قطعة قماش من زيّك الرسمي داخل صندوق الشحنة المسروقة؟",
+                    "هل لاحظت حركة غير معتادة لعربات النقل الصغيرة قرب رصيف البضائع؟",
+                    "من يمتلك المفتاح الإداري الخاص بفتح مستودع الشحن الفرعي؟",
+                    "ما طبيعة النقاش الذي دار بينك وبين حارس المستودع قبل الحادث؟",
+                    "هل طلب منك أحد نقل صناديق ثقيلة دون تسجيلها في الدفتر؟",
+                    "لماذا انطفأت إضاءة الرصيف رقم 5 في توقيت تفريغ البضائع؟",
+                    "من برأيك كان يعلم بموعد وصول شحنة الألماس السرية للمحطة؟"
+                ]
+            },
+            {
+                title: "لغز البنك المركزي المحصّن",
+                category: "بنوك ومالية",
+                desc: "في غرفة الخزائن الحديدية بالبنك المركزي، تم اختراق الخزنة رقم 404 وسرقة ملايين الدولارات دون ترك أي أثر عنف.",
+                roles: [
+                    "مدير الفرع", "حارس الخزنة", "مهندس الأنظمة", "المسؤول المالي", "رئيس خدمة العملاء",
+                    "موظف القروض", "حارس الأمن الرئيسي", "عامل النظافة", "مدقق الحسابات", "محامي البنك",
+                    "مسؤول النقدية", "فني الصراف الآلي", "مساعد الخزنة", "حارس البوابة", "موظف الاستقبال"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت ورقة تحوي الشفرة الرقمية لفتح الباب الداخلي مكتوبة بخط يدوي.", isFalse: false },
+                    { text: "الدليل الثاني: تم استخدام بصمة 'مدير الفرع' الإلكترونية لتخطي نظام الإنذار الرئيسي.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) تشير كاميرات الباب الخارجي إلى أن البنك ظل مغلقاً بالكامل ومحارساً طوال الليل.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت معدات لحام متطورة مخبأة داخل حقيبة أدوات النظافة.", isFalse: false }
+                ],
+                questions: [
+                    "كيف تم معرفة كلمة المرور السرية الخاصة بفتح الخزنة الرئيسية؟",
+                    "ما سبب تواجدك داخل غرفة الخزائن في وقت متأخر بعد مغادرة الموظفين؟",
+                    "من من الزملاء طلب منك مؤخراً تفاصيل عن نظام الحماية الرقمي؟",
+                    "ما تفسيرك لوجود بصمات أصابعك على لوحة مفاتيح الخزنة المجاورة؟",
+                    "هل لاحظت أي تحديثات غير مصرح بها على سيرفر كاميرات البنك؟",
+                    "من يمتلك صلاحية منح الرموز المؤقتة لفتح الباب الداخلي؟",
+                    "لماذا تعطلت أجهزة الإنذار الصوتي في الطابق الأرضي بالتحديد؟",
+                    "هل واجهت ضغوطاً مالية أو ديوناً تراكمت عليك في الفترة الأخيرة؟",
+                    "من هو آخر شخص غادر مبنى البنك قبل إطلاق النظام الليلي؟",
+                    "من برأيك يمتلك المفتاح الرقمي والجسدي معاً لتنفيذ هذه العملية؟"
+                ]
+            },
+            {
+                title: "جريمة مشفى العاصمة الطبي",
+                category: "صحة وطب",
+                desc: "في قسم العناية المركزة بالمشفى، سُرقت أدوية نادرة باهظة الثمن من خزانة العقاقير المقيدة.",
+                roles: [
+                    "رئيس الأطباء", "ممرضة المناوبة", "صيدلاني المشفى", "حارس أمن القسم", "مسؤول التمريض",
+                    "فني الأجهزة الطبية", "عامل التعقيم", "مدير المشتريات الطبية", "طبيب مقيم", "مريض متعاف",
+                    "مسؤول الأدوية", "عامل النظافة", "فني المختبر", "طبيب التخدير", "مسؤول الاستقبال"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت حقنة طبية فارغة تحمل بقايا العقار المسروق بجانب سلة المهملات.", isFalse: false },
+                    { text: "الدليل الثاني: سجلات الدخول تظهر استخدام بطاقة 'صيدلاني المشفى' لفتح باب خزانة العقاقير.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) تشير التقارير إلى أن قسم العناية كان مليئاً بالمرضى والزوار طوال الليل دون هدوء.", isFalse: true },
+                    { text: "الدليل الرابع: سُمع صوت إغلاق درج خشبي قوي في غرفة الصيدلية المظلمة.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا تم فتح خزانة العقاقير المقيدة في منتصف الليل دون حالة طارئة مسجلة؟",
+                    "أين كنت وقت اختفاء الدواء النادر من درج الصيدلية؟",
+                    "من من الطاقم الطبي أبدى اهتماماً غير طبيعي بمكان حفظ العقاقير؟",
+                    "ما تفسيرك لوجود مفتاح الخزانة الفرعي في جيب معطفك الأبيض؟",
+                    "هل لاحظت أي شخص يتجول بمفرده في ممرات قسم العناية المظلمة؟",
+                    "من هو المسؤول عن جرد وتسليم مفاتيح الصيدلية في نهاية المناوبة؟",
+                    "لماذا لم يعمل إنذار خزانة العقاقير عند فتحها بطريقة غير معتادة؟",
+                    "هل سألك أحد المرضى أو الزوار عن أنواع الأدوية المخزنة لديك؟",
+                    "ما هي طبيعة النقاش الحاد الذي جمعك بصيدلاني المشفى بالأمس؟",
+                    "من برأيك يمتلك الدافع أو الحاجة الطبية/المالية لهذه العقاقير؟"
+                ]
+            },
+            {
+                title: "لغز شركة البرمجيات التقنية",
+                category: "تكنولوجيا وابتكار",
+                desc: "في مقر شركة البرمجيات الكبرى، سُرق الكود البرمجي السري لمشروع الذكاء الاصطناعي الجديد قبل يوم واحد من إطلاقه.",
+                roles: [
+                    "مدير التطوير", "مهندس البرمجيات", "مختبر الأنظمة", "مدير أمن المعلومات", "مصمم واجهات",
+                    "مهندس شبكات", "مدير المشروع", "مطور قواعد بيانات", "مستشار تقني", "مسؤول الخوادم",
+                    "فني الدعم الفني", "مبرمج الواجهات الأمامية", "مسؤول التخزين السحابي", "كاتب التقنية", "مدير الموارد البشرية"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجد ملف تخزين خارجي (Flash Drive) مدبوساً تحت مكتب 'مهندس الشبكات'.", isFalse: false },
+                    { text: "الدليل الثاني: تم استخدام حساب 'مدير التطوير' لتحميل الملفات من السيرفر الرئيسي.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أظهرت السجلات أن شبكة الشركة كانت مفصولة تماماً عن الإنترنت طوال الليلة الماضية.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت رسالة نصية محذوفة تحوي عرضاً مالياً ضخماً من شركة منافسة.", isFalse: false }
+                ],
+                questions: [
+                    "كيف تم تجاوز جدار الحماية الأمني وسحب المشروع من السيرفر الرئيسي؟",
+                    "ما سبب تواجدك على منصة التطوير في وقت متأخر من الليل؟",
+                    "من من المطورين كان يبحث باستمرار عن ثغرات في نظام صلاحيات الوصول؟",
+                    "ما تفسيرك لوجود ملف النسخ الاحتياطي على جهاز الكمبيوتر الشخصي الخاص بك؟",
+                    "هل حاول أي شخص مراقبة شاشتك أو الاستفسار عن كود المصدر الخاص بك؟",
+                    "من يمتلك صلاحية المسؤول الجذرية (Root Access) على خوادم الشركة؟",
+                    "لماذا تم قطع الاتصال بكاميرات المراقبة الطابقية لمدة 5 دقائق؟",
+                    "هل تلقيت عروض عمل مغرية من شركات برمجيات منافسة في الآونة الأخيرة؟",
+                    "ما هي آخر مهمة برمجية أتممتها قبل مغادرة مقر الشركة؟",
+                    "من برأيك يملك المهارة التقنية والدافع لبيع الكود البرمجي للمنافسين؟"
+                ]
+            },
+            {
+                title: "جريمة قصر البارون التاريخي",
+                category: "قصور وتراث",
+                desc: "في قصر البارون الأثري، وُجدت لوحة فنية نادرة مفقودة من إطارها وسط احتفال ضخم أُقيم في حدائق القصر.",
+                roles: [
+                    "حارس القصر", "مرشد القصر", "خبير الفنون", "منسق الحفل", "رئيس الخدم",
+                    "عامل الحدائق", "حارس البوابة", "مصور الحفل", "المتحدث الرسمي", "جامع تحف ضيف",
+                    "مسؤول الإضاءة", "عامل النظافة", "مساعد الخدم", "مشرف القاعات", "طاهي القصر"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت أداة حادة لقص القماش معلقة على شجرة قريبة من إطار اللوحة الفارغ.", isFalse: false },
+                    { text: "الدليل الثاني: سُجل مرور شخص يرتدي قناعاً تنكرياً عبر البوابة الخلفية للقصر.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أكد الأمن أن البوابات الرئيسية للقصر ظلت مغلقة بإحكام طوال فترة الحفل.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت قصاصة ورقية تحوي رسماً توضيحياً لموقع كاميرات المراقبة.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا تم إطفاء أضواء الحديقة الخلفية للقصر لفترة قصيرة أثناء الاحتفال؟",
+                    "أين كنت عندما اكتُشف فراغ الإطار واختفاء اللوحة الفنية؟",
+                    "من من العاملين أو الضيوف أبدى شغفاً مبالغاً فيه باللوحة الفنية وتاريخها؟",
+                    "ما تفسيرك لوجود أداة قص القماش الخاصة بالحدائق بجانب مكان اللوحة؟",
+                    "هل شاهدت أي شخص يتسلق السور الخلفي للقصر نحو قاعة العرض؟",
+                    "من هو المسؤول عن تأمين القاعة الكبرى والتحكم في إضاءتها؟",
+                    "هل تلقيت طلباً من شخص ما لتسهيل دخوله إلى الغرف الداخلية للقصر؟",
+                    "ما طبيعة الحديث الذي دار بينك وبين ضيف غامض كان يتجول بمفرده؟",
+                    "لماذا لم تعمل صفارات الإنذار الخاصة بالإطار الحساس للوحة؟",
+                    "من برأيك يستطيع تهريب لوحة بهذا الحجم من داخل حفل مزدحم؟"
+                ]
+            },
+            {
+                title: "لغز مرصد الفلك والنجوم",
+                category: "علوم وفضاء",
+                desc: "في مبنى المرصد الفلكي الجبلي، سُرقت عدسة التلسكوب الكبرى المصنوعة من الكوارتز النقي مع تلف أجهزة الرصد.",
+                roles: [
+                    "مدير المرصد", "الباحث الفلكي", "مهندس التلسكوب", "حارس المرصد الجبلي", "مساعد الباحث",
+                    "تقني الأجهزة", "مسؤول المحطة", "طاهي المرصد", "عامل الصيانة", "زائر باحث",
+                    "فني الرادار", "حارس البوابة", "أمين المخزن", "مراقب الطقس", "مساعد الصيانة"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجد مفتاح ربط معدني خاص بمهندس التلسكوب ملقىً على أرضية القبة الفلكية.", isFalse: false },
+                    { text: "الدليل الثاني: سجلات الدخول توضح تفعيل باب القبة الخلفي الساعة 2:30 صباحاً.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أظهرت رادارات الطقس أن العاصفة الثلجية منعت أي شخص من الوصول للمرصد.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت آثار أقدام ثقيلة على سلالم الطوارئ الخاصة بالقبة.", isFalse: false }
+                ],
+                questions: [
+                    "كيف تم فك عدسة التلسكوب الكبرى دون إحداث صوت أو اهتزاز في القبة؟",
+                    "ما سبب تواجدك داخل قاعة التلسكوب في وقت متأخر ليلة العاصفة؟",
+                    "من من طاقم المرصد لديه الخبرة الميكانيكية لفك العدسة الدقيقة؟",
+                    "ما تفسيرك لوجود مفتاح الربط الخاص بك بجانب هيكل التلسكوب الفارغ؟",
+                    "هل لاحظت أي ومضات ضوئية غريبة خارج مبنى المرصد الجبلي؟",
+                    "من يمتلك مفاتيح قفل القبة الفلكية الرئيسية؟",
+                    "لماذا تعطلت كاميرا الرصد الخارجية الموجهة نحو سلالم الطوارئ؟",
+                    "هل أبدى أي شخص رغبته في شراء أجزاء من التلسكوب بحجة البحث العلمي؟",
+                    "ما طبيعة الاتصال اللاسلكي الذي أجريته مع المحطة السفلية؟",
+                    "من برأيك يحتاج إلى عدسة فلكية نقيّة بهذا الشكل ويستطيع تهريبها؟"
+                ]
+            },
+            {
+                title: "جريمة معهد الموسيقى الكلاسيكية",
+                category: "فنون وموسيقى",
+                desc: "في قاعة العرض الكبرى بالمعهد، سُرق عود أثري يعود للقرن الثامن عشر قبل بدء الحفل السنوي بدقائق.",
+                roles: [
+                    "عميد المعهد", "عازف الكمان", "مصلح الآلات", "حارس القاعة", "مسؤول المسرح",
+                    "طالب المعهد", "منسق الحفل", "مشرف الأوركسترا", "عامل النظافة", "محاسب المعهد",
+                    "مسؤول الاستقبال", "عازف البيانو", "مساعد التدريس", "حارس البوابة", "أمين المخزن"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجد صندوق العود الجلدي فارغاً وملقىً خلف ستائر المسرح الخلفية.", isFalse: false },
+                    { text: "الدليل الثاني: سُجلت بصمات أصابع تخص 'مصلح الآلات' على قفل الصندوق.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أكد حارس القاعة أن الأبواب كانت مغلقة تماماً ولم يدخل أحد الغرفة.", isFalse: true },
+                    { text: "الدليل الرابع: سُمع صوت لحن خفيف وعزف منفرد من القاعة المظلمة قبل الحفل.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا تم نقل العود الأثري من خزانة الحفظ الزجاجية إلى خلف الستائر؟",
+                    "أين كنت وقت عزف المقطوعة الأخيرة واكتشاف اختفاء الآلة؟",
+                    "من من الموسيقيين كان غاضباً لعدم اختياره للعزف على هذا العود تحديداً؟",
+                    "ما تفسيرك لوجود أدوات صيانة الآلات الخاصة بك قرب صندوق العود؟",
+                    "هل شاهدت شخصاً يحمل حقيبة طويلة ومريبة مغادرة عبر ممر الطلاب؟",
+                    "من المسؤول عن مفتاح غرفة الحفظ الخاصة بالآلات النادرة؟",
+                    "لماذا انقطعت إضاءة ممر الكواليس قبيل موعد العرض مباشرة؟",
+                    "هل تلقيت عروضاً مالية لبيع الآلة الأثرية لهواة جمع التحف؟",
+                    "ما هي آخر ملاحظة أبديتها بشأن تأمين الآلات الموسيقية الثمينة؟",
+                    "من برأيك يقدر القيمة التاريخية للعود ويسعى لسرقته؟"
+                ]
+            },
+            {
+                title: "لغز شركة الشحن والتجارة الدولية",
+                category: "شحن وتجارة",
+                desc: "في مستودعات التخليص الجمركي، وُجدت حاويات بضائع مهربة ومفرغة من محتواها الثمين دون كسر الأقفال الخارجية.",
+                roles: [
+                    "مدير التخليص", "مفتش الجمارك", "مشرف المستودع", "سائق الشاحنة", "عامل التفريغ",
+                    "مخلص جمركي", "حارس البوابة", "مسؤول المخزون", "تاجر مستورد", "مساعد الإدارة",
+                    "فني الرافعة", "عامل النظافة", "مسؤول الحاويات", "حارس السور", "مراقب البوابات"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت شفرة فولاذية لفتح الحاويات مدسوسة في معطف 'مشرف المستودع'.", isFalse: false },
+                    { text: "الدليل الثاني: شاحنة نقل غير مصرح بها دخلت البوابة الجنوبية الساعة 3:00 فجراً.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) سجلات البوابة تؤكد عدم دخول أو خروج أي شاحنة طوال الليل.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت بقع طلاء أصفر على أرضية الحاوية المستهدفة.", isFalse: false }
+                ],
+                questions: [
+                    "كيف تم فتح الحاوية المحكمة دون ترك أي آثار عنف على الأقفال الرسمية؟",
+                    "ما سبب تواجدك قرب البوابة الجنوبية وقت دخول الشاحنة الغريبة؟",
+                    "من من الموظفين يملك أرقام الأكواد السرية لفتح الحاويات الجمركية؟",
+                    "ما تفسيرك لوجود شفرة الفولاذ الخاصة بك في مكان التفريغ؟",
+                    "هل لاحظت أي شاحنات تغادر المستودع دون ختم التفتيش الجمركي؟",
+                    "من هو المسؤول عن مراقبة حركة الشاحنات في البوابة الجنوبية؟",
+                    "لماذا تعطلت كاميرا المراقبة رقم 9 الموجهة نحو ساحة الحاويات؟",
+                    "هل سألك أحد المخلصين عن محتويات الحاوية رقم 70 بالذات؟",
+                    "ما طبيعة النقاش المالي الذي دار بينك وبين سائق الشاحنة الغريبة؟",
+                    "من برأيك استفاد من تهريب محتويات الحاوية وإخفاء أثرها؟"
+                ]
+            },
+            {
+                title: "جريمة فندق الواحة الصحراوي",
+                category: "منتجعات سياحية",
+                desc: "في واحة المنتجعات الصحراوية الفاخرة، سُرق عقد ألماسي يعود لأميرة ضيفة أثناء الحفل البدوي المسائي.",
+                roles: [
+                    "مدير المنتجعات", "مرشد الرحلات", "مسؤول الاستقبال", "طاهي الوليمة", "حارس المنتجع",
+                    "مشرف الخدم", "مضيفة الحفل", "سائق الدراجات", "مصور الصحراء", "ضيف نزيل",
+                    "مسؤول الخيام", "عامل الإضاءة", "مساعد المطبخ", "حارس البوابة", "عامل الصيانة"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت رمال صحراوية ناعمة ومخلفات بَدَوية داخل خيمة الضيفة المسروق منها العقد.", isFalse: false },
+                    { text: "الدليل الثاني: سُجلت حركة تنقل غريبة نحو مخيمات الخيام الخلفية الساعة 12:30 صباحاً.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أكد الأمن أن جميع الحراس كانوا في مواقعهم الثابتة دون تحرك.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت قطعة مجوهرات مزيفة تركت كبديل مكان العقد الأصلي.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا انقطع التيار الكهربائي عن خيمة الضيفة أثناء الرقصة البدوية؟",
+                    "أين كنت عندما اكتُفيت عملية استبدال العقد الأصلي بالمقلد؟",
+                    "من من العاملين كان قريباً من طاولة المجوهرات في بداية الحفل؟",
+                    "ما تفسيرك لوجود آثار أقدام رملية تقود من خيمتك نحو مسرح الحادث؟",
+                    "هل رأيت أي شخص غريب يتسلل نحو المنطقة المخصصة لكبار الضيوف؟",
+                    "من المسؤول عن تأمين خيام الضيوف الفاخرة في الواحة؟",
+                    "لماذا لم يلاحظ حارس المنتجع أي حركة مشبوهة قرب الخيمة؟",
+                    "هل تلقيت شكاوى من ضيوف آخرين بشأن أمن ممتلكاتهم الشخصية؟",
+                    "ما هي طبيعة المكالمة التي أجريتَها عبر جهاز اللاسلكي أثناء الحفل؟",
+                    "من برأيك يمتلك الجرأة لسرقة عقد ملكي في قلب الصحراء؟"
+                ]
+            },
+            {
+                title: "لغز شركة البث التلفزيوني الفضائي",
+                category: "إعلام وتلفزيون",
+                desc: "في استوديو البث المباشر للقناة الفضائية، تم قطع الإرسال واختراق شاشات البث لعرض رسالة غامضة وسرقة أرشيف البرامج.",
+                roles: [
+                    "مذيع النشرة", "مهندس البث", "مخرج البرامج", "مسرّب الأخبار", "مسؤول الأرشيف",
+                    "مهندس الصيانة", "مدير القناة", "فني الإضاءة", "حارس الاستوديو", "معد البرامج",
+                    "مسؤول الصوت", "عامل النظافة", "فني الجرافيك", "مساعد الإنتاج", "حارس البوابة"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجد جهاز بث لاسلكي صغير مخبأ خلف منصة التحكم الرئيسية.", isFalse: false },
+                    { text: "الدليل الثاني: تم استخدام حساب 'مهندس البث' لتمرير شفرة الاختراق للسيرفر.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) تشير السجلات إلى أن البث تم قطعه بسبب عطل فني طبيعي في القمر الصناعي.", isFalse: true },
+                    { text: "الدليل الرابع: سُمع صوت ضحكات خافتة من غرفة التحكم المظلمة أثناء انقطاع الإرسال.", isFalse: false }
+                ],
+                questions: [
+                    "كيف تم ربط جهاز البث اللاسلكي بشبكة الشاشات الرئيسية للاستوديو؟",
+                    "ما سبب تواجدك في غرفة التحكم المركزية وقت انقطاع الإرسال المباشر؟",
+                    "من من الطاقم لديه الصلاحية الفنية لتعديل شفرات بث القناة؟",
+                    "ما تفسيرك لوجود جهاز البث اللاسلكي المشابه لجهازك الشخصي؟",
+                    "هل لاحظت أي محاولات لربط أجهزة غريبة بشبكة الحواسيب قبل البث؟",
+                    "من يمتلك كلمة المرور الخاصة بسيرفر البث الرئيسي المباشر؟",
+                    "لماذا تم تشتيت انتباه المخرج بطلب وهمي قبل الهجوم بدقيقة؟",
+                    "هل تلقيت تهديدات بوقف البث أو انتقادات حادة بسبب البرامج الأخيرة؟",
+                    "ما طبيعة الملفات التي تم سحبها من أرشيف القناة بالتزامن مع الاختراق؟",
+                    "من برأيك يملك القدرة الإعلامية والتقنية لتنفيذ هذه العملية على الهواء؟"
+                ]
+            },
+            {
+                title: "جريمة الميناء التجاري الحاوي",
+                category: "تجارة وموانئ",
+                desc: "في رصيف الحاويات الدولي، وُجدت شحنة أجهزة إلكترونية متطورة مفرغة بالكامل ومستبدلة بكتل إسمنتية ثقيلة.",
+                roles: [
+                    "مدير الميناء", "مشرف الرصيف", "مشغل الرافعة", "حارس الرصيف", "مفتش البضائع",
+                    "سائق الشاحنة", "المخلص الجمركي", "عامل الشحن", "وكيل الملاحة", "مسؤول التخزين",
+                    "فني الصيانة", "عامل النظافة", "مسؤول الأختام", "حارس البوابة", "مراقب الساحة"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت كتلة إسمنتية مكسورة تحمل بصمات 'مشغل الرافعة' قرب الشحنة.", isFalse: false },
+                    { text: "الدليل الثاني: سجلات الرافعة الكبرى توضح تشغيلها في توقيت غير مخصص للعمل.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أكد تقرير الحراسة أن الرصيف كان مراقباً بالكاميرات ولم تقترب أي رافعة.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت آثار إطارات شاحنة ضخمة على الرصيف الرملي.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا تم تشغيل الرافعة الكبرى لرفع الحاوية في وقت متأخر من الليل؟",
+                    "أين كنت وقت تمت عملية استبدال الأجهزة الإلكترونية بالكتل الإسمنتية؟",
+                    "من من العاملين لديه الخبرة في فتح الحاويات وإغلاقها بأختام مطابقة؟",
+                    "ما تفسيرك لوجود مفاتيح الرافعة الاحتياطية في حوزتك؟",
+                    "هل لاحظت دخول شاحنات غير مرخصة لرصيف الحاويات في تلك الليلة؟",
+                    "من المسؤول عن مطابقة أختام الحاويات الواردة والمغادرة في الرصيف؟",
+                    "لماذا تم توجيه الكاميرا رقم 12 بعيداً عن موقع الحاوية المستهدفة؟",
+                    "هل طلب منك أحد العمال مساعدة إضافية لتفريغ حاوية بطريقة سرية؟",
+                    "ما هي طبيعة النقاش المالي الذي دار بينك وبين سائق الشاحنة الغريبة؟",
+                    "من برأيك كان يعلم بمحتويات الشحنة الإلكترونية الباهظة قبل وصولها؟"
+                ]
+            },
+            {
+                title: "لغز أكاديمية الفنون الجميلة",
+                category: "فنون وتعليم",
+                desc: "في مرسم النحت التاريخي بالأكاديمية، سُرفت منحوتة برونزية أصلية تابعة للفنان عالمي قبل عرضها في المعرض السنوي.",
+                roles: [
+                    "عميد الأكاديمية", "أستاذ النحت", "طالب الموهوبين", "حارس المرسم", "عامل النظافة",
+                    "مسؤول المعرض", "مشرف الورشة", "أمين التخزين", "ناقد فني زائر", "مساعد التدريس",
+                    "فني الصيانة", "حارس البوابة", "مسؤول البطاقات", "طالب الرسوم", "أمين المكتبة"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت بقايا طين نحت معدني ملتصقة بملابس 'طالب الموهوبين'.", isFalse: false },
+                    { text: "الدليل الثاني: سُجل فتح باب المرسم الجنوبي باستخدام مفتاح طوارئ الساعة 1:00 فجراً.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أظهرت سجلات الحراسة أن المرسم ظل مغلقاً بإحكام ولم يزره أحد.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت أداة نقش حديدية ملقاة بجانب القاعدة الفارغة للمنحوتة.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا تم نقل المنحوتة البرونزية من مكانها الآمن إلى الطاولة الجانبية؟",
+                    "ما سبب تواجدك في مرسم النحت في وقت متأخر خارج أوقات المحاضرات؟",
+                    "من من الطلاب أو الأساتذة أبدى هوساً بنسخ هذه المنحوتة بالذات؟",
+                    "ما تفسيرك لوجود أداة النقش الخاصة بك بجانب القاعدة الفارغة؟",
+                    "هل لاحظت أي شخص يحمل صندوقاً خشبياً كبيراً مغادراً من مبنى المرسم؟",
+                    "من يمتلك مفاتيح الطوارئ الخاصة بفتح أبواب المرسم الجانبية؟",
+                    "لماذا انطفأت إضاءة الرواق المؤدي لمرسم النحت تحديداً؟",
+                    "هل تلقيت عروضاً من مهتمين بالفن لشراء أعمال نادرة من داخل الأكاديمية؟",
+                    "ما هي آخر ملاحظة أبديتها بشأن أمن المعرض الفني والتحف؟",
+                    "من برأيك يمتلك المهارة الفنية والدافع لسرقة المنحوتة البرونزية؟"
+                ]
+            },
+            {
+                title: "جريمة فندق القلعة التاريخي",
+                category: "تراث وسياحة",
+                desc: "في القلعة التاريخية المحولة إلى فندق تراثي، وُجد خنجر مرصع بالألماس مفقوداً من صندوق العرض الملكي.",
+                roles: [
+                    "مدير الفندق التراثي", "مرشد القلعة", "حارس الآثار", "طاهي المطبخ الملكي", "مسؤول الاستقبال",
+                    "عامل الصيانة", "مسؤول الكاميرات", "مضيف الضيافة", "أمين المخزن", "نزيل مهم",
+                    "حارس البوابة", "عامل النظافة", "مشرف الأجنحة", "مسؤول الهدايا", "مساعد المدير"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجدت قفازات جلدية تقليدية تخص 'حارس الآثار' ملقاة قرب صندوق العرض الزجاجي.", isFalse: false },
+                    { text: "الدليل الثاني: زجاج صندوق العرض تم قصه بحرص شديد باستخدام أداة تقطيع بالماس.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) سجلات الأمن تؤكد سلامة جميع زجاج الصناديق وعدم وجود أي خدش.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت شمعة منطفئة تنبعث منها رائحة عطرية خاصة بالقرب من موقع السرقة.", isFalse: false }
+                ],
+                questions: [
+                    "كيف تم قطع زجاج صندوق العرض الملكي دون إطلاق إنذار الخطر؟",
+                    "أين كنت وقت اختفاء الخنجر المرصع بالألماس من القلعة؟",
+                    "من من العاملين كان مكلفاً بفحص سلامة صناديق العرض التاريخية في تلك الليلة؟",
+                    "ما تفسيرك لوجود قفازاتك الجلدية بجوار الزجاج المقصوص؟",
+                    "هل لاحظت أي شخص يتجول بمفرده في أروقة القلعة المظلمة بعد منتصف الليل؟",
+                    "من يمتلك مفاتيح غرفة السيطرة الخاصة بإنذار صندوق العرض؟",
+                    "لماذا تعطلت إضاءة القاعة التاريخية الرئيسية لفترة وجيزة؟",
+                    "هل سألك أي زائر عن قيمة الخنجر التاريخية وإجراءات تأمينه؟",
+                    "ما طبيعة النقاش الذي دار بينك وبين حارس الآثار قبل الحادثة؟",
+                    "من برأيك يستطيع تقدير قيمة الخنجر وتهريبه خارج أسوار القلعة؟"
+                ]
+            },
+            {
+                title: "لغز محطة توليد الطاقة الكبرى",
+                category: "طاقة ومرافق",
+                desc: "في غرفة التحكم الرئيسية بمحطة توليد الطاقة، سُرقت وثائق تشغيل سرية وتم العبث بصمامات التبريد الرئيسية.",
+                roles: [
+                    "مدير المحطة", "مهندس التشغيل", "فني الصيانة", "حارس البوابة", "مسؤول الشبكة",
+                    "عامل التبريد", "مشرف الأمن", "مراقب الأحمال", "مهندس السلامة", "سكرتير الإدارة",
+                    "فني التوربينات", "عامل النظافة", "مسؤول الطوارئ", "مهندس الكوابل", "مساعد التشغيل"
+                ],
+                clues: [
+                    { text: "الدليل الأول: وُجد مفتاح ربط كهربائي يحمل علامة 'مهندس التشغيل' قرب صمامات التبريد.", isFalse: false },
+                    { text: "الدليل الثاني: سجلات النظام تظهر الدخول لحساب المدير الرئيسي الساعة 2:00 فجراً.", isFalse: false },
+                    { text: "الدليل الثالث: (دليل كاذب ومضلل) أظهرت شاشات المراقبة أن المحطة كانت مغلقة ولا يوجد أي ضغط بشري عليها.", isFalse: true },
+                    { text: "الدليل الرابع: وُجدت ورقة تحوي رسماً تخطيطياً لشبكة أنابيب التبريد الرئيسية.", isFalse: false }
+                ],
+                questions: [
+                    "لماذا تم العبث بصمامات التبريد الرئيسية ومحاولة تعطيل النظام؟",
+                    "ما سبب تواجدك في غرفة التحكم المركزية في وقت خارج مناوبتك الرسمية؟",
+                    "من من المهندسين يملك القدرة على تعديل إعدادات التبريد دون إطلاق إنذار؟",
+                    "ما تفسيرك لوجود مفتاح الربط الخاص بك قرب صمامات الأمان المعطلة؟",
+                    "هل لاحظت أي محاولات اختراق لشبكة الحواسيب الصناعية في المحطة؟",
+                    "من المسؤول عن تسليم وتسجيل مفاتيح غرف التحكم الحساسة؟",
+                    "لماذا انقطع التيار عن شاشات المراقبة الموجهة نحو مدخل غرفة التحكم؟",
+                    "هل واجهت ضغوطاً فنية أو طلبات غريبة من جهات خارجية تخص طاقة المحطة؟",
+                    "ما هي آخر مهمة تشغيلية قمت بتنفيذها قبل مغادرة غرفة التحكم؟",
+                    "من برأيك يملك المعرفة التقنية العميقة لتنفيذ تخريب بهذا الحجم؟"
+                ]
+            }
+        ];
+
+        // Possible motives (innocent-looking + suspicious)
+        const motivePool = [
+            "كان لديك ديون متراكمة وتحتاج مالاً بسرعة",
+            "شعرت أن الإدارة ظلمتك وحرمتك من ترقية مستحقة",
+            "كنت تعرف سراً خطيراً عن الضحية وخشيت انكشافه",
+            "تعرضت لضغط شديد من جهة خارجية مقابل مبلغ كبير",
+            "أردت الانتقام من موقف سابق حدث معك",
+            "كنت بحاجة لتغطية خطأ كبير ارتكبته سابقاً",
+            "ظننت أن الفرصة سانحة ولن يشك أحد فيك",
+            "كان لديك خلاف شخصي حاد مع أحد الموجودين",
+            "أردت إثبات أنك أذكى من الجميع",
+            "تلقيت عرضاً مغرياً من جهة منافسة",
+            "كنت تحت تأثير تهديد مباشر ضد عائلتك",
+            "أردت إخفاء شيء ثمين كنت تخبئه في المكان"
+        ];
+
+        const mafiosoMotivePool = [
+            "أنت المخطّط الرئيسي ولديك دافع قوي جداً للجريمة",
+            "كنت المستفيد الأكبر مادياً من وقوع هذه الجريمة",
+            "نفذت العملية بناءً على طلب جهة قوية مقابل ثمن باهظ",
+            "أردت إسكات الضحية لأنها كانت تعرف سراً يدمّرك",
+            "هذه ليست أول مرة... ولديك خبرة في إخفاء الآثار"
+        ];
+
+        let gameState = {
+            selectedCaseIndex: 0,
+            judgeName: "الحكم",
+            players: [],
+            playerCount: 4,
+            currentCase: null,
+            assignedRoles: {}, // name -> { storyRole, isMafioso, motive }
+            currentPlayerIndex: 0,
+            activeCluesCount: 1,
+            voteRound: 1,
+            lastAccused: null,
+            eliminated: []   // names of eliminated players
+        };
+
+        // Initialize Splash Screen Timer (5 seconds)
+        window.addEventListener('DOMContentLoaded', () => {
+            initCaseDropdown();
+            initPlayerCountOptions();
+            generatePlayerInputs();
+
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.remove();
+                    showScreen('screen-case-select');
+                }, 800);
+            }, 5000);
+        });
+
+        function initCaseDropdown() {
+            const select = document.getElementById('case-select-dropdown');
+            select.innerHTML = '';
+            casesData.forEach((c, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.text = `${idx + 1}. ${c.title} (${c.category})`;
+                select.appendChild(opt);
+            });
+        }
+
+        function initPlayerCountOptions() {
+            const select = document.getElementById('player-count');
+            select.innerHTML = '';
+            for (let i = 3; i <= 15; i++) {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.text = i + " لاعبين";
+                if (i === 4) opt.selected = true;
+                select.appendChild(opt);
+            }
+        }
+
+        function generatePlayerInputs() {
+            const count = parseInt(document.getElementById('player-count').value);
+            gameState.playerCount = count;
+            const container = document.getElementById('players-inputs');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= count; i++) {
+                const row = document.createElement('div');
+                row.className = 'player-input-row';
+                row.innerHTML = `
+                    <input type="text" id="player-name-${i}" placeholder="اسم اللاعب ${i}" value="اللاعب ${i}">
+                `;
+                container.appendChild(row);
+            }
+        }
+
+        function goToScenario() {
+            const select = document.getElementById('case-select-dropdown');
+            gameState.selectedCaseIndex = parseInt(select.value);
+            gameState.currentCase = JSON.parse(JSON.stringify(casesData[gameState.selectedCaseIndex]));
+
+            // Fill scenario screen
+            document.getElementById('scenario-category').innerText = gameState.currentCase.category;
+            document.getElementById('scenario-title').innerText = gameState.currentCase.title;
+            document.getElementById('scenario-desc').innerText = gameState.currentCase.desc;
+
+            const rolesContainer = document.getElementById('scenario-roles');
+            rolesContainer.innerHTML = '';
+            gameState.currentCase.roles.forEach(role => {
+                const chip = document.createElement('span');
+                chip.className = 'role-chip';
+                chip.innerText = role;
+                rolesContainer.appendChild(chip);
+            });
+
+            showScreen('screen-scenario');
+        }
+
+        function goToPlayerSetup() {
+            showScreen('screen-setup');
+        }
+
+        function startRoleDistribution() {
+            gameState.judgeName = document.getElementById('judge-name-input').value.trim() || "الحكم";
+            
+            gameState.players = [];
+            for (let i = 1; i <= gameState.playerCount; i++) {
+                const nameInput = document.getElementById(`player-name-${i}`).value.trim();
+                gameState.players.push(nameInput || `اللاعب ${i}`);
+            }
+
+            // Load selected case
+            gameState.currentCase = JSON.parse(JSON.stringify(casesData[gameState.selectedCaseIndex]));
+            gameState.activeCluesCount = 1;
+
+            // Assign Roles:
+            // Pick random mafioso among players
+            const mafiosoIndex = Math.floor(Math.random() * gameState.players.length);
+            
+            // Pick unique roles from the 15 story roles
+            const shuffledRoles = [...gameState.currentCase.roles].sort(() => 0.5 - Math.random());
+
+            gameState.assignedRoles = {};
+            // shuffle motives so they are unique-ish
+            const shuffledMotives = [...motivePool].sort(() => 0.5 - Math.random());
+            const shuffledMafiosoMotives = [...mafiosoMotivePool].sort(() => 0.5 - Math.random());
+
+            gameState.players.forEach((player, idx) => {
+                const storyRole = shuffledRoles[idx % shuffledRoles.length];
+                const isMafioso = (idx === mafiosoIndex);
+                const motive = isMafioso
+                    ? shuffledMafiosoMotives[idx % shuffledMafiosoMotives.length]
+                    : shuffledMotives[idx % shuffledMotives.length];
+
+                gameState.assignedRoles[player] = {
+                    storyRole: storyRole,
+                    isMafioso: isMafioso,
+                    motive: motive
+                };
+            });
+
+            gameState.currentPlayerIndex = 0;
+            gameState.voteRound = 1;
+            gameState.activeCluesCount = 1;
+            gameState.eliminated = [];
+            showScreen('screen-role-pass');
+            updateRolePassScreen();
+        }
+
+        function updateRolePassScreen() {
+            const playerName = gameState.players[gameState.currentPlayerIndex];
+            document.getElementById('current-player-name').innerText = playerName;
+            document.getElementById('pass-instruction').innerText = "أعطِ الجهاز للاعب الآتي:";
+        }
+
+        function revealMyRole() {
+            const playerName = gameState.players[gameState.currentPlayerIndex];
+            const data = gameState.assignedRoles[playerName];
+
+            document.getElementById('my-story-role').innerText = "شخصيتك في القصة: " + data.storyRole;
+            
+            const mafiosoStatusEl = document.getElementById('my-secret-mafioso-status');
+            if (data.isMafioso) {
+                mafiosoStatusEl.innerText = "⚠️ أنت المافيوسو (المجرم الحقيقي) سراً! حاول التمويه والتضليل وعدم كشف أمرك.";
+                mafiosoStatusEl.style.color = "var(--accent-color)";
+            } else {
+                mafiosoStatusEl.innerText = "✅ أنت بريء ضمن طاقم الشخصيات. ساعد أصدقاءك في كشف الحقيقة!";
+                mafiosoStatusEl.style.color = "#3fb950";
+            }
+
+            // Show motive
+            document.getElementById('my-motive-box').style.display = 'block';
+            document.getElementById('my-motive-text').innerText = data.motive;
+
+            showScreen('screen-role-reveal');
+        }
+
+        function nextPlayerRole() {
+            gameState.currentPlayerIndex++;
+            if (gameState.currentPlayerIndex < gameState.players.length) {
+                showScreen('screen-role-pass');
+                updateRolePassScreen();
+            } else {
+                // All players viewed roles, now show Judge handover screen
+                document.getElementById('judge-handover-text').innerText = `أعطِ الجهاز الآن لـ "${gameState.judgeName}" (حكم اللعبة) لكي يطلع على كافة أسرار القضية وهُوية المافيوسو.`;
+                showScreen('screen-judge-handover');
+            }
+        }
+
+        function enterJudgeHub() {
+            setupGameHub();
+            showScreen('screen-game-hub');
+        }
+
+        function setupGameHub() {
+            const c = gameState.currentCase;
+            document.getElementById('judge-display-name').innerText = gameState.judgeName;
+            
+            // Find mafioso name for judge
+            let realMafioso = "";
+            for (let player in gameState.assignedRoles) {
+                if (gameState.assignedRoles[player].isMafioso) {
+                    realMafioso = `${player} (${gameState.assignedRoles[player].storyRole})`;
+                    break;
+                }
+            }
+            document.getElementById('judge-secret-mafioso').innerText = realMafioso;
+
+            document.getElementById('case-category-badge').innerText = c.category;
+            document.getElementById('case-title').innerText = c.title;
+            document.getElementById('case-description').innerText = c.desc;
+
+            // Show all assigned roles + motives for the Judge
+            const rolesList = document.getElementById('assigned-roles-list');
+            rolesList.innerHTML = '';
+            gameState.players.forEach(player => {
+                const data = gameState.assignedRoles[player];
+                const row = document.createElement('div');
+                row.className = 'assigned-role-row';
+                row.style.flexDirection = 'column';
+                row.style.alignItems = 'flex-start';
+                row.style.gap = '4px';
+                const isOut = gameState.eliminated.includes(player);
+                row.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; width:100%; align-items:center; ${isOut ? 'opacity:0.45;' : ''}">
+                        <span><strong>${player}</strong> ← ${data.storyRole}${isOut ? ' <span style="color:#ff7b72;">(مُقصى)</span>' : ''}</span>
+                        ${data.isMafioso ? '<span class="mafioso-tag">مافيوسو ⚠️</span>' : '<span style="color:var(--text-muted);font-size:0.85rem;">بريء</span>'}
+                    </div>
+                    <div style="font-size:0.85rem; color:var(--gold);">الدافع: ${data.motive}</div>
+                `;
+                rolesList.appendChild(row);
+            });
+
+            // Show eliminated summary
+            const elimInfo = document.getElementById('eliminated-info');
+            if (elimInfo) {
+                if (gameState.eliminated.length === 0) {
+                    elimInfo.innerText = "لم يتم إقصاء أي لاعب بعد.";
+                } else {
+                    elimInfo.innerText = "المُقصَون: " + gameState.eliminated.join("، ");
+                }
+            }
+
+            renderClues();
+
+            // Pick a random question
+            const randomQ = c.questions[Math.floor(Math.random() * c.questions.length)];
+            document.getElementById('current-question').innerText = randomQ;
+        }
+
+        function renderClues() {
+            const container = document.getElementById('clues-container');
+            container.innerHTML = '';
+            
+            const c = gameState.currentCase;
+            for (let i = 0; i < gameState.activeCluesCount && i < c.clues.length; i++) {
+                const clueObj = c.clues[i];
+                const box = document.createElement('div');
+                box.className = 'clue-box';
+                box.innerHTML = `<h4>الدليل رقم ${i + 1} ${clueObj.isFalse ? '<span style="color:#ff7b72;">(دليل مضلل/كاذب)</span>' : ''}</h4><p style="text-align: right; margin-bottom: 0; color: var(--text-main);">${clueObj.text}</p>`;
+                container.appendChild(box);
+            }
+
+            if (gameState.activeCluesCount >= c.clues.length) {
+                document.getElementById('btn-next-clue').style.display = 'none';
+            }
+        }
+
+        function revealNextClue() {
+            if (gameState.activeCluesCount < gameState.currentCase.clues.length) {
+                gameState.activeCluesCount++;
+                renderClues();
+            }
+        }
+
+        function goToVoting() {
+            // Only players still in the game
+            const alive = gameState.players.filter(p => !gameState.eliminated.includes(p));
+            if (alive.length < 2) {
+                alert("لم يتبقَّ عدد كافٍ من اللاعبين للتصويت");
+                return;
+            }
+
+            document.getElementById('vote-round-label').innerText = "الجولة " + gameState.voteRound;
+            const select = document.getElementById('accused-select');
+            select.innerHTML = '';
+            alive.forEach(player => {
+                const opt = document.createElement('option');
+                opt.value = player;
+                opt.text = `${player} (${gameState.assignedRoles[player].storyRole})`;
+                select.appendChild(opt);
+            });
+            showScreen('screen-voting');
+        }
+
+        function submitVoteRound() {
+            const accused = document.getElementById('accused-select').value;
+            gameState.lastAccused = accused;
+
+            // Eliminate the player
+            if (!gameState.eliminated.includes(accused)) {
+                gameState.eliminated.push(accused);
+            }
+
+            const data = gameState.assignedRoles[accused];
+            const isMafioso = data.isMafioso;
+
+            if (isMafioso) {
+                // Game over – innocents win
+                const titleEl = document.getElementById('result-title');
+                const descEl = document.getElementById('result-description');
+                titleEl.innerText = "🎉 فاز البريئون!";
+                titleEl.style.color = "#3fb950";
+                descEl.innerHTML = `تم كشف المافيوسو وإقصاؤه في الجولة رقم <strong>${gameState.voteRound}</strong>!<br><br>
+                    المجرم كان: <strong style="color: var(--accent-color);">${accused}</strong><br>
+                    شخصيته: ${data.storyRole}<br>
+                    دافعه: ${data.motive}<br><br>
+                    أحسنتم أيها المحققون 👏`;
+
+                // Show full scenario for the Judge to narrate
+                fillFinalScenario();
+                showScreen('screen-result');
+            } else {
+                // Innocent eliminated – continue
+                document.getElementById('vote-round-result-text').innerHTML =
+                    `تم إقصاء <strong style="color:var(--accent-color);">${accused}</strong><br>
+                    (شخصيته: ${data.storyRole})<br><br>
+                    <span style="color:#3fb950; font-weight:bold;">كان بريئاً!</span><br>
+                    اللعبة مستمرة بدون هذا اللاعب.`;
+                showScreen('screen-vote-result');
+            }
+        }
+
+        function startNewVoteRound() {
+            gameState.voteRound++;
+            goToVoting();
+        }
+
+        // Kept for compatibility if needed, but main path is elimination
+        function revealFinalResult() {
+            // If somehow called, just go back to hub
+            showScreen('screen-game-hub');
+        }
+
+        function fillFinalScenario() {
+            const section = document.getElementById('final-scenario-section');
+            if (!section || !gameState.currentCase) return;
+
+            section.style.display = 'block';
+            const c = gameState.currentCase;
+
+            document.getElementById('final-scenario-text').innerText = c.desc;
+            document.getElementById('final-scenario-category').innerText = c.category;
+
+            const rolesContainer = document.getElementById('final-scenario-roles');
+            rolesContainer.innerHTML = '';
+            c.roles.forEach(role => {
+                const chip = document.createElement('span');
+                chip.className = 'role-chip';
+                chip.innerText = role;
+                rolesContainer.appendChild(chip);
+            });
+        }
+
+        function resetGame() {
+            const section = document.getElementById('final-scenario-section');
+            if (section) section.style.display = 'none';
+            showScreen('screen-case-select');
+        }
+
+        function showScreen(screenId) {
+            const screens = ['screen-case-select', 'screen-scenario', 'screen-setup', 'screen-role-pass', 'screen-role-reveal', 'screen-judge-handover', 'screen-game-hub', 'screen-voting', 'screen-vote-result', 'screen-result'];
+            screens.forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
