@@ -375,6 +375,13 @@
         .say-list { background: rgba(0,0,0,0.25); border-radius: 6px; padding: 8px 12px; margin: 6px 0; text-align: right; line-height: 1.9; }
         details.script-step { border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; margin: 8px 0; text-align: right; }
         details.script-step summary { cursor: pointer; color: var(--gold); font-weight: bold; }
+        .event-card { border-color: var(--accent-color); box-shadow: 0 0 30px rgba(229,9,20,0.35); }
+        .event-flash { text-align: center; color: #fff; background: var(--accent-color); border-radius: 8px; padding: 6px; font-weight: 900; letter-spacing: 2px; margin-bottom: 12px; animation: flash 0.6s ease-in-out 4 alternate; }
+        @keyframes flash { from { opacity: 1; } to { opacity: 0.35; } }
+        .event-btn { animation: flash 0.7s ease-in-out infinite alternate; }
+        .escape-line { background: rgba(229,9,20,0.12); border: 1px solid var(--accent-color); color: #ff7b72; border-radius: 8px; padding: 8px; text-align: center; font-weight: bold; margin: 10px 0; }
+        .event-pop { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+        .event-pop-box { background: var(--card-bg); border: 2px solid var(--accent-color); border-radius: 12px; padding: 18px; max-width: 520px; width: 100%; }
         .rules-box { font-size: 0.9rem; text-align: right; color: var(--text-muted); line-height: 1.8; }
     </style>
     <script>
@@ -536,6 +543,16 @@
             <button class="btn btn-secondary" onclick="try{sessionStorage.removeItem('mafioso-autojoin')}catch(e){}; showScreen('screen-case-select')">← رجوع</button>
         </div>
 
+        <!-- Event popup on player phones -->
+        <div id="phone-event-pop" class="event-pop hidden" onclick="this.classList.add('hidden')">
+            <div class="event-pop-box">
+                <div class="event-flash">⚡ حدث مفاجئ ⚡</div>
+                <h2 id="pop-title" style="color: var(--accent-color);"></h2>
+                <div id="pop-body" class="say" style="border-right-color:var(--accent-color);"></div>
+                <button class="btn">فهمت</button>
+            </div>
+        </div>
+
         <!-- Player's own phone view -->
         <div id="screen-player-phone" class="card hidden">
             <div style="text-align:center;"><span class="badge" id="phone-room-label">مافيوسو 🔪</span></div>
@@ -562,6 +579,8 @@
                         <div id="phone-card"></div>
                     </div>
                 </div>
+                <div id="phone-dead" class="net-banner hidden" style="border-color:var(--accent-color);color:var(--accent-color);">💀 انقتلت! المجرم وصلك… ضلّك تابع اللعبة، بس ممنوع تحكي أو تصوّت.</div>
+                <div id="phone-escape" class="escape-line hidden"></div>
                 <div id="phone-ended" class="hidden"></div>
                 <h3 style="text-align:right;margin-top:18px;">📢 آخر الأخبار</h3>
                 <div id="phone-news"></div>
@@ -639,7 +658,9 @@
             <p id="current-question" style="color: var(--gold); font-weight: bold; font-size: 1.1rem; margin-bottom: 10px;"></p>
             <button class="btn btn-secondary" onclick="newQuestion()">سؤال جديد 🎲</button>
 
+            <p id="hub-escape" class="escape-line hidden"></p>
             <button class="btn" onclick="goToVoting()">الانتقال لمرحلة الاتهام والتصويت النهائي ⚖️</button>
+            <button class="btn btn-secondary" onclick="manualEvent()">⚡ أطلق حدث مفاجئ الآن (إذا النقاش برد)</button>
         </div>
 
         <!-- Voting Screen -->
@@ -663,9 +684,20 @@
         <div id="screen-vote-result" class="card hidden">
             <h2>نتيجة جولة التصويت</h2>
             <p id="vote-round-result-text" style="font-size: 1.15rem; margin: 20px 0;"></p>
-            <p style="color: var(--text-muted); font-size: 0.95rem;">لم يتم كشف الحقيقة بعد. الحكم يقرر إذا بدكم جولة تصويت جديدة أو كشف النتيجة النهائية.</p>
-            <button class="btn" onclick="backToHub()">← رجوع للوحة الحكم (كشف أدلة أو تصويت جديد)</button>
-            <button class="btn btn-secondary" onclick="startNewVoteRound()">بدء جولة تصويت جديدة مباشرة 🔄</button>
+            <div id="vote-normal-btns">
+                <button class="btn" onclick="backToHub()">← رجوع للوحة الحكم (كشف أدلة أو تصويت جديد)</button>
+                <button class="btn btn-secondary" onclick="startNewVoteRound()">بدء جولة تصويت جديدة مباشرة 🔄</button>
+            </div>
+            <button class="btn event-btn hidden" id="vote-event-btn" onclick="showEventScreen()">⚡ استنّوا… في شي صار! اضغط لتشوف</button>
+        </div>
+
+        <!-- Surprise event -->
+        <div id="screen-event" class="card hidden event-card">
+            <div class="event-flash">⚡ حدث مفاجئ ⚡</div>
+            <h2 id="event-title" style="color: var(--accent-color);"></h2>
+            <div id="event-body"></div>
+            <p class="judge-note" id="event-note"></p>
+            <button class="btn" onclick="backToHub()">← رجوع للوحة الحكم</button>
         </div>
 
         <!-- Result Screen -->
@@ -1840,7 +1872,7 @@
             const online = net.lobby.filter(x => x.online);
             if (online.length < 3) return;
             net.lobby = online;
-            net.news = []; net.endedHtml = null;
+            net.news = []; net.endedHtml = null; net.lastEvent = null;
             initGame(net.lobby.map(x => x.name));
             net.started = true;
             net.lobby.forEach(sendCard);
@@ -1859,14 +1891,16 @@
                 card: renderSections(p.sections),
                 caseTitle: c.title,
                 caseDesc: `${esc(c.desc)}<br><br>📍 مكان الجريمة: <strong>${esc(ex.scene)}</strong><br>🕒 الوقت التقريبي: <strong>${fmtTime(ex.t)}</strong>`,
-                cast: m.players.map(x => `${x.name}: ${x.role}`)
+                cast: m.players.map(x => `${x.name}: ${x.role}`),
+                lastEventId: net.lastEvent ? net.lastEvent.id : 0
             });
             sendTo(entry.conn, publicState());
         }
 
         function publicState() {
             const clues = gameState.mystery ? gameState.mystery.clues.slice(0, gameState.activeCluesCount).map((cl, i) => ({ label: `الدليل ${i + 1}: ${cl.label}`, text: cl.text })) : [];
-            return { type: 'public', clues, news: net.news, ended: net.endedHtml, out: gameState.eliminated };
+            const left = gameState.events ? escapeVotesLeft() : null;
+            return { type: 'public', clues, news: net.news, ended: net.endedHtml, out: gameState.eliminated, killed: gameState.killed || [], event: net.lastEvent || null, escapeLeft: left };
         }
 
         function broadcastPublic() {
@@ -1996,6 +2030,8 @@
                 document.getElementById('phone-case-title').innerText = d.caseTitle;
                 document.getElementById('phone-case-desc').innerHTML = d.caseDesc;
                 document.getElementById('phone-player-name').innerText = d.name;
+                client.myName = d.name;
+                client.lastEventId = d.lastEventId || 0;
                 document.getElementById('phone-role').innerText = 'شخصيتك: ' + d.role;
                 document.getElementById('phone-card').innerHTML = d.card;
                 document.getElementById('phone-cast').innerHTML = d.cast.map(t => `<span class="role-chip">${esc(t)}</span>`).join('');
@@ -2008,6 +2044,19 @@
                 return;
             }
             if (d.type === 'public') {
+                document.getElementById('phone-dead').classList.toggle('hidden', !(d.killed || []).includes(client.myName));
+                const escEl = document.getElementById('phone-escape');
+                escEl.classList.toggle('hidden', d.escapeLeft == null || !!d.ended);
+                if (d.escapeLeft != null) escEl.innerText = `⏳ باقي ${d.escapeLeft} ${d.escapeLeft === 1 ? 'تصويت واحد' : 'تصويتات'} قبل ما يهرب المجرم!`;
+                if (d.event && d.event.id !== client.lastEventId && !d.ended) {
+                    client.lastEventId = d.event.id;
+                    {
+                        document.getElementById('pop-title').innerText = d.event.title;
+                        document.getElementById('pop-body').innerHTML = d.event.text;
+                        document.getElementById('phone-event-pop').classList.remove('hidden');
+                        if (navigator.vibrate) { try { navigator.vibrate([200, 100, 200, 100, 300]); } catch (e) {} }
+                    }
+                }
                 document.getElementById('phone-clues').innerHTML = (d.clues || []).slice().reverse().map(c => `<div class="feed-item"><h4>${esc(c.label)}</h4>${c.text}</div>`).join('');
                 document.getElementById('phone-news').innerHTML = (d.news || []).map(n => `<div class="feed-item">${n}</div>`).join('') || '<p>لسا ما في شي.</p>';
                 const ended = document.getElementById('phone-ended');
@@ -2162,6 +2211,8 @@
             gameState.voteRound = 1;
             gameState.activeCluesCount = 1;
             gameState.eliminated = [];
+            gameState.killed = [];
+            gameState.events = { murders: 0, used: {}, escapeAt: null, list: [], pending: null };
         }
 
         function playerObj(name) { return gameState.mystery.players.find(p => p.name === name); }
@@ -2227,14 +2278,20 @@
                 const d = document.createElement('details');
                 d.className = 'dossier';
                 if (isOut) d.style.opacity = '0.5';
-                d.innerHTML = `<summary><span>${who(p)}${isOut ? ' <span style="color:#ff7b72;">(مُقصى)</span>' : ''}</span>${tag}</summary>
+                d.innerHTML = `<summary><span>${who(p)}${isOut ? (gameState.killed.includes(p.name) ? ' <span style="color:#ff7b72;">(💀 مقتول)</span>' : ' <span style="color:#ff7b72;">(مُقصى)</span>') : ''}</span>${tag}</summary>
                     <div style="font-size:0.85rem;margin:6px 0;color:var(--text-muted)">بيدّعي إنه كان في: <strong>${esc(p.claim)}</strong></div>
                     ${renderSections(p.sections)}`;
                 rolesList.appendChild(d);
             });
 
             const elimInfo = document.getElementById('eliminated-info');
-            elimInfo.innerText = gameState.eliminated.length === 0 ? "لم يتم إقصاء أي لاعب بعد." : "المُقصَون: " + gameState.eliminated.join("، ");
+            const voted = gameState.eliminated.filter(n => !gameState.killed.includes(n));
+            elimInfo.innerText = gameState.eliminated.length === 0 ? "لم يتم إقصاء أي لاعب بعد."
+                : (voted.length ? "المطرودين بالتصويت: " + voted.join("، ") : "") + (gameState.killed.length ? "   💀 المقتولين: " + gameState.killed.join("، ") : "");
+            const left = escapeVotesLeft();
+            const escEl = document.getElementById('hub-escape');
+            escEl.classList.toggle('hidden', left === null);
+            if (left !== null) escEl.innerText = `⏳ باقي ${left} ${left === 1 ? 'تصويت واحد' : 'تصويتات'} قبل ما يهرب المجرم!`;
 
             // جدول التحقق
             const fx = document.getElementById('facts-table');
@@ -2277,6 +2334,9 @@
                     say('اللي عليه أكتر أصوات بيطلع من اللعبة.') +
                     note('إذا تعادلوا: كل متهم بيدافع عن حاله 30 ثانية، وبعدها بتعيدوا التصويت بينهم بس. بعدها اضغط "الانتقال لمرحلة الاتهام" واختار مين طلع.') +
                     note('بعد الطرد اقرأ النتيجة متل ما بتطلع (بريء أو شريك)، وبعدها بينكشف دليل جديد لحاله. ارجع للخطوة 4.')],
+                ['⚡ الأحداث المفاجئة',
+                    note('كل ما طردتوا بريء والمجرم لسا حر، بيصير حدث مفاجئ: جريمة تانية مع رسالة أخيرة، أو كاميرا، أو فضيحة، أو تهديد، أو انقطاع كهربا. وأول حدث بيبلّش عد تنازلي، والمجرم بيهرب إذا ما انكشف بالوقت.') +
+                    note('اقرأ الحدث بحماس وبصوت عالي! اللاعب المقتول بيضل يتابع بس ما بيحكي ولا بيصوّت. وإذا النقاش برد، فيك تطلق حدث بإيدك بالزر تحت.')],
                 ['6️⃣ النهاية',
                     note('لما ينطرد المافيوسو أو تربح المافيا، اقرأ "شو صار فعلاً" بشاشة النتيجة، وهون الكل بيفهم القصة كاملة.') +
                     say('خلّونا نشوف مين كان صادق، ومين كذب، وليش…')]
@@ -2345,6 +2405,7 @@
             const aliveMafia = alive.filter(x => x.team === 'mafia').length;
             const aliveInn = alive.length - aliveMafia;
             if (aliveInn <= aliveMafia) { endGame(false); return; }
+            if (gameState.events.pending) gameState.events.pending = null;
 
             let verdict;
             if (p.isAccomplice) verdict = `<span style="color:var(--gold);font-weight:bold;">كان شريك المافيوسو! 🤝</span><br>ضربة قوية… بس المافيوسو الحقيقي لسا بينكم.`;
@@ -2352,19 +2413,131 @@
             else verdict = `<span style="color:#3fb950;font-weight:bold;">كان بريئاً!</span><br>اللعبة مستمرة بدونه.`;
 
             gameState.voteRound++;
+            const escLeft = escapeVotesLeft();
+            if (escLeft !== null && escLeft <= 0) { endGame(false, 'escaped'); return; }
             if (gameState.activeCluesCount < gameState.mystery.clues.length) gameState.activeCluesCount++;
             addNews(`🗳️ الجولة ${gameState.voteRound - 1}: تم إقصاء ${esc(accused)} (${esc(p.role)}) — ${p.isAccomplice ? 'وطلع <strong>شريك المافيوسو</strong>! 🤝' : 'وطلع <strong>بريء</strong>.'} انكشف دليل جديد.`);
             document.getElementById('vote-round-result-text').innerHTML =
                 `تم إقصاء <strong style="color:var(--accent-color);">${esc(accused)}</strong> (${esc(p.role)})<br><br>${verdict}<br><br>
                 <span style="font-size:0.9rem;color:var(--text-muted)">باقي ${aliveInn} أبرياء مقابل ${aliveMafia} من المافيا. انكشف دليل جديد تلقائياً بلوحة الحكم.</span>`;
+            // المجرم لسا حر… بيصير حدث مفاجئ
+            const e = generateEvent();
+            gameState.events.pending = e;
+            document.getElementById('vote-event-btn').classList.toggle('hidden', !e);
+            document.getElementById('vote-normal-btns').classList.toggle('hidden', !!e);
             showScreen('screen-vote-result');
         }
 
         function startNewVoteRound() { goToVoting(); }
 
+        // ===================== الأحداث المفاجئة (لما يطوّل المجرم) =====================
+        function aliveP() { return gameState.mystery.players.filter(p => !gameState.eliminated.includes(p.name)); }
+        function firstLetter(role) { return role.trim().split(/\s+/)[0].replace(/^ال/, '').charAt(0); }
+        function weightedPick(opts) {
+            const total = opts.reduce((a, o) => a + o[1], 0);
+            let r = Math.random() * total;
+            for (const o of opts) { if ((r -= o[1]) < 0) return o[0]; }
+            return opts[opts.length - 1][0];
+        }
+
+        function generateEvent() {
+            const m = gameState.mystery, ex = m.ex, T = m.T, ev = gameState.events;
+            const alive = aliveP();
+            const inn = alive.filter(p => p.team === 'innocent');
+            const mafia = alive.filter(p => p.team === 'mafia');
+            const opts = [];
+            if (ev.murders < 2 && inn.length - 1 > mafia.length) opts.push(['murder', ev.murders === 0 ? 6 : 3]);
+            if (!ev.used.camera && alive.length >= 3) opts.push(['camera', 3]);
+            if (!ev.used.secret && m.liar && alive.includes(m.liar)) opts.push(['secret', 2]);
+            if (!ev.used.threat && inn.length >= 1) opts.push(['threat', 2]);
+            if (!ev.used.blackout && alive.length >= 3) opts.push(['blackout', 2]);
+            if (!opts.length) return null;
+            const kind = weightedPick(opts);
+            ev.used[kind] = true;
+            let e;
+
+            if (kind === 'murder') {
+                ev.murders++;
+                const v = (m.witness && inn.includes(m.witness)) ? m.witness : pick(inn);
+                const where = v.claim || pick(ex.places);
+                const letter = firstLetter(m.maf.role);
+                const matches = alive.filter(p => p !== v && firstLetter(p.role) === letter);
+                gameState.eliminated.push(v.name);
+                gameState.killed.push(v.name);
+                e = { title: '💀 جريمة تانية!',
+                    text: `صرخة بنص الليل! لقينا ${who(v)} فاقد للحياة في ${esc(where)}. المجرم ضرب مرة تانية!<br><br>✍️ <strong>رسالة أخيرة:</strong> قبل ما يفارق، كتب بإصبعه على الأرض حرف واحد: <span style="font-size:1.6rem;color:var(--gold);">«${esc(letter)}»</span>`,
+                    note: `الضحية كان بريء${v === m.witness ? ' — وهو الشاهد اللي لمح المجرم، عشان هيك انقتل' : ''}. الحرف هو أول حرف من شخصية المافيوسو (${esc(m.maf.role)}). بينطبق على: ${matches.map(p => esc(p.name) + ' (' + esc(p.role) + ')').join('، ')}.` };
+            } else if (kind === 'camera') {
+                const others = shuffle(alive.filter(p => p !== m.maf)).slice(0, 2);
+                const sus = shuffle([m.maf, ...others]);
+                e = { title: '📹 الكاميرا القديمة رجعت اشتغلت!',
+                    text: `كاميرا مراقبة قديمة كانوا ناسيينها سجّلت لثواني: ظل حدا داخل على ${esc(ex.scene)} الساعة ${fmtTime(T - 5)}. الوجه مش واضح، بس الطول واللبس بينطبقوا على واحد من هدول بس: ${joinAr(sus.map(who))}.`,
+                    note: `المافيوسو ${esc(m.maf.name)} واحد منهم، والباقي أبرياء.` };
+            } else if (kind === 'secret') {
+                e = { title: '📸 فضيحة!',
+                    text: `انتشرت صورة على التلفونات بتفضح ${who(m.liar)}: كان في ${esc(m.liarReal)} وقت الجريمة، مش بالمكان اللي حكاه! والسبب: ${esc(m.liar.secret)}. يعني كذب… بس كذبته ما إلها علاقة بالجريمة.`,
+                    note: `${esc(m.liar.name)} بريء. هالحدث بيشيله من دائرة الشك.` };
+            } else if (kind === 'threat') {
+                const t = (m.witness && inn.includes(m.witness)) ? m.witness : pick(inn);
+                e = { title: '✉️ رسالة تهديد',
+                    text: `${who(t)} لقى ورقة تحت بابه، مكتوبة بخط مرجّف: «شفت أكتر من اللازم… اسكت أحسنلك.» المجرم خايف من شي بيعرفه!`,
+                    note: `${esc(t.name)} بريء. المافيا خايفة من معلوماته${t === m.witness ? ' (هو الشاهد اللي لمح المجرم)' : ''}، خلّيه يحكي كل شي شافه.` };
+            } else {
+                const seenPool = alive.filter(p => p.team === 'mafia');
+                const seen = (Math.random() < 0.55 && seenPool.length) ? pick(seenPool) : pick(alive);
+                e = { title: '🔌 انقطعت الكهربا!',
+                    text: `انقطعت الكهربا عن المكان كله لدقيقتين! ولما رجعت، الصندوق اللي فيه ${esc(ex.trace)} بغرفة الأدلة كان مفتوح والمحتوى مخربط. وفي حدا بيقول إنه لمح ${who(seen)} قريب من غرفة الأدلة بالعتمة.`,
+                    note: seen.team === 'mafia' ? `${esc(seen.name)} فعلاً من المافيا وكان عم يخرّب الأدلة.` : `${esc(seen.name)} بريء، كان مارق بالصدفة. اللي خرّب هو المافيا.` };
+            }
+
+            // عدّ تنازلي: المجرم رح يهرب
+            if (ev.escapeAt == null) {
+                ev.escapeAt = gameState.voteRound + 2;
+                e.text += `<br><br>⏳ <strong>وخبر سيئ:</strong> العاصفة رح تهدأ قريباً والطريق رح ينفتح. إذا ما انكشف المجرم خلال <strong>3 تصويتات</strong>، رح يهرب للأبد!`;
+            }
+
+            ev.list.push(e);
+            m.clues.splice(gameState.activeCluesCount, 0, { label: e.title, truth: true, text: e.text, note: e.note });
+            gameState.activeCluesCount++;
+            net.lastEvent = { id: ev.list.length, title: e.title, text: e.text };
+            addNews(`⚡ <strong>${e.title}</strong> ${e.text}`);
+            return e;
+        }
+
+        function escapeVotesLeft() {
+            const at = gameState.events && gameState.events.escapeAt;
+            return at == null ? null : at - gameState.voteRound + 1;
+        }
+
+        function showEventScreen() {
+            const e = gameState.events.pending;
+            if (!e) { backToHub(); return; }
+            gameState.events.pending = null;
+            document.getElementById('event-title').innerText = e.title;
+            document.getElementById('event-body').innerHTML = `<div class="say" style="border-right-color:var(--accent-color);">🎙️ اقرأ بحماس: "${e.text}"</div>`;
+            document.getElementById('event-note').innerHTML = '🔒 للحكم: ' + e.note;
+            showScreen('screen-event');
+            if (navigator.vibrate) { try { navigator.vibrate([150, 80, 150]); } catch (er) {} }
+        }
+
+        function manualEvent() {
+            const e = generateEvent();
+            if (!e) { alert('ما ضل أحداث مفاجئة لهاللعبة.'); return; }
+            if (checkMafiaWin()) return;
+            gameState.events.pending = e;
+            showEventScreen();
+        }
+
+        function checkMafiaWin() {
+            const alive = aliveP();
+            const aliveMafia = alive.filter(x => x.team === 'mafia').length;
+            if (alive.length - aliveMafia <= aliveMafia) { endGame(false); return true; }
+            return false;
+        }
+
         function backToHub() { setupGameHub(); showScreen('screen-game-hub'); }
 
-        function endGame(innocentsWin) {
+        function endGame(innocentsWin, reason) {
             const m = gameState.mystery;
             const titleEl = document.getElementById('result-title');
             const descEl = document.getElementById('result-description');
@@ -2375,7 +2548,9 @@
             } else {
                 titleEl.innerText = "🔪 فاز المافيوسو!";
                 titleEl.style.color = "var(--accent-color)";
-                descEl.innerHTML = `الحيلة انطلت على الجميع… ${who(m.maf)} ضل مخفي لآخر لحظة.<br>دافعه (من بطاقته): "${esc(m.maf.motive)}"`;
+                descEl.innerHTML = reason === 'escaped'
+                    ? `⏳ انفتح الطريق… و${who(m.maf)} هرب قبل ما تكشفوه!<br>دافعه (من بطاقته): "${esc(m.maf.motive)}"`
+                    : `الحيلة انطلت على الجميع… ${who(m.maf)} ضل مخفي لآخر لحظة.<br>دافعه (من بطاقته): "${esc(m.maf.motive)}"`;
             }
             fillFinalScenario();
             if (net.started) {
@@ -2415,7 +2590,7 @@
         }
 
         function showScreen(screenId) {
-            const screens = ['screen-case-select', 'screen-scenario', 'screen-setup', 'screen-role-pass', 'screen-role-reveal', 'screen-judge-handover', 'screen-game-hub', 'screen-voting', 'screen-vote-result', 'screen-result', 'screen-lobby', 'screen-join', 'screen-player-phone'];
+            const screens = ['screen-case-select', 'screen-scenario', 'screen-setup', 'screen-role-pass', 'screen-role-reveal', 'screen-judge-handover', 'screen-game-hub', 'screen-voting', 'screen-vote-result', 'screen-result', 'screen-lobby', 'screen-join', 'screen-player-phone', 'screen-event'];
             screens.forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById(screenId).classList.remove('hidden');
         }
