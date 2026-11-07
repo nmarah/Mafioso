@@ -503,6 +503,16 @@
                 <input type="text" id="judge-name-input" value="الحكم">
             </div>
 
+            <div class="form-group">
+                <label for="acc-mode">🤝 شريك للمافيوسو:</label>
+                <select id="acc-mode">
+                    <option value="auto">🎲 عشوائي حسب عدد اللاعبين</option>
+                    <option value="none">❌ بدون شريك — المافيوسو لحاله</option>
+                    <option value="always">✅ دايماً في شريك</option>
+                </select>
+                <p style="font-size:0.8rem;margin:6px 0 0;text-align:right;">العشوائي: أقل من 6 لاعبين بدون شريك، من 6 لـ 8 أحياناً، و9 وطالع دايماً. والشريك بيحتاج 5 لاعبين عالأقل، فإذا كنتوا أقل بتصير اللعبة بدون شريك.</p>
+            </div>
+
             <label class="pass-only" style="text-align: right; margin-bottom: 5px;">أسماء المشاركين:</label>
             <div id="players-inputs" class="players-inputs-container pass-only">
                 <!-- Inputs generated dynamically -->
@@ -1509,12 +1519,12 @@
         }
 
         // ===================== محرّك بناء اللغز =====================
-        function buildMystery(names, c, ex, seed) {
+        function buildMystery(names, c, ex, seed, accMode) {
             rand = mulberry32(seed);
-            try { return buildMysteryInner(names, c, ex); } finally { rand = Math.random; }
+            try { return buildMysteryInner(names, c, ex, accMode || 'auto'); } finally { rand = Math.random; }
         }
 
-        function buildMysteryInner(names, c, ex) {
+        function buildMysteryInner(names, c, ex, accMode) {
             const T = ex.t;
             const roles = shuffle(c.roles);
             const P = names.map((name, i) => ({ name, role: roles[i % roles.length], team: 'innocent', obs: [], risks: [] }));
@@ -1525,7 +1535,11 @@
             const maf = P[order[0]];
             maf.team = 'mafia'; maf.isMafioso = true;
             let acc = null;
-            if (n >= 9 || (n >= 6 && rand() < 0.6)) {
+            // الحكم بيختار: بدون شريك / دايماً شريك / عشوائي حسب العدد
+            const wantAcc = accMode === 'none' ? false
+                : accMode === 'always' ? n >= 5
+                : (n >= 9 || (n >= 6 && rand() < 0.6));
+            if (wantAcc) {
                 acc = P[order[1]];
                 acc.team = 'mafia'; acc.isAccomplice = true;
             }
@@ -2206,7 +2220,7 @@
             gameState.players = names;
             gameState.playerCount = names.length;
             gameState.seed = Math.floor(Math.random() * 2147483647);
-            gameState.mystery = buildMystery(names, gameState.currentCase, caseExtras[gameState.selectedCaseIndex], gameState.seed);
+            gameState.mystery = buildMystery(names, gameState.currentCase, caseExtras[gameState.selectedCaseIndex], gameState.seed, document.getElementById('acc-mode').value);
             gameState.currentPlayerIndex = 0;
             gameState.voteRound = 1;
             gameState.activeCluesCount = 1;
