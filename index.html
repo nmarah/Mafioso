@@ -421,7 +421,7 @@
   <path d="M100 148 C106 157 110 162 110 167 A10 10 0 0 1 90 167 C90 162 94 157 100 148 Z" fill="#e50914"/>
 </svg></div>
         <div class="splash-logo">مافيوسو</div>
-        <div class="splash-subtitle">لعبة الغموض والتحقيق الاستراتيجي</div>
+        <div class="splash-subtitle">لعبة غموض وتحقيق وكشف المجرم</div>
         <div class="loader-bar">
             <div class="loader-progress"></div>
         </div>
@@ -447,14 +447,14 @@
   <path d="M100 148 C106 157 110 162 110 167 A10 10 0 0 1 90 167 C90 162 94 157 100 148 Z" fill="#e50914"/>
 </svg></div>
             <h1>مافيوسو</h1>
-            <p>اختر القضية التي ترغب في التحقيق فيها لهذه الجلسة:</p>
+            <p>اختاروا القضية اللي بدكم تحققوا فيها:</p>
             
             <div class="form-group">
-                <label for="case-select-dropdown">قائمة القضايا (<span id="case-count-label">20</span> قضية) — كل مرة بتلعب نفس القضية القصة بتتغير:</label>
+                <label for="case-select-dropdown">قائمة القضايا (<span id="case-count-label">20</span> قضية)، وكل مرة بتلعبوا نفس القضية القصة بتتغير:</label>
                 <select id="case-select-dropdown"></select>
             </div>
 
-            <button class="btn" onclick="goToScenario()">التالي: عرض السيناريو الكامل</button>
+            <button class="btn" onclick="goToScenario()">التالي: قصة الجريمة</button>
             <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0 10px;">
             <p style="margin-bottom:5px;">إنت لاعب والحكم فاتح غرفة؟</p>
             <button class="btn btn-secondary" onclick="openJoinScreen()">📱 دخول غرفة كلاعب</button>
@@ -462,8 +462,8 @@
 
         <!-- Scenario Briefing (for Judge) -->
         <div id="screen-scenario" class="card hidden">
-            <h2>السيناريو الكامل للقضية</h2>
-            <p style="color: var(--gold); font-weight: 600;">هذا النص مخصص للحكم ليقرأه أو يحكيه للاعبين قبل توزيع الأدوار</p>
+            <h2>قصة الجريمة</h2>
+            <p style="color: var(--gold); font-weight: 600;">هاي الصفحة للحكم، بتعرّفه ع القضية قبل ما يوزّع الأدوار</p>
             
             <div style="text-align: center; margin-bottom: 10px;">
                 <span id="scenario-category" class="badge">تصنيف</span>
@@ -474,24 +474,24 @@
                 وصف الجريمة...
             </div>
 
-            <h3 style="text-align: right; margin-top: 18px; margin-bottom: 8px;">الشخصيات الموجودة في هذه القضية:</h3>
+            <h3 style="text-align: right; margin-top: 18px; margin-bottom: 8px;">الشخصيات اللي بالقضية:</h3>
             <div class="roles-list" id="scenario-roles"></div>
 
             <p style="font-size: 0.9rem; margin-top: 18px; color: var(--text-muted);">
-                ما في داعي تقرأ هون: بعد توزيع الأدوار رح تلاقي بلوحة الحكم نص كامل تقرأه للاعبين خطوة بخطوة.
+                ما في داعي تقرأ هون، بعد توزيع الأدوار رح تلاقي بلوحة الحكم كل إشي بتقرأه بالترتيب.
             </p>
 
-            <button class="btn" onclick="goToPlayerSetup()">التالي: إدخال اللاعبين والحكم</button>
-            <button class="btn btn-secondary" onclick="showScreen('screen-case-select')">← رجوع لاختيار قضية أخرى</button>
+            <button class="btn" onclick="goToPlayerSetup()">التالي: اللاعبين والحكم</button>
+            <button class="btn btn-secondary" onclick="showScreen('screen-case-select')">← ارجع اختار قضية تانية</button>
         </div>
 
         <!-- 2. Player & Judge Setup Screen -->
         <div id="screen-setup" class="card hidden">
-            <h2>إعداد اللاعبين والحكم</h2>
-            <p>حدد حكم اللعبة (الذي سيدير الجلسة ويملك كافة أسرار القضية)، واختر طريقة اللعب.</p>
+            <h2>اللاعبين والحكم</h2>
+            <p>اكتب مين الحكم (هو اللي بيدير اللعبة وبيعرف كل الأسرار)، واختار كيف بدكم تلعبوا.</p>
             
             <div class="form-group">
-                <label>طريقة اللعب:</label>
+                <label>كيف بدكم تلعبوا:</label>
                 <label class="mode-option"><input type="radio" name="dist-mode" id="mode-room" checked onchange="updateModeUI()"> 🌐 غرفة أونلاين — كل لاعب على جواله</label>
                 <label class="mode-option"><input type="radio" name="dist-mode" id="mode-pass" onchange="updateModeUI()"> 🔄 تمرير جهاز واحد على الكل</label>
             </div>
@@ -504,7 +504,7 @@
             </div>
 
             <div class="form-group">
-                <label for="judge-name-input">اسم حكم اللعبة (يدير الأدلة ويعرف المجرم):</label>
+                <label for="judge-name-input">اسم الحكم (بيدير الأدلة وبيعرف المجرم):</label>
                 <input type="text" id="judge-name-input" value="الحكم">
             </div>
 
@@ -518,14 +518,14 @@
                 <p style="font-size:0.8rem;margin:6px 0 0;text-align:right;">العشوائي: أقل من 6 لاعبين بدون شريك، من 6 لـ 8 أحياناً، و9 وطالع دايماً. والشريك بيحتاج 5 لاعبين عالأقل، فإذا كنتوا أقل بتصير اللعبة بدون شريك.</p>
             </div>
 
-            <label class="pass-only" style="text-align: right; margin-bottom: 5px;">أسماء المشاركين:</label>
+            <label class="pass-only" style="text-align: right; margin-bottom: 5px;">أسماء اللاعبين:</label>
             <div id="players-inputs" class="players-inputs-container pass-only">
                 <!-- Inputs generated dynamically -->
             </div>
 
             <p class="room-only" style="font-size:0.9rem;">بالغرفة الأونلاين كل لاعب بيكتب اسمه بنفسه من جواله (من 3 لـ 15 لاعب).</p>
-            <button class="btn" id="setup-start-btn" onclick="startSetup()">بدء توزيع الأدوار السرية</button>
-            <button class="btn btn-secondary" onclick="showScreen('screen-scenario')">← رجوع لسيناريو القضية</button>
+            <button class="btn" id="setup-start-btn" onclick="startSetup()">وزّع الأدوار السرية</button>
+            <button class="btn btn-secondary" onclick="showScreen('screen-scenario')">← ارجع لقصة الجريمة</button>
         </div>
 
         <!-- Lobby (judge phone) -->
@@ -533,8 +533,8 @@
             <h2>🌐 غرفة اللعبة</h2>
             <p style="margin-bottom:0;">رقم الغرفة:</p>
             <div class="room-code" id="lobby-code">····</div>
-            <p class="status-line" id="lobby-status">جاري إنشاء الغرفة…</p>
-            <p style="font-size:0.9rem;">كل لاعب يفتح اللعبة على جواله (نفس الملف أو الرابط)، يضغط <strong>"دخول غرفة كلاعب"</strong>، ويكتب الرقم واسمه.</p>
+            <p class="status-line" id="lobby-status">لحظة، بنفتح الغرفة…</p>
+            <p style="font-size:0.9rem;">كل لاعب بيفتح اللعبة على جواله (نفس الملف أو الرابط)، بيضغط <strong>"دخول غرفة كلاعب"</strong>، وبيكتب الرقم واسمه.</p>
             <button class="btn btn-secondary" onclick="shareRoom()">📤 ابعت رابط الغرفة (واتساب…)</button>
             <h3 style="margin-top:18px;">اللاعبين اللي دخلوا (<span id="lobby-count">0</span>):</h3>
             <div class="lobby-list" id="lobby-list"></div>
@@ -573,13 +573,13 @@
             <div style="text-align:center;"><span class="badge" id="phone-room-label">مافيوسو 🔪</span></div>
             <div class="net-banner hidden" id="phone-offline">
                 ⚠️ انقطع الاتصال مع الحكم.
-                <button class="btn" style="margin-top:8px;" onclick="joinRoom()">إعادة الاتصال 🔄</button>
+                <button class="btn" style="margin-top:8px;" onclick="joinRoom()">ارجع اتصل 🔄</button>
             </div>
 
             <div id="phone-waiting">
                 <h2>✅ دخلت الغرفة</h2>
                 <h3 id="phone-wait-name" style="color: var(--accent-color);"></h3>
-                <p>استنى الحكم يبدأ اللعبة… بطاقتك رح توصل هون لحالها.</p>
+                <p>استنى الحكم يبلّش… بطاقتك رح توصل هون لحالها.</p>
                 <div class="lobby-list" id="phone-wait-list"></div>
             </div>
 
@@ -594,7 +594,7 @@
                         <div id="phone-card"></div>
                     </div>
                 </div>
-                <div id="phone-dead" class="net-banner hidden" style="border-color:var(--accent-color);color:var(--accent-color);">💀 انقتلت! المجرم وصلك… ضلّك تابع اللعبة، بس ممنوع تحكي أو تصوّت.</div>
+                <div id="phone-dead" class="net-banner hidden" style="border-color:var(--accent-color);color:var(--accent-color);">💀 انقتلت! المجرم وصلك… ضل تابع اللعبة، بس ممنوع تحكي أو تصوّت.</div>
                 <div id="phone-escape" class="escape-line hidden"></div>
                 <div id="phone-ended" class="hidden"></div>
                 <h3 style="text-align:right;margin-top:18px;">📢 آخر الأخبار</h3>
@@ -608,102 +608,99 @@
 
         <!-- Role Secret Pass Screen -->
         <div id="screen-role-pass" class="card hidden">
-            <h2>تمرير الجهاز</h2>
-            <p id="pass-instruction">أعطِ الجهاز للاعب الآتي:</p>
+            <h2>مرّر الجوال</h2>
+            <p id="pass-instruction">عطي الجوال لـ:</p>
             <h3 id="current-player-name" style="color: var(--accent-color); font-size: 1.8rem; margin: 20px 0;">اسم اللاعب</h3>
-            <p style="font-size: 0.9rem; color: #ff5555;">تأكد أن اللاعب وحده من يمسك الجهاز دون إظهاره لأحد!</p>
-            <button class="btn" onclick="revealMyRole()">كشف شخصيتي سراً</button>
+            <p style="font-size: 0.9rem; color: #ff5555;">تأكد إنه ما حدا غيره شايف الشاشة!</p>
+            <button class="btn" onclick="revealMyRole()">اكشف دوري بالسر</button>
         </div>
 
         <!-- Role Reveal Card (Private) -->
         <div id="screen-role-reveal" class="card hidden">
-            <h2>دورك وشخصيتك في القصة</h2>
+            <h2>دورك بالقصة</h2>
             <div class="secret-reveal">
                 <h3 id="my-story-role" style="color: var(--gold); font-size: 1.5rem; margin-bottom: 10px;">الشخصية</h3>
                 <div id="my-card"></div>
             </div>
-            <p style="font-size: 0.95rem; margin-bottom: 20px;">احفظ قصتك وحجتك وشو شفت منيح — رح تحتاجهم بالنقاش! لا تفرجي البطاقة لحدا.</p>
+            <p style="font-size: 0.95rem; margin-bottom: 20px;">احفظ قصتك منيح لأنك رح تحتاجها بالنقاش، وما تفرجي البطاقة لحدا.</p>
             <button class="btn" onclick="nextPlayerRole()">حفظت دوري، التالي</button>
         </div>
 
         <!-- Judge Handover Screen -->
         <div id="screen-judge-handover" class="card hidden">
-            <h2>انتهى توزيع الأدوار! ⚖️</h2>
-            <p>تم توزيع الشخصيات على جميع اللاعبين سراً، وأصبح كل لاعب يعرف شخصيته داخل القضية.</p>
+            <h2>خلص توزيع الأدوار! ⚖️</h2>
+            <p>كل لاعب صار بيعرف دوره بالسر.</p>
             <div class="secret-reveal" style="border-color: var(--gold);">
-                <h3 style="color: var(--gold);">تسليم الجهاز لحكم اللعبة</h3>
+                <h3 style="color: var(--gold);">عطي الجوال للحكم</h3>
                 <p id="judge-handover-text" style="color: var(--text-main); font-size: 1.1rem; margin-top: 10px;"></p>
             </div>
-            <button class="btn" onclick="enterJudgeHub()">دخول لوحة تحكم الحكم</button>
+            <button class="btn" onclick="enterJudgeHub()">افتح لوحة الحكم</button>
         </div>
 
         <!-- Main Judge Game Hub -->
         <div id="screen-game-hub" class="card hidden">
             <div class="judge-dashboard">
-                <h3 style="color: var(--gold); margin-bottom: 5px;">👑 لوحة تحكم حكم اللعبة (<span id="judge-display-name">الحكم</span>)</h3>
+                <h3 style="color: var(--gold); margin-bottom: 5px;">👑 لوحة الحكم (<span id="judge-display-name">الحكم</span>)</h3>
                 <p id="hub-net" class="hidden" style="font-size:0.85rem;text-align:right;color:#3fb950;margin-bottom:6px;"></p>
-                <p id="judge-secret-box" style="font-size: 0.95rem; margin-bottom: 8px; text-align: right; color: var(--text-main);"></p>
+                <p id="judge-secret-box" style="font-size: 0.95rem; margin-bottom: 0; text-align: right; color: var(--text-main);"></p>
             </div>
-
-            <h3 style="text-align:right;margin-top:6px;">🎙️ نص الحكم — شو تحكي للاعبين خطوة بخطوة</h3>
-            <p style="text-align:right;font-size:0.85rem;margin-bottom:4px;">الكلام بالصناديق الذهبية اقرأه بصوت عالي. الملاحظات الحمرا إلك إنت بس.</p>
-            <div id="judge-script"></div>
 
             <div style="text-align: center;">
                 <span id="case-category-badge" class="badge">تصنيف القضية</span>
             </div>
             <h2 id="case-title">عنوان القضية</h2>
-            <p id="case-description" style="text-align: right; background: var(--bg-color); padding: 15px; border-radius: 8px; border: 1px solid var(--border-color);"></p>
-
-            <h3 style="text-align: right; margin-top: 10px;">ملفات اللاعبين (اضغط على أي اسم لتشوف بطاقته):</h3>
-            <div class="assigned-roles-box" id="assigned-roles-list" style="max-height:none;"></div>
-            <p id="eliminated-info" style="text-align:right; color:var(--text-muted); font-size:0.9rem; margin-top:8px;"></p>
-
-            <details style="text-align:right;margin:10px 0;">
-                <summary style="cursor:pointer;color:var(--gold);font-weight:bold;">🔎 جدول التحقق: شو صار بكل مكان وقت الجريمة</summary>
-                <div class="assigned-roles-box" id="facts-table"></div>
-            </details>
+            <p style="font-size:0.85rem;margin-bottom:6px;">اقرأ الكلام الأصفر بصوت عالي بالترتيب. الكلام الأحمر إلك إنت بس.</p>
 
             <div id="clues-container"></div>
-            <button class="btn btn-secondary" onclick="revealNextClue()" id="btn-next-clue">كشف دليل جديد للحكم واللاعبين 🔍</button>
+            <button class="btn btn-secondary" onclick="revealNextClue()" id="btn-next-clue">اكشف الدليل اللي بعده 🔍</button>
 
-            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 20px 0;">
-
-            <h3>سؤال التحقيق الموجه للجلسة:</h3>
-            <p id="current-question" style="color: var(--gold); font-weight: bold; font-size: 1.1rem; margin-bottom: 10px;"></p>
-            <button class="btn btn-secondary" onclick="newQuestion()">سؤال جديد 🎲</button>
+            <div id="judge-cast"></div>
 
             <p id="hub-escape" class="escape-line hidden"></p>
-            <button class="btn" onclick="goToVoting()">الانتقال لمرحلة الاتهام والتصويت النهائي ⚖️</button>
-            <button class="btn btn-secondary" onclick="manualEvent()">⚡ أطلق حدث مفاجئ الآن (إذا النقاش برد)</button>
+            <button class="btn" onclick="goToVoting()">يلّا ع التصويت ⚖️</button>
+            <button class="btn btn-secondary" onclick="manualEvent()">⚡ اعمل حدث مفاجئ هسّا (إذا النقاش برد)</button>
+            <p id="eliminated-info" style="text-align:right; color:var(--text-muted); font-size:0.9rem; margin-top:10px;"></p>
+
+            <details class="script-step">
+                <summary>📖 القوانين (احكيها مرة وحدة بأول اللعبة)</summary>
+                <div id="judge-rules"></div>
+            </details>
+            <details class="script-step">
+                <summary>🗂️ ملفات اللاعبين (بطاقة كل واحد)</summary>
+                <div class="assigned-roles-box" id="assigned-roles-list" style="max-height:none;"></div>
+            </details>
+            <details class="script-step">
+                <summary>🔎 جدول التحقق: شو صار بكل مكان وقت الجريمة</summary>
+                <div class="assigned-roles-box" id="facts-table"></div>
+            </details>
         </div>
 
         <!-- Voting Screen -->
         <div id="screen-voting" class="card hidden">
-            <h2>محكمة مافيوسو - جولة تصويت</h2>
+            <h2>وقت التصويت ⚖️</h2>
             <div style="text-align:center;">
                 <span class="vote-round-badge" id="vote-round-label">الجولة 1</span>
             </div>
-            <p>من هو برأيكم الشخص الذي يمثّل دور "المافيوسو" والمتورط الحقيقي؟</p>
+            <p>مين برأيكم المافيوسو؟ صوّتوا ع العد لثلاثة، واختار اللي عليه أكتر أصوات.</p>
             
             <div class="form-group">
-                <label for="accused-select">اختر المشتبه به:</label>
+                <label for="accused-select">مين طلع؟</label>
                 <select id="accused-select"></select>
             </div>
 
-            <button class="btn" onclick="submitVoteRound()">تأكيد اتهام هذه الجولة</button>
-            <button class="btn btn-secondary" onclick="showScreen('screen-game-hub')">← رجوع للوحة الحكم (الأدلة)</button>
+            <button class="btn" onclick="submitVoteRound()">طلّعه من اللعبة</button>
+            <button class="btn btn-secondary" onclick="showScreen('screen-game-hub')">← ارجع للوحة الحكم</button>
         </div>
 
         <!-- Intermediate Vote Result (no truth reveal) -->
         <div id="screen-vote-result" class="card hidden">
-            <h2>نتيجة جولة التصويت</h2>
+            <h2>نتيجة التصويت</h2>
             <p id="vote-round-result-text" style="font-size: 1.15rem; margin: 20px 0;"></p>
             <div id="vote-normal-btns">
-                <button class="btn" onclick="backToHub()">← رجوع للوحة الحكم (كشف أدلة أو تصويت جديد)</button>
-                <button class="btn btn-secondary" onclick="startNewVoteRound()">بدء جولة تصويت جديدة مباشرة 🔄</button>
+                <button class="btn" onclick="backToHub()">← ارجع للوحة الحكم</button>
+                <button class="btn btn-secondary" onclick="startNewVoteRound()">صوّتوا كمان مرة 🔄</button>
             </div>
-            <button class="btn event-btn hidden" id="vote-event-btn" onclick="showEventScreen()">⚡ استنّوا… في شي صار! اضغط لتشوف</button>
+            <button class="btn event-btn hidden" id="vote-event-btn" onclick="showEventScreen()">⚡ استنّوا… في إشي صار! اضغط وشوف</button>
         </div>
 
         <!-- Surprise event -->
@@ -712,7 +709,7 @@
             <h2 id="event-title" style="color: var(--accent-color);"></h2>
             <div id="event-body"></div>
             <p class="judge-note" id="event-note"></p>
-            <button class="btn" onclick="backToHub()">← رجوع للوحة الحكم</button>
+            <button class="btn" onclick="backToHub()">← ارجع للوحة الحكم</button>
         </div>
 
         <!-- Result Screen -->
@@ -721,16 +718,16 @@
             <p id="result-description" style="font-size: 1.1rem; margin-bottom: 20px;"></p>
 
             <div id="final-scenario-section" style="display:none;">
-                <h3 style="color: var(--gold); text-align: right; margin-bottom: 10px;">📜 شو صار فعلاً (الحكم يقرأه للجميع)</h3>
+                <h3 style="color: var(--gold); text-align: right; margin-bottom: 10px;">📜 شو صار فعلاً (اقرأه للكل)</h3>
                 <div class="scenario-box" id="final-scenario-text" style="margin-bottom: 12px;"></div>
                 <div style="text-align: right; margin-bottom: 8px;">
                     <span class="badge" id="final-scenario-category"></span>
                 </div>
-                <h4 style="text-align: right; color: var(--text-muted); margin-bottom: 8px;">الشخصيات التي كانت موجودة:</h4>
+                <h4 style="text-align: right; color: var(--text-muted); margin-bottom: 8px;">مين كان مين:</h4>
                 <div class="roles-list" id="final-scenario-roles"></div>
             </div>
 
-            <button class="btn" onclick="resetGame()" style="margin-top: 20px;">إعادة اللعب بقضية جديدة 🔄</button>
+            <button class="btn" onclick="resetGame()" style="margin-top: 20px;">العبوا قضية جديدة 🔄</button>
         </div>
     </div>
 
@@ -1275,27 +1272,29 @@
         );
 
         // Possible motives (innocent-looking + suspicious)
+        // ليش ممكن يشكّوا بالبريء (بتنقرا بعد "لأنك")
         const motivePool = [
-            "كان لديك ديون متراكمة وتحتاج مالاً بسرعة",
-            "شعرت أن الإدارة ظلمتك وحرمتك من ترقية مستحقة",
-            "كنت تعرف سراً خطيراً عن الضحية وخشيت انكشافه",
-            "تعرضت لضغط شديد من جهة خارجية مقابل مبلغ كبير",
-            "أردت الانتقام من موقف سابق حدث معك",
-            "كنت بحاجة لتغطية خطأ كبير ارتكبته سابقاً",
-            "ظننت أن الفرصة سانحة ولن يشك أحد فيك",
-            "كان لديك خلاف شخصي حاد مع أحد الموجودين",
-            "أردت إثبات أنك أذكى من الجميع",
-            "تلقيت عرضاً مغرياً من جهة منافسة",
-            "كنت تحت تأثير تهديد مباشر ضد عائلتك",
-            "أردت إخفاء شيء ثمين كنت تخبئه في المكان"
+            "عليك ديون كتير ومحتاج مصاري بسرعة",
+            "حاسس إنه الإدارة ظلمتك وما رقّتك",
+            "بتعرف سر خطير عن صاحب المكان وخايف ينكشف",
+            "في جهة من برّا ضغطت عليك مقابل مصاري",
+            "بدك تنتقم من موقف قديم صار معك",
+            "بدك تغطّي على غلطة كبيرة عملتها زمان",
+            "تخانقت مع واحد من الموجودين قدام الكل",
+            "دايماً بتحب تثبت إنك أذكى من الكل",
+            "وصلك عرض مغري من جهة منافسة",
+            "في حدا هدّد عيلتك",
+            "كنت مخبّي إشي غالي بنفس المكان",
+            "كنت آخر واحد حكى مع صاحب المكان"
         ];
 
+        // دافع المافيوسو: للبطاقة (إنت) وللنهاية (هو)
         const mafiosoMotivePool = [
-            "أنت المخطّط الرئيسي ولديك دافع قوي جداً للجريمة",
-            "كنت المستفيد الأكبر مادياً من وقوع هذه الجريمة",
-            "نفذت العملية بناءً على طلب جهة قوية مقابل ثمن باهظ",
-            "أردت إسكات الضحية لأنها كانت تعرف سراً يدمّرك",
-            "هذه ليست أول مرة... ولديك خبرة في إخفاء الآثار"
+            { you: "إنت المستفيد الأكبر من اللي صار", them: "هو المستفيد الأكبر من اللي صار" },
+            { you: "جهة قوية دفعتلك مبلغ كبير عشان تعملها", them: "جهة قوية دفعتله مبلغ كبير عشان يعملها" },
+            { you: "صاحب المكان كان بيعرف سر بيدمّرك", them: "صاحب المكان كان بيعرف سر بيدمّره" },
+            { you: "إلك تار قديم مع صاحب المكان", them: "إله تار قديم مع صاحب المكان" },
+            { you: "غرقان بالديون وهاي كانت فرصتك الأخيرة", them: "كان غرقان بالديون وهاي كانت فرصته الأخيرة" }
         ];
 
         // ===================== تفاصيل مسرح الجريمة لكل قضية =====================
@@ -1426,16 +1425,16 @@
         // تفاصيل حسية تحدث في كل مكان وقت الجريمة (يعرفها فقط من كان فعلاً هناك)
         const placeFactsPool = [
             "انقطعت الكهرباء دقيقتين ورجعت",
-            "كان في راديو شغّال عم يغني أغنية قديمة بصوت عالي",
-            "انكسر كاسة زجاج وصار صوت قوي",
-            "المكيّف كان معطّل والجو كان حر كتير",
+            "كان في راديو شغّال بغنّي أغنية قديمة بصوت عالي",
+            "انكسرت كاسة زجاج وصار صوت قوي",
+            "المكيّف كان خربان والجو كان شوب كتير",
             "دخلت قطة وعملت فوضى وكبّت أغراض",
             "رنّ جرس إنذار تجريبي لثواني وسكت",
             "حدا طلب أكل وكانت الريحة طاغية على المكان",
             "انفتح الشباك من الهوا وطارت أوراق",
             "التلفون الأرضي رنّ كذا مرة وما حدا رد",
-            "اللمبة كانت عم ترمش طول الوقت",
-            "كان في صوت تصليح ودق من الحيط اللي جنبه"
+            "اللمبة كانت بترمش طول الوقت",
+            "كان في صوت دق وتصليح بالحيط اللي جنبه"
         ];
 
         // أغراض شخصية ممكن تنزرع لتوريط بريء
@@ -1445,7 +1444,7 @@
         const traitPool = [
             { clue: "زر قميص مقطوع لونه غامق", card: "في زر مقطوع من قميصك الغامق" },
             { clue: "نقاط دم صغيرة من جرح بسيط", card: "عندك جرح صغير طازة بإصبعك" },
-            { clue: "أثر حذاء رياضي بنقشة مميزة", card: "لابس حذاء رياضي بنقشة مميزة" },
+            { clue: "أثر بوط رياضي بنقشة مميزة", card: "لابس بوط رياضي بنقشة مميزة" },
             { clue: "ريحة عطر قوي ومميز", card: "حاطط عطر قوي ومميز ريحته بتضل بالمكان" },
             { clue: "شعرة مصبوغة بلون غريب", card: "شعرك مصبوغ بلون ملفت" },
             { clue: "عقب سيجارة من نوع نادر", card: "بتدخن نوع سجائر نادر" }
@@ -1474,7 +1473,7 @@
         const hiderReasonsThem = [
             "ياخد غرض شخصي كان ناسيه هناك",
             "يشوف أوراق مش من حقه يشوفها",
-            "يخبي شي خاص فيه ما بده حدا يلاقيه",
+            "يخبي إشي خاص فيه ما بده حدا يلاقيه",
             "يقابل شخص بالسر بعيد عن العيون"
         ];
 
@@ -1482,15 +1481,8 @@
         const hiderReasonsPool = [
             "تاخد غرض شخصي كنت ناسيه هناك",
             "تشوف أوراق مش من حقك تشوفها",
-            "تخبي شي خاص فيك ما بدك حدا يلاقيه",
+            "تخبي إشي خاص فيك ما بدك حدا يلاقيه",
             "تقابل شخص بالسر بعيد عن العيون"
-        ];
-
-        const mafiaArgumentsPool = [
-            "\"لو أنا المجرم، كان هربت من زمان! أنا ضليت هون وعم ساعدكم\"",
-            "\"الأداة المستخدمة مش معي لحالي — في غيري عنده صلاحية، ليش ما بتسألوهم؟\"",
-            "\"اللي عم يتهمني هو أكتر واحد متوتر هون… مش ملفت؟\"",
-            "\"الأدلة المادية ممكن تنزرع، بس الكذب بالمكان ما بيتخبّى. اسألوا كل واحد وين كان بالضبط\""
         ];
 
         let gameState = {
@@ -1533,13 +1525,16 @@
             m = ((m % 1440) + 1440) % 1440;
             const h24 = Math.floor(m / 60), mm = m % 60;
             let h = h24 % 12; if (h === 0) h = 12;
-            const period = h24 < 5 ? 'فجراً' : h24 < 12 ? 'صباحاً' : h24 < 17 ? 'ظهراً' : h24 < 20 ? 'مساءً' : 'ليلاً';
+            const period = h24 < 5 ? 'بالليل' : h24 < 12 ? 'الصبح' : h24 < 17 ? 'الظهر' : h24 < 20 ? 'المسا' : 'بالليل';
             return `${h}:${String(mm).padStart(2, '0')} ${period}`;
         }
         // "الضحية كان عايش" بقضايا القتل، و"الغرض كان بمكانه" بقضايا السرقة
         // "الأداة" = وسيلة الدخول (مفتاح، بطاقة، رمز…) مش سلاح الجريمة
         function deathTxt(ex) { return ex.weapon ? `<br>🩸 <strong>سبب الوفاة:</strong> ${esc(ex.weapon)}.` : ''; }
         function intactTxt(ex) { return ex.kind === 'm' ? `${esc(ex.item)} كان لسا عايش` : `${esc(ex.item)} كان بمكانه`; }
+        // "بـ" و"لـ" لازقين صح: بالمطبخ، بموقف السيارات، للمطبخ، لمفتاح…
+        function bi(w) { w = String(w); return esc(w.startsWith('ال') ? 'بال' + w.slice(2) : 'ب' + w); }
+        function li(w) { w = String(w); return esc(w.startsWith('ال') ? 'لل' + w.slice(2) : 'ل' + w); }
         function who(p) { return `<strong>${esc(p.name)}</strong> (${esc(p.role)})`; }
         function joinAr(list) {
             if (list.length <= 1) return list.join('');
@@ -1626,54 +1621,54 @@
             const trait = pick(traitPool);
             const decoyCandidates = P.filter(p => p !== maf && p !== acc && p !== framed);
             const traitDecoy = decoyCandidates.length ? pick(decoyCandidates) : null;
-            maf.risks.push(`⚠️ ${trait.card} — ممكن يكون ضل أثر منك بالمكان.`);
-            if (traitDecoy) traitDecoy.risks.push(`${trait.card} (هالشي ممكن يورطك بالغلط إذا طلع دليل مشابه).`);
-            framed.risks.push(`ضاعت منك اليوم <strong>${planted}</strong> وما بتعرف وين راحت.`);
+            maf.risks.push(`${trait.card}، وممكن يكون ضل أثر منك بالمكان.`);
+            if (traitDecoy) traitDecoy.risks.push(`${trait.card}، وهاد ممكن يورّطك بالغلط إذا طلع دليل بشبهه.`);
+            framed.risks.push(`ضيّعت اليوم <strong>${planted}</strong> تبعك وما بتعرف وين.`);
 
             // مجموعة اللي عندهم صلاحية على الأداة
             const accessPool = shuffle(P.filter(p => p !== maf && p !== acc));
             const accessGroup = shuffle([maf, ...accessPool.slice(0, Math.min(n >= 5 ? 3 : 2, accessPool.length))]);
-            accessGroup.forEach(p => { if (p !== maf) p.risks.push(`بحكم شغلك بتقدر توصل لـ <strong>${esc(ex.tool)}</strong> (وسيلة الدخول لمكان الجريمة)، يعني إنت من المشتبه فيهم.`); });
+            accessGroup.forEach(p => { if (p !== maf) p.risks.push(`بحكم شغلك بتقدر توصل <strong>${li(ex.tool)}</strong> (وسيلة الدخول لمكان الجريمة)، يعني إنت من المشتبه فيهم.`); });
 
             // 6) الشهادات والملاحظات
             honest.forEach(p => {
                 const others = P.filter(o => o !== p);
                 const y = pick(others);
-                p.obs.push(`حوالي الساعة ${fmtTime(T - 30)} شفت ${who(y)} في ${esc(y.claim)}.`);
+                p.obs.push(`حوالي الساعة ${fmtTime(T - 30)} شفت ${who(y)} ${bi(y.claim)}.`);
             });
             if (witness) {
                 const decoy = pick(P.filter(o => o !== maf && o !== witness));
                 const pair = shuffle([maf, decoy]);
-                witness.obs.push(`🔦 الأهم: حوالي ${fmtTime(T - 10)} شفت حدا ماشي بسرعة باتجاه ${esc(ex.scene)}. كان بعيد والضو خفيف — كان يا ${who(pair[0])} يا ${who(pair[1])}، مش متأكد مين فيهم.`);
+                witness.obs.push(`والأهم: حوالي ${fmtTime(T - 10)} شفت حدا ماشي بسرعة ع ${esc(ex.scene)}، بس كان بعيد والضو خفيف، يا ${who(pair[0])} يا ${who(pair[1])}، مش متأكد مين فيهم.`);
             }
             if (liar) {
                 const seer = pick(honest.filter(p => p !== witness));
-                if (seer) seer.obs.push(`حوالي ${fmtTime(T + 20)} شفت ${who(liar)} راجع من جهة ${esc(liarReal)} وكان متوتر وعم يتلفّت.`);
+                if (seer) seer.obs.push(`حوالي ${fmtTime(T + 20)} شفت ${who(liar)} راجع من جهة ${esc(liarReal)} وكان متوتر وبتلفّت حواليه.`);
             }
             if (hider.isInnocentHider) {
-                hider.obs.push(`لما كنت في ${esc(ex.scene)} حوالي ${fmtTime(T - 40)}، ${intactTxt(ex)} وكل شي طبيعي — يعني الجريمة صارت بعدها أكيد.`);
+                hider.obs.push(`لما كنت ${bi(ex.scene)} حوالي ${fmtTime(T - 40)}، ${intactTxt(ex)} وكل إشي طبيعي، يعني الجريمة أكيد صارت بعدها.`);
             }
 
             // 7) الأدلة اللي بيكشفها الحكم بالتدريج
             const hiderNote = hiderMode === 'mafioso' ? 'المافيوسو نفسه هو اللي أخفى الآثار'
                 : hiderMode === 'accomplice' ? `شريك المافيوسو ${esc(acc.name)} هو اللي أخفى الآثار`
-                : `بريء متستّر (${esc(hider.name)}) أخفى الآثار لأنه كان بالمكان قبل الجريمة لسبب خاص — مش هو المجرم!`;
+                : `بريء متستّر (${esc(hider.name)}) خبّى الآثار لأنه كان بالمكان قبل الجريمة لسبب خاص، بس مش هو المجرم!`;
 
             const sceneClue = { label: 'تقرير مسرح الجريمة', truth: true,
-                text: `${esc(c.desc)}<br>حسب تقرير الطب الشرعي، الجريمة وقعت بحدود الساعة <strong>${fmtTime(T)}</strong> في <strong>${esc(ex.scene)}</strong>.${deathTxt(ex)}<br>والغريب إنه ${esc(ex.trace)} انمسحت بعد الجريمة — حدا عبث بالمكان.`,
+                text: `${esc(c.desc)}<br>حسب الطب الشرعي، الجريمة صارت حوالي الساعة <strong>${fmtTime(T)}</strong> في <strong>${esc(ex.scene)}</strong>.${deathTxt(ex)}<br>والغريب إنه ${esc(ex.trace)} انمسحت بعد الجريمة، يعني حدا لعب بمكان الجريمة.`,
                 note: hiderNote };
             const accessClue = { label: 'سجل الصلاحيات', truth: true,
-                text: `عشان يوصل لـ ${esc(ex.scene)}، المجرم استخدم <strong>${esc(ex.tool)}</strong> (هاي وسيلة الدخول، مش سلاح الجريمة). وحسب السجلات، الوحيدين اللي بيقدروا يوصلوا لهالشي: ${joinAr(accessGroup.map(who))}.`,
+                text: `عشان يوصل ${li(ex.scene)}، المجرم استخدم <strong>${esc(ex.tool)}</strong> (هاي وسيلة الدخول، مش سلاح الجريمة). وحسب السجلات، الوحيدين اللي بيقدروا يوصلوا لهالشي: ${joinAr(accessGroup.map(who))}.`,
                 note: `المافيوسو ${esc(maf.name)} من ضمنهم، والباقي أبرياء.` };
             const plantedClue = { label: 'غرض شخصي بمسرح الجريمة', truth: false,
-                text: `انلقت <strong>${planted}</strong> تخص ${who(framed)} مرمية جنب ${esc(ex.scene)}.`,
-                note: `⚠️ دليل مزروع! ${esc(maf.name)} زرعه ليورّط ${esc(framed.name)} البريء.` };
+                text: `لقينا جنب ${esc(ex.scene)} <strong>${planted}</strong> تبع ${who(framed)}.`,
+                note: `⚠️ دليل مزروع! ${esc(maf.name)} زرعه عشان يورّط ${esc(framed.name)} البريء.` };
             const hiderClue = { label: 'شاهد من برّا', truth: true,
-                text: `عامل توصيل كان مارق شاف ${who(hider)} حوالي <strong>${fmtTime(T + 15)}</strong> قريب من ${esc(ex.scene)} وهو عم يمسح شي ويخبي غرض بكيس.`,
+                text: `عامل توصيل كان مارق شاف ${who(hider)} حوالي <strong>${fmtTime(T + 15)}</strong> قريب من ${esc(ex.scene)} وهو بمسح إشي وبخبّي غرض بكيس.`,
                 note: hiderNote };
             const contraClue = { label: 'سجل الأقفال الإلكتروني', truth: true,
-                text: `${esc(mafClaim)} كان <strong>مقفول ومطفّى</strong> من ${fmtTime(T - 20)} لحد ${fmtTime(T + 20)}. يعني أي حدا بيقول إنه كان هناك وقت الجريمة عم يكذب.`,
-                note: `هذا مكان حجة المافيوسو${acc ? ' وشريكه' : ''}.` };
+                text: `${esc(mafClaim)} كان <strong>مقفول ومطفّى</strong> من ${fmtTime(T - 20)} لحد ${fmtTime(T + 20)}. يعني أي حدا بيقول إنه كان هناك وقت الجريمة بكذب.`,
+                note: `هاد المكان اللي بيدّعي المافيوسو${acc ? ' وشريكه' : ''} إنهم كانوا فيه.` };
             const traitClue = { label: 'أثر جسدي', truth: true,
                 text: `فريق الأدلة لقى في ${esc(ex.scene)}: <strong>${trait.clue}</strong>.`,
                 note: `ينطبق على المافيوسو ${esc(maf.name)}${traitDecoy ? ` وكمان بالصدفة على البريء ${esc(traitDecoy.name)}` : ''}.` };
@@ -1681,73 +1676,62 @@
             const early = shuffle([accessClue, plantedClue]);
             if (liar) early.push({ label: 'إفادة عامل الصيانة', truth: true,
                 text: `عامل الصيانة كان في ${esc(liarClaim)} طول الوقت وأكد إنه ما شاف ${who(liar)} هناك وقت الجريمة أبداً.`,
-                note: `${esc(liar.name)} بريء بس عم يخبي سر: ${esc(liar.secretThem)}.` });
+                note: `${esc(liar.name)} بريء بس مخبّي سر: ${esc(liar.secretThem)}.` });
             const late = [contraClue, traitClue];
             if (acc) late.push({ label: 'رسالة مشبوهة', truth: true,
-                text: `على تلفون ${who(acc)} لقينا رسالة من رقم مخفي الساعة ${fmtTime(T + 5)}: "خلصت. التزم بالقصة متل ما اتفقنا."`,
+                text: `على تلفون ${who(acc)} لقينا رسالة من رقم مخفي الساعة ${fmtTime(T + 5)}: "خلصت. التزم بالقصة زي ما اتفقنا."`,
                 note: `${esc(acc.name)} هو شريك المافيوسو.` });
             const clues = [sceneClue, ...shuffle(early), hiderClue, ...shuffle(late)];
 
             // 8) بطاقة كل لاعب
             const motives = shuffle(motivePool);
             P.forEach((p, i) => {
-                p.motive = p.isMafioso ? pick(mafiosoMotivePool) : motives[i % motives.length];
+                if (p.isMafioso) { const mm = pick(mafiosoMotivePool); p.motive = mm.you; p.motiveThem = mm.them; }
+                else p.motive = motives[i % motives.length];
                 p.sections = buildCard(p, { T, ex, maf, acc, hider, hiderMode, framed, planted, mafClaim, placeFacts, P });
             });
 
             return { T, ex, players: P, maf, acc, hider, hiderMode, framed, liar, witness, traitDecoy, trait, planted, mafClaim, liarClaim, liarReal, placeFacts, clues, accessGroup };
         }
 
+        // بطاقة كل لاعب: فقرة وحدة واضحة باللهجة الفلسطينية
         function buildCard(p, ctx) {
-            const { T, ex, maf, acc, hider, hiderMode, framed, planted, mafClaim, placeFacts, P } = ctx;
-            const s = [];
-            const companions = P.filter(o => o !== p && o.team === 'innocent' && !o.isLiar && o.claim === p.claim && p.team === 'innocent' && !p.isLiar);
+            const { T, ex, maf, acc, hiderMode, framed, planted, mafClaim, placeFacts, P } = ctx;
+            const deed = ex.weapon ? `قتلت ${esc(ex.item)} (${esc(ex.weapon)})` : `سرقت ${esc(ex.item)}`;
+            const risksTxt = p.risks.length ? ' ' + p.risks.join(' ') : '';
 
             if (p.isMafioso) {
-                s.push({ cls: 'danger', title: '🔪 إنت المافيوسو', html: `إنت المجرم الحقيقي. هدفك: تضل بالجلسة وما ينكشف أمرك لحد ما يقل عدد الأبرياء.${acc ? `<br>شريكك السري: ${who(acc)} — بيعرف كل شي وبيغطي عليك.` : '<br>إنت لحالك، ما حدا معك.'}` });
-                s.push({ title: '🕒 شو صار فعلاً', html: `الساعة ${fmtTime(T - 30)} كنت فعلاً في ${esc(mafClaim)} (وممكن حدا شافك هناك — هاد بيقوّي قصتك). حوالي ${fmtTime(T - 10)} دخلت لـ ${esc(ex.scene)} باستخدام <strong>${esc(ex.tool)}</strong>، و${ex.weapon ? `قتلت ${esc(ex.item)} الساعة ${fmtTime(T)}: <strong>${esc(ex.weapon)}</strong>.` : `نفذت العملية على ${esc(ex.item)} الساعة ${fmtTime(T)}.`}` });
-                s.push({ title: '🎭 قصتك قدام الكل', html: `"كنت في ${esc(mafClaim)} من ${fmtTime(T - 30)} لحد ${fmtTime(T + 30)} وما طلعت."${acc ? ` وشريكك ${esc(acc.name)} رح يشهد إنه كان معك.` : ' (كنت لحالك — حجتك ضعيفة، عوّضها بالهجوم).'}` });
-                const hideTxt = hiderMode === 'mafioso' ? `إنت بنفسك مسحت ${esc(ex.trace)} بعد العملية. في احتمال حدا شافك وإنت طالع.`
-                    : hiderMode === 'accomplice' ? `شريكك ${esc(acc.name)} هو اللي مسح ${esc(ex.trace)} بعدك. إذا انكشف، حاول تبعد حالك عنه.`
-                    : `إنت ما لحقت تمسح آثارك… بس لما رجعت تشوف، لقيت حدا تاني مسحها! ما بتعرف مين ولا ليش — استغل هالشي لصالحك.`;
-                s.push({ title: '🧹 الآثار', html: hideTxt });
-                s.push({ title: '🎯 خطة التوريط', html: `زرعت <strong>${planted}</strong> تبع ${who(framed)} جنب ${esc(ex.scene)}. لما يطلع هالدليل، اضغط عليه وقول إنك "حاسس إنه كان مختفي وقت الجريمة".` });
-                s.push({ cls: 'warn', title: '🩸 نقاط ضعفك', html: `${p.risks.join('<br>')}<br>ما بتعرف شو صار جوّا ${esc(mafClaim)} وقت الجريمة لأنك ما كنت هناك. إذا حدا طلب تحقق من الحكم عن تفاصيل المكان، تهرّب أو اخترع بحذر.` });
-                s.push({ title: '💬 حجة جاهزة', html: pick(mafiaArgumentsPool) });
-                s.push({ title: '🔥 دافعك', html: esc(p.motive) });
-                return s;
+                const hide = hiderMode === 'mafioso' ? `بعدها إنت بنفسك مسحت ${esc(ex.trace)}، وممكن حدا شافك وإنت طالع.`
+                    : hiderMode === 'accomplice' ? `وشريكك هو اللي مسح ${esc(ex.trace)} بعدك، فإذا انكشف بعّد حالك عنه.`
+                    : `ما لحقت تمسح آثارك، بس لما رجعت لقيت حدا تاني مسحها، وما بتعرف مين ولا ليش، فاستغلها لصالحك.`;
+                return [{ cls: 'danger', title: '🔪 إنت المافيوسو', html:
+                    `إنت المجرم الحقيقي، وبدك تضل مخفي لآخر اللعبة. ${acc ? `شريكك ${who(acc)} بيعرف كل إشي ورح يغطّي عليك.` : 'إنت لحالك وما حدا معك.'} ` +
+                    `الساعة ${fmtTime(T - 30)} كنت فعلاً ${bi(mafClaim)} وممكن حدا شافك هناك، وحوالي ${fmtTime(T - 10)} فُتت على ${esc(ex.scene)} <strong>${bi(ex.tool)}</strong> و${deed} الساعة ${fmtTime(T)}. ${hide} ` +
+                    `قدام الكل احكي إنك ضليت ${bi(mafClaim)} من ${fmtTime(T - 30)} لـ ${fmtTime(T + 30)}${acc ? ` و${esc(acc.name)} رح يشهد إنه كان معك` : ''}. ` +
+                    `وكمان زرعت <strong>${planted}</strong> تبع ${who(framed)} جنب ${esc(ex.scene)}، فلما يطلع هالدليل اضغط عليه. ` +
+                    `انتبه:${risksTxt} وإنت ما بتعرف شو صار جوّا ${esc(mafClaim)} وقت الجريمة لأنك ما كنت هناك، فإذا حدا طلب تحقق تهرّب منه. دافعك: ${esc(p.motive)}.` }];
             }
 
             if (p.isAccomplice) {
-                s.push({ cls: 'danger', title: '🤝 إنت شريك المافيوسو', html: `المافيوسو هو ${who(maf)}. بتربح إذا ما انكشف. إذا انطردت إنت، اللعبة بتكمل بس المافيوسو بيصير لحاله.` });
-                s.push({ title: '🕒 شو صار فعلاً', html: `من ${fmtTime(T - 15)} لحد ${fmtTime(T + 10)} كنت عم تراقب الطريق قرب ${esc(ex.scene)} وتأمّن لـ ${esc(maf.name)}.${hiderMode === 'accomplice' ? ` وبعد ما خلّص، فتت ومسحت ${esc(ex.trace)} وخبيت الغرض بكيس — في احتمال حدا شافك.` : ''}` });
-                s.push({ title: '🎭 قصتك قدام الكل', html: `"كنت مع ${esc(maf.name)} في ${esc(mafClaim)} من ${fmtTime(T - 30)} لحد ${fmtTime(T + 30)}." إنت شاهد زور لحجته.` });
-                s.push({ title: '🎯 مهمتك', html: `قول إنك شفت ${who(framed)} قريب من ${esc(ex.scene)} حوالي ${fmtTime(T - 5)}. (المافيوسو زرع ${planted} تبعه هناك.)` });
-                s.push({ cls: 'warn', title: '⚠️ خطر', html: `${p.risks.length ? p.risks.join('<br>') + '<br>' : ''}ما بتعرفوا شو صار جوّا ${esc(mafClaim)} — إذا حدا طلب تحقق، إنتو الاثنين بخطر. وفي رسالة على تلفونك ممكن تفضحك.` });
-                s.push({ title: '🔥 دافعك', html: esc(p.motive) });
-                return s;
+                return [{ cls: 'danger', title: '🤝 إنت شريك المافيوسو', html:
+                    `المافيوسو هو ${who(maf)}، وإنتو بتربحوا إذا ضل مخفي. ` +
+                    `من ${fmtTime(T - 15)} لـ ${fmtTime(T + 10)} كنت بتراقب الطريق قرب ${esc(ex.scene)} وبتأمّنله${hiderMode === 'accomplice' ? `، وبعد ما خلّص فُتت ومسحت ${esc(ex.trace)} وخبّيت الغرض بكيس، وممكن حدا شافك` : ''}. ` +
+                    `قدام الكل احكي إنك كنت مع ${esc(maf.name)} ${bi(mafClaim)} من ${fmtTime(T - 30)} لـ ${fmtTime(T + 30)}، واحكي إنك شفت ${who(framed)} قريب من ${esc(ex.scene)} حوالي ${fmtTime(T - 5)}، لأنه المافيوسو زرع ${planted} تبعه هناك. ` +
+                    `انتبه:${risksTxt} إنتو الاثنين ما بتعرفوا شو صار جوّا ${esc(mafClaim)}، وفي رسالة على تلفونك ممكن تفضحك. دافعك: لأنك ${esc(p.motive)}.` }];
             }
 
             // ---- الأبرياء ----
-            s.push({ cls: 'good', title: '✅ إنت بريء', html: 'هدفك: تكشفوا المافيوسو وتطردوه بالتصويت. ركّز بالتناقضات بين القصص، وانتبه — مش كل دليل صحيح، ومش كل كذاب مجرم.' });
-
+            const companions = P.filter(o => o !== p && o.team === 'innocent' && !o.isLiar && o.claim === p.claim);
+            let where;
             if (p.isLiar) {
-                s.push({ title: '🕒 وين كنت فعلاً', html: `في ${esc(p.real)} من ${fmtTime(T - 20)} لحد ${fmtTime(T + 15)}. السبب: ${esc(p.secret)}.` });
-                s.push({ cls: 'warn', title: '🤫 سرّك', html: `رح تقول للكل إنك كنت في ${esc(p.claim)} (وفعلاً كنت هناك الساعة ${fmtTime(T - 30)}). إذا انكشفت كذبتك، فيك تعترف بسرك لتبرّئ حالك — بتعرف إنه في ${esc(p.real)} وقت الجريمة: "${esc(placeFacts[p.real])}" والحكم بيقدر يأكدها. بس الاعتراف إله ثمن!` });
+                where = `الحقيقة إنك من ${fmtTime(T - 20)} لـ ${fmtTime(T + 15)} كنت ${bi(p.real)} لأنك ${esc(p.secret)}، بس قدام الكل رح تحكي إنك كنت ${bi(p.claim)} (وفعلاً كنت هناك الساعة ${fmtTime(T - 30)}). إذا انكشفت كذبتك بتقدر تعترف بسرك عشان تبرّي حالك، وبتعرف إنه ${bi(p.real)} وقت الجريمة ${esc(placeFacts[p.real])}، والحكم بيقدر يأكدها.`;
             } else {
-                const withTxt = companions.length ? `ومعك: ${joinAr(companions.map(who))} — بيقدروا يشهدولك.` : 'كنت لحالك — حجتك أضعف، دافع عنها بالتفاصيل.';
-                s.push({ title: '🕒 وين كنت', html: `في ${esc(p.claim)} من ${fmtTime(T - 30)} لحد ${fmtTime(T + 30)}. ${withTxt}` });
-                s.push({ title: '🛡️ حجتك القوية', html: `وقت الجريمة في ${esc(p.claim)}: "${esc(placeFacts[p.claim])}". هالتفصيلة ما بيعرفها إلا اللي كان هناك فعلاً — اطلب من الحكم يأكدها إذا اتهموك، أو اسأل غيرك عنها لتكشف الكذاب.` });
+                where = `وقت الجريمة كنت ${bi(p.claim)} من ${fmtTime(T - 30)} لـ ${fmtTime(T + 30)}${companions.length ? `، ومعك ${joinAr(companions.map(who))} وبيقدروا يشهدولك` : ' لحالك، فحجتك أضعف'}. وإشي ما بيعرفه غير اللي كان هناك: ${esc(placeFacts[p.claim])}، فإذا اتهموك اطلب من الحكم يأكده.`;
             }
-
-            if (p.isInnocentHider) {
-                s.push({ cls: 'warn', title: '🧹 سرّك الخطير', html: `قبل الجريمة بحوالي 40 دقيقة دخلت لـ ${esc(ex.scene)} لـ ${esc(p.hiderReason)}. لما سمعت إنه صارت جريمة، رجعت حوالي ${fmtTime(T + 15)} ومسحت ${esc(ex.trace)} لأنك خفت تكون بصماتك هناك. إنت مش المجرم، بس إنت اللي أخفيت الآثار… وهالشي ممكن يخرب على المحققين!` });
-            }
-
-            if (p.obs.length) s.push({ title: '👁️ شو شفت', html: p.obs.join('<br>') });
-            const risks = [...p.risks, `سبب ممكن يخلّيهم يشكّوا فيك: ${esc(p.motive)}.`];
-            s.push({ cls: 'warn', title: '⚠️ شو ممكن يورّطك', html: risks.join('<br>') });
-            return s;
+            const hiderTxt = p.isInnocentHider ? ` وإلك سر خطير: قبل الجريمة بحوالي 40 دقيقة فُتت على ${esc(ex.scene)} عشان ${esc(p.hiderReason)}، ولما سمعت بالجريمة رجعت حوالي ${fmtTime(T + 15)} ومسحت ${esc(ex.trace)} خوفاً من بصماتك. إنت مش المجرم، بس إنت اللي خبّيت الآثار.` : '';
+            const obsTxt = p.obs.length ? ' ' + p.obs.join(' ') : '';
+            return [{ cls: 'good', title: '✅ إنت بريء', html:
+                `بدك تكشف المافيوسو وتطرده بالتصويت، وانتبه إنه مش كل دليل صحيح ومش كل كذاب مجرم. ${where}${hiderTxt}${obsTxt}${risksTxt} وممكن يشكّوا فيك لأنك ${esc(p.motive)}.` }];
         }
 
         function renderSections(sections) {
@@ -1764,7 +1748,7 @@
         function peerOpts() { return window.MAFIOSO_PEER_OPTS || {}; }
         function peerAvailable() {
             if (window.Peer) return true;
-            alert('ما قدرت أحمّل نظام الغرف — لازم يكون في إنترنت. فيك تلعب بطريقة "تمرير جهاز واحد".');
+            alert('ما قدرت أحمّل نظام الغرف — لازم يكون في إنترنت. بتقدروا تلعبوا بطريقة "تمرير جهاز واحد".');
             return false;
         }
         function keepAwake() {
@@ -1777,7 +1761,7 @@
             const room = document.getElementById('mode-room').checked;
             document.querySelectorAll('.pass-only').forEach(el => el.classList.toggle('hidden', room));
             document.querySelectorAll('.room-only').forEach(el => el.classList.toggle('hidden', !room));
-            document.getElementById('setup-start-btn').innerText = room ? 'افتح الغرفة 🌐' : 'بدء توزيع الأدوار السرية';
+            document.getElementById('setup-start-btn').innerText = room ? 'افتح الغرفة 🌐' : 'وزّع الأدوار السرية';
         }
 
         // ---------- الحكم (المضيف) ----------
@@ -1792,7 +1776,7 @@
             }
             net.lobby = [];
             document.getElementById('lobby-code').innerText = '····';
-            setLobbyStatus('جاري إنشاء الغرفة…');
+            setLobbyStatus('لحظة، بنفتح الغرفة…');
             renderLobby();
             showScreen('screen-lobby');
             openHostPeer(0);
@@ -1908,7 +1892,7 @@
             try { if (navigator.share) { await navigator.share(link ? { title: 'مافيوسو', text, url: link } : { title: 'مافيوسو', text }); return; } }
             catch (e) { if (e && e.name === 'AbortError') return; }
             const all = link ? `${text}\n${link}` : text;
-            try { await navigator.clipboard.writeText(all); alert('تم النسخ ✅ ابعته بالواتساب.'); }
+            try { await navigator.clipboard.writeText(all); alert('نسخته ✅ ابعته عالواتساب.'); }
             catch (e) { prompt('انسخ وابعت:', all); }
         }
 
@@ -2000,7 +1984,7 @@
             if (!peerAvailable()) return;
             try { localStorage.setItem('mafioso-name', name); } catch (e) {}
             client.code = code; client.name = name;
-            setJoinStatus('جاري الاتصال بالغرفة…');
+            setJoinStatus('لحظة، بندخل الغرفة…');
             document.getElementById('join-btn').disabled = true;
 
             clearTimeout(client.timer);
@@ -2076,7 +2060,7 @@
                 document.getElementById('phone-player-name').innerText = d.name;
                 client.myName = d.name;
                 client.lastEventId = d.lastEventId || 0;
-                document.getElementById('phone-role').innerText = 'شخصيتك: ' + d.role;
+                document.getElementById('phone-role').innerText = 'دورك: ' + d.role;
                 document.getElementById('phone-card').innerHTML = d.card;
                 document.getElementById('phone-cast').innerHTML = d.cast.map(t => `<span class="role-chip">${esc(t)}</span>`).join('');
                 document.getElementById('phone-card-wrap').classList.add('hidden');
@@ -2102,7 +2086,7 @@
                     }
                 }
                 document.getElementById('phone-clues').innerHTML = (d.clues || []).slice().reverse().map(c => `<div class="feed-item"><h4>${esc(c.label)}</h4>${c.text}</div>`).join('');
-                document.getElementById('phone-news').innerHTML = (d.news || []).map(n => `<div class="feed-item">${n}</div>`).join('') || '<p>لسا ما في شي.</p>';
+                document.getElementById('phone-news').innerHTML = (d.news || []).map(n => `<div class="feed-item">${n}</div>`).join('') || '<p>لسا ما في إشي.</p>';
                 const ended = document.getElementById('phone-ended');
                 if (d.ended) { ended.innerHTML = d.ended; ended.classList.remove('hidden'); }
                 else { ended.innerHTML = ''; ended.classList.add('hidden'); }
@@ -2272,7 +2256,7 @@
 
         function revealMyRole() {
             const p = playerObj(gameState.players[gameState.currentPlayerIndex]);
-            document.getElementById('my-story-role').innerText = "شخصيتك في القصة: " + p.role;
+            document.getElementById('my-story-role').innerText = "دورك: " + p.role;
             document.getElementById('my-card').innerHTML = renderSections(p.sections);
             showScreen('screen-role-reveal');
             window.scrollTo(0, 0);
@@ -2285,7 +2269,7 @@
                 showScreen('screen-role-pass');
                 updateRolePassScreen();
             } else {
-                document.getElementById('judge-handover-text').innerText = `أعطِ الجهاز الآن لـ "${gameState.judgeName}" (حكم اللعبة) لكي يطلع على كافة أسرار القضية.`;
+                document.getElementById('judge-handover-text').innerText = `عطي الجوال هسّا لـ"${gameState.judgeName}" (الحكم)، هو بس بيشوف كل الأسرار.`;
                 showScreen('screen-judge-handover');
             }
         }
@@ -2314,7 +2298,6 @@
 
             document.getElementById('case-category-badge').innerText = c.category;
             document.getElementById('case-title').innerText = c.title;
-            document.getElementById('case-description').innerText = c.desc;
 
             // ملفات اللاعبين
             const rolesList = document.getElementById('assigned-roles-list');
@@ -2327,7 +2310,7 @@
                 const d = document.createElement('details');
                 d.className = 'dossier';
                 if (isOut) d.style.opacity = '0.5';
-                d.innerHTML = `<summary><span>${who(p)}${isOut ? (gameState.killed.includes(p.name) ? ' <span style="color:#ff7b72;">(💀 مقتول)</span>' : ' <span style="color:#ff7b72;">(مُقصى)</span>') : ''}</span>${tag}</summary>
+                d.innerHTML = `<summary><span>${who(p)}${isOut ? (gameState.killed.includes(p.name) ? ' <span style="color:#ff7b72;">(💀 مقتول)</span>' : ' <span style="color:#ff7b72;">(طلع بالتصويت)</span>') : ''}</span>${tag}</summary>
                     <div style="font-size:0.85rem;margin:6px 0;color:var(--text-muted)">بيدّعي إنه كان في: <strong>${esc(p.claim)}</strong></div>
                     ${renderSections(p.sections)}`;
                 rolesList.appendChild(d);
@@ -2335,7 +2318,7 @@
 
             const elimInfo = document.getElementById('eliminated-info');
             const voted = gameState.eliminated.filter(n => !gameState.killed.includes(n));
-            elimInfo.innerText = gameState.eliminated.length === 0 ? "لم يتم إقصاء أي لاعب بعد."
+            elimInfo.innerText = gameState.eliminated.length === 0 ? "لسا ما طلع حدا."
                 : (voted.length ? "المطرودين بالتصويت: " + voted.join("، ") : "") + (gameState.killed.length ? "   💀 المقتولين: " + gameState.killed.join("، ") : "");
             const left = escapeVotesLeft();
             const escEl = document.getElementById('hub-escape');
@@ -2346,60 +2329,28 @@
             const fx = document.getElementById('facts-table');
             fx.innerHTML = Object.entries(m.placeFacts).map(([pl, f]) => `<div class="assigned-role-row"><span><strong>${esc(pl)}</strong></span><span style="max-width:65%;text-align:left;color:var(--text-main)">${esc(f)}</span></div>`).join('');
 
-            renderJudgeScript();
+            renderJudgeGuide();
             renderClues();
-            newQuestion();
         }
 
-        function renderJudgeScript() {
-            const m = gameState.mystery, c = gameState.currentCase, ex = m.ex;
-            const say = t => `<div class="say">🎙️ "${t}"</div>`;
-            const note = t => `<p class="judge-note">🔒 ${t}</p>`;
+        // دليل الحكم: مين مين (بعد الدليل الأول) + القوانين باختصار، بدون تكرار
+        function renderJudgeGuide() {
+            const m = gameState.mystery;
             const liars = [`${esc(m.maf.name)} (المافيوسو)`];
             if (m.acc) liars.push(`${esc(m.acc.name)} (الشريك)`);
-            if (m.liar) liars.push(`${esc(m.liar.name)} (بريء بيخبي سر)`);
-            const steps = [
-                ['1️⃣ الافتتاح: عرّفهم على الجريمة والقوانين',
-                    say(`مساء الخير يا محققين. الليلة صارت جريمة: ${esc(c.desc)}`) +
-                    say(`مكان الجريمة: ${esc(ex.scene)}، حوالي الساعة ${fmtTime(ex.t)}.${ex.weapon ? ` وسبب الوفاة: ${esc(ex.weapon)}.` : ''} والأماكن الموجودة بالموقع: ${esc(ex.places.join('، '))}.`) +
-                    say(`بيناتنا هلأ المافيوسو، المجرم الحقيقي، وممكن يكون معه شريك بيغطي عليه. الباقي أبرياء. بس انتبهوا: في أبرياء عندهم أسرار وممكن يكذبوا لأسباب ما إلها علاقة بالجريمة، ومش كل دليل رح يطلع صحيح.`) +
-                    say(`كل واحد معه بطاقة سرية فيها شخصيته، ووين كان، وشو شاف، وشو ممكن يورطه. ما حدا يفرجي بطاقته لحدا.`) +
-                    say(`الأبرياء بيربحوا إذا طردوا المافيوسو بالتصويت. والمافيا بتربح إذا ضل مخفي لحد ما يصير عدد الأبرياء الباقيين قد عدد المافيا.`)],
-                ['2️⃣ تعريف الشخصيات: هيك بيعرف كل واحد دور الباقي',
-                    say('الشخصيات معلنة للكل، بس مين المجرم سر. رح أقرأ مين مين بالقصة:') +
-                    `<div class="say-list">${m.players.map(p => `• <strong>${esc(p.name)}</strong> ← ${esc(p.role)}`).join('<br>')}</div>` +
-                    say('هلأ كل واحد بدوره يعرّف عن حاله: اسمه، وشخصيته، ووين كان وقت الجريمة ومع مين. احكوا من بطاقتكم.') +
-                    (net.started ? note('بالغرفة الأونلاين، قائمة "مين مين" موجودة كمان على جوال كل لاعب.') : '') +
-                    note(`المافيوسو كمان رح يحكي قصة مزيفة. اللي رح يكذبوا عن مكانهم: ${liars.join('، ')}. قارن كلامهم بملفاتهم تحت.`)],
-                ['3️⃣ قانون التحقق: اشرحه مرة وحدة',
-                    say('كل واحد إله طلب تحقق واحد باللعبة كلها: بتقول تفصيلة صارت بالمكان اللي كنت فيه وقت الجريمة، وأنا بقلك صح ولا غلط. اللي كان فعلاً هناك بيعرفها، والكذاب ما بيعرفها.') +
-                    note('جاوب من "جدول التحقق" تحت. إذا كلامه بيطابق التفصيلة قول "صح"، غير هيك "غلط".')],
-                ['4️⃣ كل جولة: دليل، ونقاش، وأسئلة',
-                    note('اقرأ آخر دليل انكشف (الصناديق الصفرا تحت) بصوت عالي، بدون الملاحظة الحمرا. الدليل المزروع اقرأه عادي.') +
-                    say('عندكم 5 دقايق نقاش. فيكم تسألوا بعض، تطلبوا تحقق، وتتهموا. حطّوا عينكم على التناقضات.') +
-                    note('إذا في حدا ساكت أو النقاش وقف، استخدم "السؤال الموجّه" تحت.')],
-                ['5️⃣ التصويت والطرد',
-                    say('خلص الوقت! على العد لثلاثة، كل واحد يأشّر على اللي بيشك فيه: واحد… اثنين… ثلاثة!') +
-                    say('اللي عليه أكتر أصوات بيطلع من اللعبة.') +
-                    note('إذا تعادلوا: كل متهم بيدافع عن حاله 30 ثانية، وبعدها بتعيدوا التصويت بينهم بس. بعدها اضغط "الانتقال لمرحلة الاتهام" واختار مين طلع.') +
-                    note('بعد الطرد اقرأ النتيجة متل ما بتطلع (بريء أو شريك)، وبعدها بينكشف دليل جديد لحاله. ارجع للخطوة 4.')],
-                ['⚡ الأحداث المفاجئة',
-                    note('كل ما طردتوا بريء والمجرم لسا حر، بيصير حدث مفاجئ: جريمة تانية مع رسالة أخيرة، أو كاميرا، أو فضيحة، أو تهديد، أو انقطاع كهربا. وأول حدث بيبلّش عد تنازلي، والمجرم بيهرب إذا ما انكشف بالوقت.') +
-                    note('اقرأ الحدث بحماس وبصوت عالي! اللاعب المقتول بيضل يتابع بس ما بيحكي ولا بيصوّت. وإذا النقاش برد، فيك تطلق حدث بإيدك بالزر تحت.')],
-                ['6️⃣ النهاية',
-                    note('لما ينطرد المافيوسو أو تربح المافيا، اقرأ "شو صار فعلاً" بشاشة النتيجة، وهون الكل بيفهم القصة كاملة.') +
-                    say('خلّونا نشوف مين كان صادق، ومين كذب، وليش…')]
-            ];
-            document.getElementById('judge-script').innerHTML = steps.map(([t, h], i) =>
-                `<details class="script-step"${i < 2 && gameState.voteRound === 1 && gameState.eliminated.length === 0 ? ' open' : ''}><summary>${t}</summary>${h}</details>`).join('');
-        }
-
-        function newQuestion() {
-            const c = gameState.currentCase;
-            const alive = gameState.mystery.players.filter(p => !gameState.eliminated.includes(p.name));
-            const target = pick(alive);
-            const q = pick(c.questions);
-            document.getElementById('current-question').innerHTML = `🎤 موجّه إلى ${who(target)}:<br>"${esc(q)}"`;
+            if (m.liar) liars.push(`${esc(m.liar.name)} (بريء مخبّي سر)`);
+            const alive = m.players.filter(p => !gameState.eliminated.includes(p.name));
+            document.getElementById('judge-cast').innerHTML = `
+                <div class="clue-box">
+                    <h4>👥 بعد الدليل الأول: مين مين</h4>
+                    <div class="say">🎙️ "هاي شخصياتكم بالقصة، وكل واحد بيعرف دوره من بطاقته:<br>${alive.map(p => `<strong>${esc(p.name)}</strong> ← ${esc(p.role)}`).join('<br>')}<br>هسّا كل واحد بدوره يعرّف عن حاله ويحكي وين كان وقت الجريمة ومع مين."</div>
+                    <p class="judge-note">🔒 اللي رح يكذبوا عن مكانهم: ${liars.join('، ')}. قارن كلامهم بملفاتهم تحت.</p>
+                </div>`;
+            document.getElementById('judge-rules').innerHTML = `<div class="say">🎙️ "بيناتنا مافيوسو، وممكن يكون معه شريك، والباقي أبرياء. بس في أبرياء مخبّيين أسرار وبيكذبوا، ومش كل دليل صحيح. ` +
+                `ما حدا يفرجي بطاقته لحدا. كل واحد إله طلب تحقق واحد باللعبة: بيحكي إشي صار بمكانه وقت الجريمة، وأنا بقوله صح ولا غلط. ` +
+                `بعد كل نقاش بنصوّت ع العد لثلاثة، واللي عليه أكتر أصوات بيطلع. إذا طلع بريء بينكشف دليل جديد، وممكن يصير إشي مفاجئ. ` +
+                `الأبرياء بيربحوا إذا طردوا المافيوسو، والمافيا بتربح إذا ضل مخفي لحد ما يصير عدد الأبرياء قد عددهم، أو إذا هرب."</div>` +
+                `<p class="judge-note">🔒 التحقق بتجاوبه من "جدول التحقق". الدليل المزروع اقرأه عادي. إذا تعادلت الأصوات، كل متهم بيدافع عن حاله 30 ثانية وبتعيدوا التصويت بيناتهم.</p>`;
         }
 
         function renderClues() {
@@ -2410,14 +2361,14 @@
                 const cl = clues[i];
                 const box = document.createElement('div');
                 box.className = 'clue-box';
-                box.innerHTML = `<h4>الدليل ${i + 1}: ${cl.label} ${cl.truth ? '' : '<span style="color:#ff7b72;">(دليل مزروع/مضلّل — اقرأه عادي)</span>'}</h4>
-                    <p style="text-align:right;margin-bottom:6px;color:var(--text-main);">${cl.text}</p>
-                    <p class="judge-note">🔒 للحكم فقط: ${cl.note}</p>`;
+                box.innerHTML = `<h4>الدليل ${i + 1}: ${cl.label} ${cl.truth ? '' : '<span style="color:#ff7b72;">(مزروع، بس اقرأه عادي)</span>'}</h4>
+                    <div class="say">🎙️ ${cl.text}</div>
+                    <p class="judge-note">🔒 ${cl.note}</p>`;
                 container.appendChild(box);
             }
             const btn = document.getElementById('btn-next-clue');
             btn.style.display = gameState.activeCluesCount >= clues.length ? 'none' : 'block';
-            btn.innerText = `كشف الدليل التالي 🔍 (${gameState.activeCluesCount}/${clues.length})`;
+            btn.innerText = `اكشف الدليل اللي بعده 🔍 (${gameState.activeCluesCount}/${clues.length})`;
         }
 
         function revealNextClue() {
@@ -2430,7 +2381,7 @@
 
         function goToVoting() {
             const alive = gameState.players.filter(p => !gameState.eliminated.includes(p));
-            if (alive.length < 2) { alert("لم يتبقَّ عدد كافٍ من اللاعبين للتصويت"); return; }
+            if (alive.length < 2) { alert("ما ضل لاعبين كفاية للتصويت"); return; }
             document.getElementById('vote-round-label').innerText = "الجولة " + gameState.voteRound;
             const select = document.getElementById('accused-select');
             select.innerHTML = '';
@@ -2457,18 +2408,18 @@
             if (gameState.events.pending) gameState.events.pending = null;
 
             let verdict;
-            if (p.isAccomplice) verdict = `<span style="color:var(--gold);font-weight:bold;">كان شريك المافيوسو! 🤝</span><br>ضربة قوية… بس المافيوسو الحقيقي لسا بينكم.`;
-            else if (p.isInnocentHider) verdict = `<span style="color:#3fb950;font-weight:bold;">كان بريئاً!</span><br>بس كان عنده سر… هو اللي أخفى الآثار. المجرم لسا بينكم.`;
-            else verdict = `<span style="color:#3fb950;font-weight:bold;">كان بريئاً!</span><br>اللعبة مستمرة بدونه.`;
+            if (p.isAccomplice) verdict = `<span style="color:var(--gold);font-weight:bold;">طلع شريك المافيوسو! 🤝</span><br>ضربة قوية… بس المافيوسو الحقيقي لسا بيناتكم.`;
+            else if (p.isInnocentHider) verdict = `<span style="color:#3fb950;font-weight:bold;">طلع بريء!</span><br>بس كان مخبّي سر… هو اللي خبّى الآثار. والمجرم لسا بيناتكم.`;
+            else verdict = `<span style="color:#3fb950;font-weight:bold;">طلع بريء!</span><br>واللعبة بتكمّل بدونه.`;
 
             gameState.voteRound++;
             const escLeft = escapeVotesLeft();
             if (escLeft !== null && escLeft <= 0) { endGame(false, 'escaped'); return; }
             if (gameState.activeCluesCount < gameState.mystery.clues.length) gameState.activeCluesCount++;
-            addNews(`🗳️ الجولة ${gameState.voteRound - 1}: تم إقصاء ${esc(accused)} (${esc(p.role)}) — ${p.isAccomplice ? 'وطلع <strong>شريك المافيوسو</strong>! 🤝' : 'وطلع <strong>بريء</strong>.'} انكشف دليل جديد.`);
+            addNews(`🗳️ الجولة ${gameState.voteRound - 1}: طلّعتوا ${esc(accused)} (${esc(p.role)})، ${p.isAccomplice ? 'وطلع <strong>شريك المافيوسو</strong>! 🤝' : 'وطلع <strong>بريء</strong>.'} انكشف دليل جديد.`);
             document.getElementById('vote-round-result-text').innerHTML =
-                `تم إقصاء <strong style="color:var(--accent-color);">${esc(accused)}</strong> (${esc(p.role)})<br><br>${verdict}<br><br>
-                <span style="font-size:0.9rem;color:var(--text-muted)">باقي ${aliveInn} أبرياء مقابل ${aliveMafia} من المافيا. انكشف دليل جديد تلقائياً بلوحة الحكم.</span>`;
+                `طلّعتوا <strong style="color:var(--accent-color);">${esc(accused)}</strong> (${esc(p.role)})<br><br>${verdict}<br><br>
+                <span style="font-size:0.9rem;color:var(--text-muted)">باقي ${aliveInn} أبرياء مقابل ${aliveMafia} من المافيا. وانكشف دليل جديد بلوحة الحكم.</span>`;
             // المجرم لسا حر… بيصير حدث مفاجئ
             const e = generateEvent();
             gameState.events.pending = e;
@@ -2514,7 +2465,7 @@
                 gameState.eliminated.push(v.name);
                 gameState.killed.push(v.name);
                 e = { title: '💀 جريمة تانية!',
-                    text: `صرخة بنص الليل! لقينا ${who(v)} فاقد للحياة في ${esc(where)}. المجرم ضرب مرة تانية!<br><br>✍️ <strong>رسالة أخيرة:</strong> قبل ما يفارق، كتب بإصبعه على الأرض حرف واحد: <span style="font-size:1.6rem;color:var(--gold);">«${esc(letter)}»</span>`,
+                    text: `صرخة بنص الليل! لقينا ${who(v)} مقتول ${bi(where)}. المجرم ضرب مرة تانية!<br><br>✍️ <strong>رسالة أخيرة:</strong> قبل ما يفارق، كتب بإصبعه على الأرض حرف واحد: <span style="font-size:1.6rem;color:var(--gold);">«${esc(letter)}»</span>`,
                     note: `الضحية كان بريء${v === m.witness ? ' — وهو الشاهد اللي لمح المجرم، عشان هيك انقتل' : ''}. الحرف هو أول حرف من شخصية المافيوسو (${esc(m.maf.role)}). بينطبق على: ${matches.map(p => esc(p.name) + ' (' + esc(p.role) + ')').join('، ')}.` };
             } else if (kind === 'camera') {
                 const others = shuffle(alive.filter(p => p !== m.maf)).slice(0, 2);
@@ -2529,20 +2480,20 @@
             } else if (kind === 'threat') {
                 const t = (m.witness && inn.includes(m.witness)) ? m.witness : pick(inn);
                 e = { title: '✉️ رسالة تهديد',
-                    text: `${who(t)} لقى ورقة تحت بابه، مكتوبة بخط مرجّف: «شفت أكتر من اللازم… اسكت أحسنلك.» المجرم خايف من شي بيعرفه!`,
-                    note: `${esc(t.name)} بريء. المافيا خايفة من معلوماته${t === m.witness ? ' (هو الشاهد اللي لمح المجرم)' : ''}، خلّيه يحكي كل شي شافه.` };
+                    text: `${who(t)} لقى ورقة تحت بابه، مكتوبة بخط مرجّف: «شفت أكتر من اللازم… اسكت أحسنلك.» المجرم خايف من إشي بيعرفه!`,
+                    note: `${esc(t.name)} بريء. المافيا خايفة من معلوماته${t === m.witness ? ' (هو الشاهد اللي لمح المجرم)' : ''}، خلّيه يحكي كل إشي شافه.` };
             } else {
                 const seenPool = alive.filter(p => p.team === 'mafia');
                 const seen = (Math.random() < 0.55 && seenPool.length) ? pick(seenPool) : pick(alive);
                 e = { title: '🔌 انقطعت الكهربا!',
                     text: `انقطعت الكهربا عن المكان كله لدقيقتين! ولما رجعت، الصندوق اللي فيه ${esc(ex.trace)} بغرفة الأدلة كان مفتوح والمحتوى مخربط. وفي حدا بيقول إنه لمح ${who(seen)} قريب من غرفة الأدلة بالعتمة.`,
-                    note: seen.team === 'mafia' ? `${esc(seen.name)} فعلاً من المافيا وكان عم يخرّب الأدلة.` : `${esc(seen.name)} بريء، كان مارق بالصدفة. اللي خرّب هو المافيا.` };
+                    note: seen.team === 'mafia' ? `${esc(seen.name)} فعلاً من المافيا وكان بخرّب الأدلة.` : `${esc(seen.name)} بريء، كان مارق بالصدفة. اللي خرّب هو المافيا.` };
             }
 
             // عدّ تنازلي: المجرم رح يهرب
             if (ev.escapeAt == null) {
                 ev.escapeAt = gameState.voteRound + 2;
-                e.text += `<br><br>⏳ <strong>وخبر سيئ:</strong> العاصفة رح تهدأ قريباً والطريق رح ينفتح. إذا ما انكشف المجرم خلال <strong>3 تصويتات</strong>، رح يهرب للأبد!`;
+                e.text += `<br><br>⏳ <strong>وخبر عاطل:</strong> العاصفة رح تهدا قريب والطريق رح ينفتح. إذا ما انكشف المجرم خلال <strong>3 تصويتات</strong>، رح يهرب للأبد!`;
             }
 
             ev.list.push(e);
@@ -2591,15 +2542,15 @@
             const titleEl = document.getElementById('result-title');
             const descEl = document.getElementById('result-description');
             if (innocentsWin) {
-                titleEl.innerText = "🎉 فاز الأبرياء!";
+                titleEl.innerText = "🎉 ربحوا الأبرياء!";
                 titleEl.style.color = "#3fb950";
-                descEl.innerHTML = `تم كشف المافيوسو في الجولة رقم <strong>${gameState.voteRound}</strong>!<br>المجرم كان: ${who(m.maf)}<br>دافعه (من بطاقته): "${esc(m.maf.motive)}"`;
+                descEl.innerHTML = `كشفتوا المافيوسو بالجولة رقم <strong>${gameState.voteRound}</strong>!<br>المجرم كان: ${who(m.maf)}<br>الدافع: ${esc(m.maf.motiveThem)}.`;
             } else {
-                titleEl.innerText = "🔪 فاز المافيوسو!";
+                titleEl.innerText = "🔪 ربح المافيوسو!";
                 titleEl.style.color = "var(--accent-color)";
                 descEl.innerHTML = reason === 'escaped'
-                    ? `⏳ انفتح الطريق… و${who(m.maf)} هرب قبل ما تكشفوه!<br>دافعه (من بطاقته): "${esc(m.maf.motive)}"`
-                    : `الحيلة انطلت على الجميع… ${who(m.maf)} ضل مخفي لآخر لحظة.<br>دافعه (من بطاقته): "${esc(m.maf.motive)}"`;
+                    ? `⏳ انفتح الطريق… و${who(m.maf)} هرب قبل ما تكشفوه!<br>الدافع: ${esc(m.maf.motiveThem)}.`
+                    : `الحيلة مشيت عالكل… ${who(m.maf)} ضل مخفي لآخر لحظة.<br>الدافع: ${esc(m.maf.motiveThem)}.`;
             }
             fillFinalScenario();
             if (net.started) {
@@ -2613,17 +2564,17 @@
         function fillFinalScenario() {
             const m = gameState.mystery, ex = m.ex, T = m.T;
             const lines = [];
-            lines.push(`🕒 <strong>${fmtTime(T - 40)}</strong> — ${m.hider.isInnocentHider ? `${who(m.hider)} دخل ${esc(ex.scene)} عشان ${esc(m.hider.hiderReasonThem)}، وطلع. كل شي كان طبيعي.` : `كل شي كان طبيعي و${intactTxt(ex)}.`}`);
+            lines.push(`🕒 <strong>${fmtTime(T - 40)}</strong> — ${m.hider.isInnocentHider ? `${who(m.hider)} دخل ${esc(ex.scene)} عشان ${esc(m.hider.hiderReasonThem)}، وطلع. كل إشي كان طبيعي.` : `كل إشي كان طبيعي و${intactTxt(ex)}.`}`);
             lines.push(`🕒 <strong>${fmtTime(T - 30)}</strong> — ${who(m.maf)} كان في ${esc(m.mafClaim)} قدام الناس، عشان يبني حجته.${m.acc ? ` و${who(m.acc)} اتفق معه يشهد إنه كان معه.` : ''}`);
-            if (m.liar) lines.push(`🕒 <strong>${fmtTime(T - 20)}</strong> — ${who(m.liar)} تسلل لـ ${esc(m.liarReal)} لأنه ${esc(m.liar.secretThem)}. هاد سبب كذبه — مش الجريمة.`);
-            lines.push(`🕒 <strong>${fmtTime(T - 10)}</strong> — المافيوسو تسلل لـ ${esc(ex.scene)}${m.witness ? ` (و${who(m.witness)} لمحه من بعيد)` : ''}${m.acc ? ` والشريك عم يراقب الطريق` : ''}.`);
-            lines.push(`🕒 <strong>${fmtTime(T)}</strong> — دخل باستخدام ${esc(ex.tool)}، و${ex.weapon ? `قتل ${esc(ex.item)} (${esc(ex.weapon)})` : `نفّذ الجريمة على ${esc(ex.item)}`}، وضل منه أثر: ${m.trait.clue}${m.traitDecoy ? ` (اللي بالصدفة ينطبق كمان على ${who(m.traitDecoy)})` : ''}.`);
+            if (m.liar) lines.push(`🕒 <strong>${fmtTime(T - 20)}</strong> — ${who(m.liar)} تسلل ${li(m.liarReal)} لأنه ${esc(m.liar.secretThem)}. هاد سبب كذبه — مش الجريمة.`);
+            lines.push(`🕒 <strong>${fmtTime(T - 10)}</strong> — المافيوسو تسلل ${li(ex.scene)}${m.witness ? ` (و${who(m.witness)} لمحه من بعيد)` : ''}${m.acc ? ` والشريك بيراقب الطريق` : ''}.`);
+            lines.push(`🕒 <strong>${fmtTime(T)}</strong> — دخل باستخدام ${esc(ex.tool)}، و${ex.weapon ? `قتل ${esc(ex.item)} (${esc(ex.weapon)})` : `سرق ${esc(ex.item)}`}، وضل منه أثر: ${m.trait.clue}${m.traitDecoy ? ` (اللي بالصدفة ينطبق كمان على ${who(m.traitDecoy)})` : ''}.`);
             lines.push(`🕒 <strong>${fmtTime(T + 5)}</strong> — زرع ${m.planted} تبع ${who(m.framed)} جنب المكان عشان يورّطه.`);
             const hideLine = m.hiderMode === 'mafioso' ? `المافيوسو نفسه رجع ومسح ${esc(ex.trace)}.`
                 : m.hiderMode === 'accomplice' ? `الشريك ${who(m.acc)} فات ومسح ${esc(ex.trace)} وخبّى الغرض.`
                 : `البريء ${who(m.hider)} رجع خايف ومسح ${esc(ex.trace)} لأنه كان بالمكان قبل — وهيك من غير ما يقصد غطّى على المجرم الحقيقي!`;
             lines.push(`🕒 <strong>${fmtTime(T + 15)}</strong> — ${hideLine}`);
-            lines.push(`🔥 <strong>دافع المافيوسو:</strong> "${esc(m.maf.motive)}"`);
+            lines.push(`🔥 <strong>دافع المافيوسو:</strong> ${esc(m.maf.motiveThem)}.`);
 
             document.getElementById('final-scenario-section').style.display = 'block';
             document.getElementById('final-scenario-text').innerHTML = lines.join('<br><br>');
