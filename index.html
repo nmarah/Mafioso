@@ -1412,6 +1412,10 @@
             {"scene": "غرفة الطرود الخاصة", "t": 360, "places": ["صالة الفرز", "المكتب", "الموقف", "الاستراحة", "البوابة"], "item": "الطرد السري", "tool": "مفتاح غرفة الطرود", "trace": "آثار الشمع الأحمر المكسور", "kind": "t"}
         );
 
+        // سبب الوفاة بقضايا القتل (عشان يكون واضح كيف صارت الجريمة)
+        const caseWeapons = {"20": "ضربة على الراس بشمعدان نحاسي ثقيل", "21": "سم مدسوس بكاسة الشاي اللي طلبها قبل النوم", "22": "ضربة على الراس بمفتاح ربط حديدي من عدّة غرفة المحركات", "24": "سم مدسوس بكاسة العصير تبعه", "25": "دفعة قوية خلّته يوقع ويضرب راسه بصخور الحوض", "26": "سم مدسوس بكاسة العصير اللي شربها بعد الأغنية", "28": "خنق بحبل رفيع من ورا المقعد", "29": "ضربة على الراس بتمثال برونزي صغير من رف الغرفة", "31": "رف كتب تقيل وقع عليه، بعد ما حدا فكّ براغيه", "33": "سم مدسوس بالطبق الجديد", "34": "حقنة سم صغيرة بالعتمة لما وقف المصعد", "35": "ضربة على الراس بحجر كبير", "37": "خنق بوشاح حرير من خزانة الأزياء", "39": "سم مدهون على قطعة الملك، اللي كان دايماً يحطها على شفايفه وهو يفكر", "41": "ضربة على الراس بعصا الساحر الحديدية", "42": "حقنة سم سريعة بزحمة العربة", "44": "ضربة بمضرب غولف حديدي", "45": "دفعة من أعلى درج المنارة", "47": "دفعة من فوق درابزين الشرفة", "48": "ضربة بمطرقة حفر الصخور", "50": "سم مدسوس بمشروب الطاقة", "52": "ضربة على الراس بمنفضة رخام", "54": "سم بقرص انحلّ بكاسة المي", "56": "ضربة بمجداف القارب، ووقع بالبحيرة", "58": "خنق بسلك الميكروفون", "59": "دفعة من فوق الدرج الخشبي المكسور", "61": "سم مدسوس بكاسة العصير", "63": "ضربة على الراس بعصا المدير الخشبية القديمة", "65": "ضربة على الراس بقضيب حديدي من باب القفص", "66": "وقع من الأرجوحة لأنه حبلها كان مقطوع عمداً", "68": "بار الأوزان التقيل وقع عليه لما انشال مسمار الأمان", "70": "ضربة على الراس بصندوق التبرعات الحديدي", "71": "ضربة بحجر انشلع من الحيط القديم", "73": "ضربة على الراس بطفّاية حريق صغيرة", "74": "خنق بخيوط الدمى المتينة", "76": "انحبس جوا مخزن الحبوب المقفول وانخنق بالغبار", "77": "ضربة على الراس قبل الحريق، والحريق كان لإخفاء الجريمة", "79": "زلّاجة متلاعَب فيها بالمبرد، خلّته يفقد السيطرة", "81": "فرامل مقطوعة عمداً", "82": "ضربة على الراس ببكرة فيلم معدنية تقيلة", "84": "خنق بمخدة", "86": "سم مدسوس بقطعة الكعكة تبعه", "87": "ضربة بمفتاح ربط، ووقع بالمي", "89": "سم مدسوس بالصلصة", "91": "دفعة من فوق البرج الخشبي", "93": "ضربة بحدوة حصان حديدية", "95": "ضربة بكأس البطولة المعدني اللي على مكتبه", "96": "سم مدسوس بكاسة القهوة", "98": "ضربة على الراس بتمثال كريستال", "100": "ضربة بمجداف، ووقع على الصخور", "101": "ضربة بالمطرقة نفسها اللي انكسر فيها الجهاز", "103": "ضربة على الراس بجائزة زجاجية من الجناح", "105": "سم انحقن جوا كيس المحلول", "107": "خنق بحبل الستارة", "109": "سم مدسوس بعلبة السكر"};
+        Object.entries(caseWeapons).forEach(([i, w]) => { caseExtras[i].weapon = w; });
+
         const genericPlaces = ["الممر الخلفي", "السطح", "موقف السيارات", "غرفة الاستراحة", "الدرج الخلفي"];
 
         // تفاصيل حسية تحدث في كل مكان وقت الجريمة (يعرفها فقط من كان فعلاً هناك)
@@ -1450,6 +1454,23 @@
             "كنت تقرأ ملفات سرية للإدارة مش من حقك تشوفها",
             "كنت تلعب قمار على الموبايل بوقت الدوام وعليك ديون",
             "كنت تقابل شخص من جهة منافسة عشان عرض شغل جديد"
+        ];
+
+        // نفس الأسرار بصيغة الغائب (لما الحكم بيحكي عن اللاعب)
+        const liarSecretsThem = [
+            "كان نايم سراً بدل ما يكون بمناوبته، ولو انعرف رح ينطرد",
+            "كان يقابل شخص بعلاقة سرية وما بده حدا يعرف",
+            "كان ياخد أغراض صغيرة من المخزن لنفسه",
+            "كان يقرأ ملفات سرية للإدارة مش من حقه يشوفها",
+            "كان يلعب قمار على الموبايل بوقت الدوام وعليه ديون",
+            "كان يقابل شخص من جهة منافسة عشان عرض شغل جديد"
+        ];
+
+        const hiderReasonsThem = [
+            "ياخد غرض شخصي كان ناسيه هناك",
+            "يشوف أوراق مش من حقه يشوفها",
+            "يخبي شي خاص فيه ما بده حدا يلاقيه",
+            "يقابل شخص بالسر بعيد عن العيون"
         ];
 
         // سبب دخول البريء "المتستّر" لمسرح الجريمة قبل وقوعها
@@ -1511,6 +1532,8 @@
             return `${h}:${String(mm).padStart(2, '0')} ${period}`;
         }
         // "الضحية كان عايش" بقضايا القتل، و"الغرض كان بمكانه" بقضايا السرقة
+        // "الأداة" = وسيلة الدخول (مفتاح، بطاقة، رمز…) مش سلاح الجريمة
+        function deathTxt(ex) { return ex.weapon ? `<br>🩸 <strong>سبب الوفاة:</strong> ${esc(ex.weapon)}.` : ''; }
         function intactTxt(ex) { return ex.kind === 'm' ? `${esc(ex.item)} كان لسا عايش` : `${esc(ex.item)} كان بمكانه`; }
         function who(p) { return `<strong>${esc(p.name)}</strong> (${esc(p.role)})`; }
         function joinAr(list) {
@@ -1556,7 +1579,7 @@
             let hider;
             if (hiderMode === 'mafioso') hider = maf;
             else if (hiderMode === 'accomplice') hider = acc;
-            else { hider = takeInn(); hider.isInnocentHider = true; hider.hiderReason = pick(hiderReasonsPool); }
+            else { hider = takeInn(); hider.isInnocentHider = true; const hr = Math.floor(rand() * hiderReasonsPool.length); hider.hiderReason = hiderReasonsPool[hr]; hider.hiderReasonThem = hiderReasonsThem[hr]; }
 
             // 3) البريء اللي رح يتلبّس التهمة + البريء الكذاب + الشاهد
             const framed = takeInn();
@@ -1565,7 +1588,9 @@
             if (innocents.length >= 4 || (innocents.length >= 3 && rand() < 0.5)) {
                 liar = takeInn();
                 liar.isLiar = true;
-                liar.secret = pick(liarSecretsPool);
+                const si = Math.floor(rand() * liarSecretsPool.length);
+                liar.secret = liarSecretsPool[si];
+                liar.secretThem = liarSecretsThem[si];
             }
             const witness = takeInn();
             if (witness) witness.isWitness = true;
@@ -1603,7 +1628,7 @@
             // مجموعة اللي عندهم صلاحية على الأداة
             const accessPool = shuffle(P.filter(p => p !== maf && p !== acc));
             const accessGroup = shuffle([maf, ...accessPool.slice(0, Math.min(n >= 5 ? 3 : 2, accessPool.length))]);
-            accessGroup.forEach(p => { if (p !== maf) p.risks.push(`عندك صلاحية على <strong>${ex.tool}</strong> بحكم شغلك — يعني إنت من المشتبه فيهم.`); });
+            accessGroup.forEach(p => { if (p !== maf) p.risks.push(`بحكم شغلك بتقدر توصل لـ <strong>${esc(ex.tool)}</strong> (وسيلة الدخول لمكان الجريمة)، يعني إنت من المشتبه فيهم.`); });
 
             // 6) الشهادات والملاحظات
             honest.forEach(p => {
@@ -1630,10 +1655,10 @@
                 : `بريء متستّر (${esc(hider.name)}) أخفى الآثار لأنه كان بالمكان قبل الجريمة لسبب خاص — مش هو المجرم!`;
 
             const sceneClue = { label: 'تقرير مسرح الجريمة', truth: true,
-                text: `${esc(c.desc)}<br>حسب تقرير الطب الشرعي، الجريمة وقعت بحدود الساعة <strong>${fmtTime(T)}</strong> في <strong>${esc(ex.scene)}</strong>. والغريب إنه ${esc(ex.trace)} انمسحت بعد الجريمة — حدا عبث بالمكان.`,
+                text: `${esc(c.desc)}<br>حسب تقرير الطب الشرعي، الجريمة وقعت بحدود الساعة <strong>${fmtTime(T)}</strong> في <strong>${esc(ex.scene)}</strong>.${deathTxt(ex)}<br>والغريب إنه ${esc(ex.trace)} انمسحت بعد الجريمة — حدا عبث بالمكان.`,
                 note: hiderNote };
             const accessClue = { label: 'سجل الصلاحيات', truth: true,
-                text: `الجريمة احتاجت <strong>${esc(ex.tool)}</strong>. وحسب السجلات، الوحيدين اللي عندهم وصول إلها: ${joinAr(accessGroup.map(who))}.`,
+                text: `عشان يوصل لـ ${esc(ex.scene)}، المجرم استخدم <strong>${esc(ex.tool)}</strong> (هاي وسيلة الدخول، مش سلاح الجريمة). وحسب السجلات، الوحيدين اللي بيقدروا يوصلوا لهالشي: ${joinAr(accessGroup.map(who))}.`,
                 note: `المافيوسو ${esc(maf.name)} من ضمنهم، والباقي أبرياء.` };
             const plantedClue = { label: 'غرض شخصي بمسرح الجريمة', truth: false,
                 text: `انلقت <strong>${planted}</strong> تخص ${who(framed)} مرمية جنب ${esc(ex.scene)}.`,
@@ -1651,7 +1676,7 @@
             const early = shuffle([accessClue, plantedClue]);
             if (liar) early.push({ label: 'إفادة عامل الصيانة', truth: true,
                 text: `عامل الصيانة كان في ${esc(liarClaim)} طول الوقت وأكد إنه ما شاف ${who(liar)} هناك وقت الجريمة أبداً.`,
-                note: `${esc(liar.name)} بريء بس عم يخبي سر: ${esc(liar.secret)}.` });
+                note: `${esc(liar.name)} بريء بس عم يخبي سر: ${esc(liar.secretThem)}.` });
             const late = [contraClue, traitClue];
             if (acc) late.push({ label: 'رسالة مشبوهة', truth: true,
                 text: `على تلفون ${who(acc)} لقينا رسالة من رقم مخفي الساعة ${fmtTime(T + 5)}: "خلصت. التزم بالقصة متل ما اتفقنا."`,
@@ -1675,7 +1700,7 @@
 
             if (p.isMafioso) {
                 s.push({ cls: 'danger', title: '🔪 إنت المافيوسو', html: `إنت المجرم الحقيقي. هدفك: تضل بالجلسة وما ينكشف أمرك لحد ما يقل عدد الأبرياء.${acc ? `<br>شريكك السري: ${who(acc)} — بيعرف كل شي وبيغطي عليك.` : '<br>إنت لحالك، ما حدا معك.'}` });
-                s.push({ title: '🕒 شو صار فعلاً', html: `الساعة ${fmtTime(T - 30)} كنت فعلاً في ${esc(mafClaim)} (وممكن حدا شافك هناك — هاد بيقوّي قصتك). حوالي ${fmtTime(T - 10)} تسللت لـ ${esc(ex.scene)} باستخدام <strong>${esc(ex.tool)}</strong> ونفذت العملية على ${esc(ex.item)} الساعة ${fmtTime(T)}.` });
+                s.push({ title: '🕒 شو صار فعلاً', html: `الساعة ${fmtTime(T - 30)} كنت فعلاً في ${esc(mafClaim)} (وممكن حدا شافك هناك — هاد بيقوّي قصتك). حوالي ${fmtTime(T - 10)} دخلت لـ ${esc(ex.scene)} باستخدام <strong>${esc(ex.tool)}</strong>، و${ex.weapon ? `قتلت ${esc(ex.item)} الساعة ${fmtTime(T)}: <strong>${esc(ex.weapon)}</strong>.` : `نفذت العملية على ${esc(ex.item)} الساعة ${fmtTime(T)}.`}` });
                 s.push({ title: '🎭 قصتك قدام الكل', html: `"كنت في ${esc(mafClaim)} من ${fmtTime(T - 30)} لحد ${fmtTime(T + 30)} وما طلعت."${acc ? ` وشريكك ${esc(acc.name)} رح يشهد إنه كان معك.` : ' (كنت لحالك — حجتك ضعيفة، عوّضها بالهجوم).'}` });
                 const hideTxt = hiderMode === 'mafioso' ? `إنت بنفسك مسحت ${esc(ex.trace)} بعد العملية. في احتمال حدا شافك وإنت طالع.`
                     : hiderMode === 'accomplice' ? `شريكك ${esc(acc.name)} هو اللي مسح ${esc(ex.trace)} بعدك. إذا انكشف، حاول تبعد حالك عنه.`
@@ -1904,7 +1929,7 @@
                 role: p.role,
                 card: renderSections(p.sections),
                 caseTitle: c.title,
-                caseDesc: `${esc(c.desc)}<br><br>📍 مكان الجريمة: <strong>${esc(ex.scene)}</strong><br>🕒 الوقت التقريبي: <strong>${fmtTime(ex.t)}</strong>`,
+                caseDesc: `${esc(c.desc)}<br><br>📍 مكان الجريمة: <strong>${esc(ex.scene)}</strong><br>🕒 الوقت التقريبي: <strong>${fmtTime(ex.t)}</strong>${deathTxt(ex)}`,
                 cast: m.players.map(x => `${x.name}: ${x.role}`),
                 lastEventId: net.lastEvent ? net.lastEvent.id : 0
             });
@@ -2183,7 +2208,7 @@
 
             document.getElementById('scenario-category').innerText = c.category;
             document.getElementById('scenario-title').innerText = c.title;
-            document.getElementById('scenario-desc').innerHTML = `${esc(c.desc)}<br><br>📍 مكان الجريمة: <strong>${esc(ex.scene)}</strong><br>🕒 الوقت التقريبي: <strong>${fmtTime(ex.t)}</strong><br>🗺️ الأماكن الموجودة بالموقع: ${esc(ex.places.join('، '))}`;
+            document.getElementById('scenario-desc').innerHTML = `${esc(c.desc)}<br><br>📍 مكان الجريمة: <strong>${esc(ex.scene)}</strong><br>🕒 الوقت التقريبي: <strong>${fmtTime(ex.t)}</strong>${deathTxt(ex)}<br>🗺️ الأماكن الموجودة بالموقع: ${esc(ex.places.join('، '))}`;
 
             const rolesContainer = document.getElementById('scenario-roles');
             rolesContainer.innerHTML = '';
@@ -2326,7 +2351,7 @@
             const steps = [
                 ['1️⃣ الافتتاح: عرّفهم على الجريمة والقوانين',
                     say(`مساء الخير يا محققين. الليلة صارت جريمة: ${esc(c.desc)}`) +
-                    say(`مكان الجريمة: ${esc(ex.scene)}، حوالي الساعة ${fmtTime(ex.t)}. والأماكن الموجودة بالموقع: ${esc(ex.places.join('، '))}.`) +
+                    say(`مكان الجريمة: ${esc(ex.scene)}، حوالي الساعة ${fmtTime(ex.t)}.${ex.weapon ? ` وسبب الوفاة: ${esc(ex.weapon)}.` : ''} والأماكن الموجودة بالموقع: ${esc(ex.places.join('، '))}.`) +
                     say(`بيناتنا هلأ المافيوسو، المجرم الحقيقي، وممكن يكون معه شريك بيغطي عليه. الباقي أبرياء. بس انتبهوا: في أبرياء عندهم أسرار وممكن يكذبوا لأسباب ما إلها علاقة بالجريمة، ومش كل دليل رح يطلع صحيح.`) +
                     say(`كل واحد معه بطاقة سرية فيها شخصيته، ووين كان، وشو شاف، وشو ممكن يورطه. ما حدا يفرجي بطاقته لحدا.`) +
                     say(`الأبرياء بيربحوا إذا طردوا المافيوسو بالتصويت. والمافيا بتربح إذا ضل مخفي لحد ما يصير عدد الأبرياء الباقيين قد عدد المافيا.`)],
@@ -2489,7 +2514,7 @@
                     note: `المافيوسو ${esc(m.maf.name)} واحد منهم، والباقي أبرياء.` };
             } else if (kind === 'secret') {
                 e = { title: '📸 فضيحة!',
-                    text: `انتشرت صورة على التلفونات بتفضح ${who(m.liar)}: كان في ${esc(m.liarReal)} وقت الجريمة، مش بالمكان اللي حكاه! والسبب: ${esc(m.liar.secret)}. يعني كذب… بس كذبته ما إلها علاقة بالجريمة.`,
+                    text: `انتشرت صورة على التلفونات بتفضح ${who(m.liar)}: كان في ${esc(m.liarReal)} وقت الجريمة، مش بالمكان اللي حكاه! والسبب: ${esc(m.liar.secretThem)}. يعني كذب… بس كذبته ما إلها علاقة بالجريمة.`,
                     note: `${esc(m.liar.name)} بريء. هالحدث بيشيله من دائرة الشك.` };
             } else if (kind === 'threat') {
                 const t = (m.witness && inn.includes(m.witness)) ? m.witness : pick(inn);
@@ -2578,11 +2603,11 @@
         function fillFinalScenario() {
             const m = gameState.mystery, ex = m.ex, T = m.T;
             const lines = [];
-            lines.push(`🕒 <strong>${fmtTime(T - 40)}</strong> — ${m.hider.isInnocentHider ? `${who(m.hider)} دخل ${esc(ex.scene)} لـ ${esc(m.hider.hiderReason)} وطلع. كل شي كان طبيعي.` : `كل شي كان طبيعي و${intactTxt(ex)}.`}`);
+            lines.push(`🕒 <strong>${fmtTime(T - 40)}</strong> — ${m.hider.isInnocentHider ? `${who(m.hider)} دخل ${esc(ex.scene)} عشان ${esc(m.hider.hiderReasonThem)}، وطلع. كل شي كان طبيعي.` : `كل شي كان طبيعي و${intactTxt(ex)}.`}`);
             lines.push(`🕒 <strong>${fmtTime(T - 30)}</strong> — ${who(m.maf)} كان في ${esc(m.mafClaim)} قدام الناس، عشان يبني حجته.${m.acc ? ` و${who(m.acc)} اتفق معه يشهد إنه كان معه.` : ''}`);
-            if (m.liar) lines.push(`🕒 <strong>${fmtTime(T - 20)}</strong> — ${who(m.liar)} تسلل لـ ${esc(m.liarReal)} لأنه ${esc(m.liar.secret)}. هاد سبب كذبه — مش الجريمة.`);
+            if (m.liar) lines.push(`🕒 <strong>${fmtTime(T - 20)}</strong> — ${who(m.liar)} تسلل لـ ${esc(m.liarReal)} لأنه ${esc(m.liar.secretThem)}. هاد سبب كذبه — مش الجريمة.`);
             lines.push(`🕒 <strong>${fmtTime(T - 10)}</strong> — المافيوسو تسلل لـ ${esc(ex.scene)}${m.witness ? ` (و${who(m.witness)} لمحه من بعيد)` : ''}${m.acc ? ` والشريك عم يراقب الطريق` : ''}.`);
-            lines.push(`🕒 <strong>${fmtTime(T)}</strong> — استخدم ${esc(ex.tool)} ونفّذ الجريمة على ${esc(ex.item)}، وضل منه أثر: ${m.trait.clue}${m.traitDecoy ? ` (اللي بالصدفة ينطبق كمان على ${who(m.traitDecoy)})` : ''}.`);
+            lines.push(`🕒 <strong>${fmtTime(T)}</strong> — دخل باستخدام ${esc(ex.tool)}، و${ex.weapon ? `قتل ${esc(ex.item)} (${esc(ex.weapon)})` : `نفّذ الجريمة على ${esc(ex.item)}`}، وضل منه أثر: ${m.trait.clue}${m.traitDecoy ? ` (اللي بالصدفة ينطبق كمان على ${who(m.traitDecoy)})` : ''}.`);
             lines.push(`🕒 <strong>${fmtTime(T + 5)}</strong> — زرع ${m.planted} تبع ${who(m.framed)} جنب المكان عشان يورّطه.`);
             const hideLine = m.hiderMode === 'mafioso' ? `المافيوسو نفسه رجع ومسح ${esc(ex.trace)}.`
                 : m.hiderMode === 'accomplice' ? `الشريك ${who(m.acc)} فات ومسح ${esc(ex.trace)} وخبّى الغرض.`
