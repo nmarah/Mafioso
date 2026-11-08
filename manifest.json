@@ -1,7 +1,7 @@
 {
-  "name": "مافيوسو",
-  "short_name": "مافيوسو",
-  "description": "لعبة جماعية للخداع وكشف المجرم",
+  "name": "Mafioso",
+  "short_name": "Mafioso",
+  "description": "Mafioso: a party game of deception and detective work",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "./",
