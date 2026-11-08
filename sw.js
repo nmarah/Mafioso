@@ -1,6 +1,6 @@
 // يخلي اللعبة تشتغل بدون إنترنت بعد أول فتحة (الغرفة الأونلاين بدها إنترنت).
 // كل مرة في إنترنت بنجيب أحدث نسخة، وإذا ما في بنفتح النسخة المحفوظة.
-const CACHE = 'mafioso-v1';
+const CACHE = 'mafioso-v2';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
