@@ -355,6 +355,10 @@
             font-size: 0.95rem;
         }
         .card-section h4 { color: var(--gold); margin-bottom: 4px; text-align: right; }
+        details.card-more { border: 1px dashed var(--border-color); border-radius: 8px; padding: 8px 12px; margin: 10px 0; text-align: right; color: var(--text-main); line-height: 1.8; font-size: 0.92rem; }
+        details.card-more summary { cursor: pointer; color: var(--text-muted); font-weight: bold; }
+        details.card-more ul { margin: 6px 18px 0 0; padding: 0; }
+        details.card-more li { margin-bottom: 4px; }
         .card-section.danger { border-right-color: var(--accent-color); background: rgba(229,9,20,0.08); }
         .card-section.danger h4 { color: var(--accent-color); }
         .card-section.good { border-right-color: #3fb950; background: rgba(63,185,80,0.08); }
@@ -1700,8 +1704,10 @@
 
         // بطاقة كل لاعب: قصيرة جداً — سطر الدور، ثم "قل للجميع"، ثم "احتفظ لنفسك"
         function buildCard(p, ctx) {
-            const { ex, maf, acc, hiderMode, framed, planted, mafClaim, placeFacts, P } = ctx;
+            const { T, ex, maf, acc, hiderMode, framed, planted, mafClaim, placeFacts, P } = ctx;
             const SAY = '🗣️ قل للجميع';
+            // تفاصيل إضافية مطوية تحت البطاقة: القصة الكاملة لمن يحب التفاصيل
+            const more = items => ({ more: true, title: '📖 تفاصيل إضافية (اختياري)', html: `<ul>${items.filter(Boolean).map(t => `<li>${t}</li>`).join('')}</ul>` });
             const KEEP = '🤫 احتفظ به لنفسك';
 
             if (p.isMafioso) {
@@ -1710,7 +1716,16 @@
                 return [
                     { cls: 'danger', title: '🔪 أنت المافيوسو', html: `ابقَ متخفياً حتى النهاية.${acc ? ` شريكك: ${who(acc)}.` : ''}` },
                     { title: SAY, html: `كنت ${bi(mafClaim)} طوال الوقت${acc ? ` مع ${esc(acc.name)}` : ''}. وعندما يظهر ${planted} قرب الجريمة، اتّهم ${who(framed)}.` },
-                    { cls: 'warn', title: KEEP, html: `${deed} ${bi(ex.scene)}.${hide} احذر: ${esc(p.traitCard)}، ولا تعرف ما حدث ${bi(mafClaim)}، فتجنّب التحقق.` }
+                    { cls: 'warn', title: KEEP, html: `${deed} ${bi(ex.scene)}.${hide} احذر: ${esc(p.traitCard)}، ولا تعرف ما حدث ${bi(mafClaim)}، فتجنّب التحقق.` },
+                    more([
+                        `الساعة ${fmtTime(T - 30)} كنت فعلاً ${bi(mafClaim)}، وربما رآك أحدهم هناك، وهذا يقوّي قصتك.`,
+                        `نحو الساعة ${fmtTime(T - 10)} تسللت ${li(ex.scene)} مستخدماً <strong>${esc(ex.tool)}</strong>، ووقعت الجريمة الساعة ${fmtTime(T)}.`,
+                        hiderMode === 'mafioso' ? `مسحت ${esc(ex.trace)} بنفسك، وربما لمحك أحدهم وأنت تغادر.`
+                            : hiderMode === 'accomplice' ? `شريكك هو من مسح ${esc(ex.trace)}، فإن انكشف أمره فابتعد عنه.`
+                            : `عندما عدت وجدت ${esc(ex.trace)} ممسوحة، ولا تعرف من فعل ذلك ولا لماذا. استغل ذلك.`,
+                        `زرعت ${planted} تعود إلى ${who(framed)} قرب مكان الجريمة.`,
+                        `دافعك: ${esc(p.motive)}.`
+                    ])
                 ];
             }
 
@@ -1718,7 +1733,14 @@
                 return [
                     { cls: 'danger', title: '🤝 أنت شريك المافيوسو', html: `المافيوسو هو ${who(maf)}. ساعده ليبقى متخفياً.` },
                     { title: SAY, html: `كنت مع ${esc(maf.name)} ${bi(mafClaim)}، ورأيت ${who(framed)} قرب ${esc(ex.scene)}.` },
-                    { cls: 'warn', title: KEEP, html: `كنت تراقب الطريق للمافيوسو${hiderMode === 'accomplice' ? ' ثم مسحت آثاره' : ''}. في هاتفك رسالة قد تفضحك، وتجنّب التحقق.` }
+                    { cls: 'warn', title: KEEP, html: `كنت تراقب الطريق للمافيوسو${hiderMode === 'accomplice' ? ' ثم مسحت آثاره' : ''}. في هاتفك رسالة قد تفضحك، وتجنّب التحقق.` },
+                    more([
+                        `من الساعة ${fmtTime(T - 15)} حتى ${fmtTime(T + 10)} كنت تراقب الطريق قرب ${esc(ex.scene)}.`,
+                        hiderMode === 'accomplice' ? `بعد أن انتهى المافيوسو دخلت ومسحت ${esc(ex.trace)} وأخفيت الغرض في كيس، وربما رآك أحدهم.` : '',
+                        `المافيوسو زرع ${planted} تعود إلى ${who(framed)}، فساعده في توجيه الشك نحوه.`,
+                        `الساعة ${fmtTime(T + 5)} وصلتك رسالة من المافيوسو: "انتهى الأمر. التزم بالقصة كما اتفقنا."`,
+                        `دافعك: أنك ${esc(p.motive)}.`
+                    ])
                 ];
             }
 
@@ -1743,11 +1765,24 @@
                 { title: SAY, html: say.join(' ') }
             ];
             if (keep.length) cards.push({ cls: 'warn', title: KEEP, html: keep.join(' ') });
+            const extra = [];
+            if (p.isLiar) {
+                extra.push(`كنت فعلاً ${bi(p.claim)} الساعة ${fmtTime(T - 30)}، ثم تسللت ${li(p.real)} وبقيت هناك من ${fmtTime(T - 20)} حتى ${fmtTime(T + 15)}.`);
+            } else {
+                extra.push(`بقيت ${bi(p.claim)} من الساعة ${fmtTime(T - 30)} حتى ${fmtTime(T + 30)}.`);
+            }
+            if (p.isInnocentHider) extra.push(`دخلت ${li(ex.scene)} قبل الجريمة بنحو 40 دقيقة لكي ${esc(p.hiderReason)}. ${p.sceneObs || ''} ثم عدت نحو الساعة ${fmtTime(T + 15)} ومسحت ${esc(ex.trace)}.`);
+            p.obs.filter(o => !o.startsWith('والأهم')).forEach(o => extra.push(o));
+            p.risks.filter(r => r.includes('وسيلة الدخول')).forEach(r => extra.push(r));
+            extra.push(`قد يشكّون فيك لأنك ${esc(p.motive)}.`);
+            cards.push(more(extra));
             return cards;
         }
 
         function renderSections(sections) {
-            return sections.map(sec => `<div class="card-section ${sec.cls || ''}"><h4>${sec.title}</h4><div>${sec.html}</div></div>`).join('');
+            return sections.map(sec => sec.more
+                ? `<details class="card-more"><summary>${sec.title}</summary><div>${sec.html}</div></details>`
+                : `<div class="card-section ${sec.cls || ''}"><h4>${sec.title}</h4><div>${sec.html}</div></div>`).join('');
         }
 
         // ===================== الغرفة الأونلاين (PeerJS) =====================
