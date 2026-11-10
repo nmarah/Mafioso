@@ -1621,6 +1621,8 @@
             const trait = pick(traitPool);
             const decoyCandidates = P.filter(p => p !== maf && p !== acc && p !== framed);
             const traitDecoy = decoyCandidates.length ? pick(decoyCandidates) : null;
+            maf.traitCard = trait.card;
+            if (traitDecoy) traitDecoy.traitCard = trait.card;
             maf.risks.push(`${trait.card}، وقد تكون تركت أثراً في المكان.`);
             if (traitDecoy) traitDecoy.risks.push(`${trait.card}، وقد يورّطك هذا خطأً إن ظهر دليل مشابه.`);
             framed.lostItem = planted;
@@ -1639,10 +1641,12 @@
             if (witness) {
                 const decoy = pick(P.filter(o => o !== maf && o !== witness));
                 const pair = shuffle([maf, decoy]);
+                witness.keyObs = `رأيت شخصاً يسرع نحو ${esc(ex.scene)} قبيل الجريمة: إما ${who(pair[0])} وإما ${who(pair[1])}.`;
                 witness.obs.push(`والأهم: نحو الساعة ${fmtTime(T - 10)} رأيت شخصاً يمشي مسرعاً نحو ${esc(ex.scene)}، لكنه كان بعيداً والضوء خافتاً؛ إما ${who(pair[0])} وإما ${who(pair[1])}، ولست متأكداً أيهما.`);
             }
             if (liar) {
                 const seer = pick(honest.filter(p => p !== witness));
+                if (seer) seer.keyObs = `رأيت ${who(liar)} عائداً من ${esc(liarReal)} بعد الجريمة وهو متوتر.`;
                 if (seer) seer.obs.push(`نحو الساعة ${fmtTime(T + 20)} رأيت ${who(liar)} عائداً من جهة ${esc(liarReal)}، وكان متوتراً يتلفّت حوله.`);
             }
             if (hider.isInnocentHider) {
@@ -1694,55 +1698,52 @@
             return { T, ex, players: P, maf, acc, hider, hiderMode, framed, liar, witness, traitDecoy, trait, planted, mafClaim, liarClaim, liarReal, placeFacts, clues, accessGroup };
         }
 
-        // بطاقة كل لاعب: سطر الدور، ثم "ما تقوله للجميع"، ثم "ما تحتفظ به لنفسك"
+        // بطاقة كل لاعب: قصيرة جداً — سطر الدور، ثم "قل للجميع"، ثم "احتفظ لنفسك"
         function buildCard(p, ctx) {
-            const { T, ex, maf, acc, hiderMode, framed, planted, mafClaim, placeFacts, P } = ctx;
-            const deed = ex.weapon ? `قتلت ${esc(ex.item)} (${esc(ex.weapon)})` : `سرقت ${esc(ex.item)}`;
-            const risksTxt = p.risks.join(' ');
-            const SAY = '🗣️ ما تقوله أمام الجميع';
-            const KEEP = '🤫 ما تحتفظ به لنفسك';
+            const { ex, maf, acc, hiderMode, framed, planted, mafClaim, placeFacts, P } = ctx;
+            const SAY = '🗣️ قل للجميع';
+            const KEEP = '🤫 احتفظ به لنفسك';
 
             if (p.isMafioso) {
-                const hide = hiderMode === 'mafioso' ? `ثم مسحت ${esc(ex.trace)} بنفسك، وربما رآك أحدهم وأنت تغادر.`
-                    : hiderMode === 'accomplice' ? `ثم مسح شريكك ${esc(ex.trace)} بعدك، فإن انكشف أمره فابتعد عنه.`
-                    : `لم تتمكن من مسح آثارك، لكنك حين عدت وجدت أن شخصاً آخر قد مسحها، ولا تعرف من هو ولا لماذا، فاستغل ذلك لصالحك.`;
+                const deed = ex.weapon ? `قتلت ${esc(ex.item)} (${esc(ex.weapon)})` : `سرقت ${esc(ex.item)}`;
+                const hide = hiderMode === 'mafioso' ? ' ثم مسحت آثارك.' : hiderMode === 'accomplice' ? ' ومسح شريكك آثارك.' : ' وشخص آخر مسح آثارك لسبب تجهله.';
                 return [
-                    { cls: 'danger', title: '🔪 أنت المافيوسو', html: `أنت المجرم الحقيقي، وهدفك أن تبقى متخفياً حتى نهاية اللعبة.` },
-                    { title: SAY, html: `قل إنك بقيت ${bi(mafClaim)} من ${fmtTime(T - 30)} حتى ${fmtTime(T + 30)} ولم تغادره${acc ? `، وسيشهد ${esc(acc.name)} أنه كان معك` : ''}. وعندما يظهر دليل ${planted} قرب مكان الجريمة، وجّه الشك نحو ${who(framed)} صاحب هذا الغرض.` },
-                    { cls: 'warn', title: KEEP, html: `${acc ? `شريكك هو ${who(acc)}. ` : 'لا شريك لك. '}في الساعة ${fmtTime(T - 30)} كنت فعلاً ${bi(mafClaim)} وربما رآك أحدهم هناك، ثم نحو الساعة ${fmtTime(T - 10)} تسللت ${li(ex.scene)} مستخدماً <strong>${esc(ex.tool)}</strong> و${deed} في الساعة ${fmtTime(T)}. ${hide} وأنت من زرع ${planted} هناك. نقاط ضعفك: ${risksTxt} ولا تعرف ما حدث داخل ${esc(mafClaim)} وقت الجريمة لأنك لم تكن هناك، فلا تطلب التحقق، وتهرّب إن طلبه غيرك منك. دافعك: ${esc(p.motive)}.` }
+                    { cls: 'danger', title: '🔪 أنت المافيوسو', html: `ابقَ متخفياً حتى النهاية.${acc ? ` شريكك: ${who(acc)}.` : ''}` },
+                    { title: SAY, html: `كنت ${bi(mafClaim)} طوال الوقت${acc ? ` مع ${esc(acc.name)}` : ''}. وعندما يظهر ${planted} قرب الجريمة، اتّهم ${who(framed)}.` },
+                    { cls: 'warn', title: KEEP, html: `${deed} ${bi(ex.scene)}.${hide} احذر: ${esc(p.traitCard)}، ولا تعرف ما حدث ${bi(mafClaim)}، فتجنّب التحقق.` }
                 ];
             }
 
             if (p.isAccomplice) {
                 return [
-                    { cls: 'danger', title: '🤝 أنت شريك المافيوسو', html: `المافيوسو هو ${who(maf)}، وتفوزان معاً إن بقي متخفياً.` },
-                    { title: SAY, html: `قل إنك كنت مع ${esc(maf.name)} ${bi(mafClaim)} من ${fmtTime(T - 30)} حتى ${fmtTime(T + 30)}، وإنك رأيت ${who(framed)} قرب ${esc(ex.scene)} نحو الساعة ${fmtTime(T - 5)}.` },
-                    { cls: 'warn', title: KEEP, html: `الحقيقة أنك من الساعة ${fmtTime(T - 15)} حتى ${fmtTime(T + 10)} كنت تراقب الطريق قرب ${esc(ex.scene)} لتؤمّن للمافيوسو${hiderMode === 'accomplice' ? `، وبعد أن انتهى دخلت ومسحت ${esc(ex.trace)} وأخفيت الغرض في كيس، وربما رآك أحدهم` : ''}. والمافيوسو زرع ${planted} تعود إلى ${esc(framed.name)} هناك. ${risksTxt ? risksTxt + ' ' : ''}كلاكما لا يعرف ما حدث داخل ${esc(mafClaim)}، فتجنّبا التحقق، وفي هاتفك رسالة قد تفضحك. دافعك: أنك ${esc(p.motive)}.` }
+                    { cls: 'danger', title: '🤝 أنت شريك المافيوسو', html: `المافيوسو هو ${who(maf)}. ساعده ليبقى متخفياً.` },
+                    { title: SAY, html: `كنت مع ${esc(maf.name)} ${bi(mafClaim)}، ورأيت ${who(framed)} قرب ${esc(ex.scene)}.` },
+                    { cls: 'warn', title: KEEP, html: `كنت تراقب الطريق للمافيوسو${hiderMode === 'accomplice' ? ' ثم مسحت آثاره' : ''}. في هاتفك رسالة قد تفضحك، وتجنّب التحقق.` }
                 ];
             }
 
             // ---- الأبرياء ----
             const companions = P.filter(o => o !== p && o.team === 'innocent' && !o.isLiar && o.claim === p.claim);
-            const sayParts = [];
-            const keepParts = [];
+            const say = [];
+            const keep = [];
             if (p.isLiar) {
-                sayParts.push(`قل إنك كنت ${bi(p.claim)} وقت الجريمة (وقد كنت هناك فعلاً الساعة ${fmtTime(T - 30)}، فقد يكون أحدهم رآك).`);
-                sayParts.push(`وإن انكشفت كذبتك وزاد الشك فيك، فاعترف بسرك لتبرئة نفسك، واذكر ما حدث ${bi(p.real)} وقت الجريمة: ${esc(placeFacts[p.real])}، ويستطيع الحكم تأكيد ذلك.`);
-                keepParts.push(`الحقيقة أنك من الساعة ${fmtTime(T - 20)} حتى ${fmtTime(T + 15)} كنت ${bi(p.real)} لأنك ${esc(p.secret)}. هذا سرك، فلا تكشفه إلا إذا اضطررت.`);
+                say.push(`كنت ${bi(p.claim)}.`);
+                say.push(`وإن انكشفت كذبتك فاعترف بسرك، ودليلك: ${esc(placeFacts[p.real])}.`);
+                keep.push(`كنت في الحقيقة ${bi(p.real)} لأنك ${esc(p.secret)}.`);
             } else {
-                sayParts.push(`وقت الجريمة كنت ${bi(p.claim)} من ${fmtTime(T - 30)} حتى ${fmtTime(T + 30)}${companions.length ? `، ومعك ${joinAr(companions.map(who))} ويمكنهم الشهادة لك` : ' وحدك'}.`);
-                sayParts.push(`وإن اتهموك فاذكر ما حدث هناك وقت الجريمة: ${esc(placeFacts[p.claim])}، واطلب من الحكم تأكيده، فلا يعرف هذا إلا من كان هناك فعلاً.`);
+                say.push(`كنت ${bi(p.claim)}${companions.length ? ` مع ${joinAr(companions.map(who))}` : ' وحدك'}.`);
+                say.push(`دليلك إن اتهموك: ${esc(placeFacts[p.claim])}، اطلب من الحكم تأكيده.`);
             }
-            if (p.obs.length) sayParts.push(p.obs.join(' '));
-            if (p.lostItem) sayParts.push(`وإن ظهر دليل ${p.lostItem}، فقل إنك أضعت هذا الغرض اليوم ولا تعرف أين، وإن أحدهم يحاول توريطك.`);
-            if (p.isInnocentHider) keepParts.push(`لديك سر خطير: قبل الجريمة بنحو 40 دقيقة دخلت ${li(ex.scene)} لكي ${esc(p.hiderReason)}، ${p.sceneObs ? p.sceneObs + ' ' : ''}وعندما سمعت بالجريمة عدت نحو الساعة ${fmtTime(T + 15)} ومسحت ${esc(ex.trace)} خوفاً من بصماتك. لست المجرم، لكنك من أخفى الآثار.`);
-            if (risksTxt) keepParts.push(`ما قد يورّطك: ${risksTxt}`);
-            keepParts.push(`وقد يشكّون فيك لأنك ${esc(p.motive)}.`);
-            return [
-                { cls: 'good', title: '✅ أنت بريء', html: `هدفك أن تكشف المافيوسو وتُخرجه بالتصويت. انتبه: ليس كل دليل صحيحاً، وليس كل كاذب مجرماً.` },
-                { title: SAY, html: sayParts.join(' ') },
-                { cls: 'warn', title: KEEP, html: keepParts.join(' ') }
+            if (p.keyObs) say.push(p.keyObs);
+            if (p.lostItem) say.push(`وإن ظهر ${p.lostItem}: أضعته اليوم.`);
+            if (p.isInnocentHider) keep.push(`دخلت ${esc(ex.scene)} قبل الجريمة، ثم عدت ومسحت آثارك خوفاً. لست المجرم.`);
+            if (p.traitCard) keep.push(`${esc(p.traitCard)}، وهذا يشبه أثر المجرم.`);
+            const cards = [
+                { cls: 'good', title: '✅ أنت بريء', html: 'اكشف المافيوسو وأخرجه بالتصويت.' },
+                { title: SAY, html: say.join(' ') }
             ];
+            if (keep.length) cards.push({ cls: 'warn', title: KEEP, html: keep.join(' ') });
+            return cards;
         }
 
         function renderSections(sections) {
