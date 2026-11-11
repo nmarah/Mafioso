@@ -1256,13 +1256,94 @@
             "كنت آخر من تحدث مع صاحب المكان"
         ];
 
-        // دافع المافيوسو: للبطاقة (أنت) وللنهاية (هو)
-        const mafiosoMotivePool = [
-            { you: "أنت المستفيد الأكبر مما حدث", them: "هو المستفيد الأكبر مما حدث" },
-            { you: "دفعت لك جهة نافذة مبلغاً كبيراً لتنفيذها", them: "دفعت له جهة نافذة مبلغاً كبيراً لتنفيذها" },
-            { you: "كان صاحب المكان يعرف سراً قد يدمّرك", them: "كان صاحب المكان يعرف سراً قد يدمّره" },
-            { you: "بينك وبين صاحب المكان ثأر قديم", them: "بينه وبين صاحب المكان ثأر قديم" },
-            { you: "أنت غارق في الديون وكانت هذه فرصتك الأخيرة", them: "كان غارقاً في الديون وكانت هذه فرصته الأخيرة" }
+        // ===================== الدوافع القوية =====================
+        // v = الضحية (أو صاحب المكان في السرقة)، it = الغرض، X = اسم اللاعب.
+        // you: لبطاقة اللاعب • them: للحكم والنهاية • hint: وصف قصير يستعمله غيره ضده
+        // clue: ورقة دليل تكشف الدافع • visit/visitThem: لماذا دخل مكان الجريمة قبلها (للبريء المتستّر)
+        const murderMotives = [
+            { tag: 'الوصية الجديدة',
+              you: v => `كان ${v} سيوقّع صباح الغد وصية جديدة تحرمك من نصيبك كله، وقد سمعته الليلة يؤكد الموعد مع المحامي`,
+              them: v => `كان ${v} سيوقّع صباح الغد وصية جديدة تحرمه من نصيبه كله`,
+              hint: 'كان سيُحرم من الميراث بوصية جديدة',
+              clue: (v, X) => `عُثر في مكتب ${v} على مسودة وصية جديدة تحرم ${X} من نصيبه كله، وموعد توقيعها صباح الغد.`,
+              visit: v => `تقرأ بعينيك مسودة الوصية الجديدة`, visitThem: v => `يقرأ مسودة الوصية الجديدة` },
+            { tag: 'الابتزاز',
+              you: v => `كان ${v} يبتزّك بوثائق تثبت اختلاساً قديماً قمت به، وطلب الليلة مبلغاً لا تملكه وإلا سلّمها للشرطة صباحاً`,
+              them: v => `كان ${v} يبتزّه بوثائق اختلاس قديم، ويطالبه الليلة بمبلغ لا يملكه`,
+              hint: 'كان ضحية ابتزاز يهدد بسجنه',
+              clue: (v, X) => `في هاتف ${v} رسالة إلى ${X}: "المبلغ كاملاً الليلة، وإلا ستكون الوثائق عند الشرطة صباحاً."`,
+              visit: v => `تبحث عن وثائق الابتزاز لتستعيدها`, visitThem: v => `يبحث عن وثائق الابتزاز ليستعيدها` },
+            { tag: 'الثأر',
+              you: v => `قبل سنوات تسبّب ${v} في الحادث الذي مات فيه أخوك، ثم أفلت من العقاب بالرشوة، ولم تنسَ ذلك يوماً`,
+              them: v => `تسبّب ${v} قبل سنوات في موت أخيه، ثم أفلت من العقاب بالرشوة`,
+              hint: 'يريد الثأر لموت أخيه',
+              clue: (v, X) => `في محفظة ${X} قصاصة صحيفة قديمة عن الحادث الذي مات فيه أخوه، ووجه ${v} محاط بدائرة حمراء.`,
+              visit: v => `تواجه ${v} بما فعله بأخيك`, visitThem: v => `يواجه ${v} بما فعله بأخيه` },
+            { tag: 'سرقة مشروع العمر',
+              you: v => `سرق ${v} مشروع عمرك ونسبه لنفسه، وكان سيعلن الليلة طردك ليمحو أي دليل على حقك`,
+              them: v => `سرق ${v} مشروع عمره ونسبه لنفسه، وكان سيطرده الليلة`,
+              hint: 'سُرق منه مشروع عمره وكان سيُطرد',
+              clue: (v, X) => `عقد شراكة ممزق بين ${v} و${X}، وعليه بخط ${v}: "ينتهي كل شيء الليلة."`,
+              visit: v => `تأخذ نسخة العقد التي تثبت حقك`, visitThem: v => `يأخذ نسخة العقد التي تثبت حقه` },
+            { tag: 'الفضيحة',
+              you: v => `اكتشف ${v} أن شهاداتك مزوّرة، وأمهلك حتى منتصف الليل لتعترف أمام الجميع وإلا فضحك وخسرت كل شيء`,
+              them: v => `اكتشف ${v} أن شهاداته مزوّرة، وأمهله حتى منتصف الليل قبل أن يفضحه`,
+              hint: 'كان على وشك أن يُفضح تزويره',
+              clue: (v, X) => `في حقيبة ${v} ملف عنوانه "${X}: الشهادات المزوّرة"، ومعه صور للوثائق.`,
+              visit: v => `تسرق الملف الذي يفضح تزويرك`, visitThem: v => `يسرق الملف الذي يفضح تزويره` },
+            { tag: 'الدين والسجن',
+              you: v => `تدين لـ${v} بمبلغ ضخم، وقد رفع عليك قضية ستدخلك السجن وتطرد عائلتك من بيتها الأسبوع القادم`,
+              them: v => `كان مديناً لـ${v} بمبلغ ضخم، ورفع عليه قضية ستدخله السجن وتطرد عائلته من بيتها`,
+              hint: 'كان مهدداً بالسجن وطرد عائلته بسبب دين',
+              clue: (v, X) => `في درج ${v} إنذار قضائي باسم ${X}: "سداد كامل خلال أسبوع، وإلا الحبس وإخلاء المنزل."`,
+              visit: v => `تتوسل إلى ${v} أن يسحب القضية`, visitThem: v => `يتوسل إلى ${v} أن يسحب القضية` }
+        ];
+
+        const theftMotives = [
+            { tag: 'دين العصابة',
+              you: (v, it) => `عليك دين لعصابة خطيرة أمهلتك حتى الليلة وإلا آذت عائلتك، و${it} وحده يكفي لسداده`,
+              them: (v, it) => `كان مديناً لعصابة خطيرة أمهلته حتى الليلة وإلا آذت عائلته`,
+              hint: 'مدين لعصابة تنتهي مهلتها الليلة',
+              clue: (v, X) => `في سترة ${X} رسالة تهديد: "المهلة تنتهي الليلة. العائلة أولاً."`,
+              visit: v => `تطلب من صاحب المكان قرضاً أخيراً قبل انتهاء المهلة`, visitThem: v => `يطلب من صاحب المكان قرضاً أخيراً` },
+            { tag: 'إرث العائلة',
+              you: (v, it) => `${it} كان ملك عائلتك، وسلبه صاحب المكان من جدّك ظلماً، وأقسمت أن تستعيده يوماً`,
+              them: (v, it) => `يعتبر ${it} ملك عائلته التي سُلب منها ظلماً`,
+              hint: 'يعتبر الغرض المسروق إرث عائلته',
+              clue: (v, X, it) => `في محفظة ${X} صورة قديمة يظهر فيها ${it} في بيت عائلته، وعلى ظهرها: "سنستعيده."`,
+              visit: (v, it) => `تلقي نظرة على ${it} الذي كان ملك عائلتك`, visitThem: (v, it) => `يلقي نظرة على ${it} الذي كان ملك عائلته` },
+            { tag: 'عرض المنافس',
+              you: (v, it) => `وعدتك جهة منافسة بمبلغ يغيّر حياتك ووظيفة في الخارج إن أوصلت لها ${it} قبل الفجر`,
+              them: (v, it) => `وعدته جهة منافسة بثروة ووظيفة في الخارج مقابل ${it}`,
+              hint: 'تلقى عرضاً مغرياً من جهة منافسة',
+              clue: (v, X) => `على هاتف ${X} رسالة من جهة منافسة: "العرض قائم حتى الفجر فقط. أحضره وستسافر."`,
+              visit: (v, it) => `تتأكد من مكان ${it} كما طلبت منك الجهة المنافسة`, visitThem: (v, it) => `يتأكد من مكان ${it} للجهة المنافسة` },
+            { tag: 'الانتقام من صاحب المكان',
+              you: () => `طردك صاحب المكان قبل سنوات ظلماً ولطّخ سمعتك، وأقسمت أن تجعله يخسر أغلى ما يملك`,
+              them: () => `طرده صاحب المكان ظلماً قبل سنوات ولطّخ سمعته`,
+              hint: 'يريد الانتقام من صاحب المكان',
+              clue: (v, X) => `شكوى قديمة من ${X} ضد صاحب المكان، وعلى هامشها بخطه: "سيدفع الثمن."`,
+              visit: () => `تواجه صاحب المكان بالظلم القديم`, visitThem: () => `يواجه صاحب المكان بالظلم القديم` },
+            { tag: 'علاج الابن',
+              you: () => `ابنك يحتاج إلى عملية عاجلة بعد ثلاثة أيام، وثمنها أكبر من كل ما تملك`,
+              them: () => `يحتاج ابنه إلى عملية عاجلة لا يملك ثمنها`,
+              hint: 'يحتاج ثمن عملية عاجلة لابنه',
+              clue: (v, X) => `فاتورة مستشفى باسم ${X} بمبلغ ضخم، مستحقة خلال ثلاثة أيام.`,
+              visit: () => `تطلب من صاحب المكان مساعدة لعلاج ابنك`, visitThem: () => `يطلب من صاحب المكان مساعدة لعلاج ابنه` },
+            { tag: 'مبلغ التأمين',
+              you: (v, it) => `${it} مؤمَّن عليه بمبلغ ضخم، ونصفه سيُصرف لك سراً إن اختفى، وأنت غارق في الديون`,
+              them: (v, it) => `كان سيقبض نصف مبلغ التأمين على ${it} إن اختفى`,
+              hint: 'سيقبض مبلغ التأمين إن اختفى الغرض',
+              clue: (v, X, it) => `وثيقة تأمين على ${it} يظهر فيها ${X} مستفيداً من نصف المبلغ.`,
+              visit: (v, it) => `تتأكد من أن ${it} ما زال في مكانه قبل تجديد التأمين`, visitThem: (v, it) => `يتأكد من ${it} قبل تجديد التأمين` }
+        ];
+
+        // لماذا يساعد الشريك المافيوسو (تُقرأ بعد "لأن")
+        const accompliceReasons = [
+            { you: () => `المافيوسو وعدك بنصف المكسب، وأنت غارق في الديون`, them: () => `المافيوسو وعده بنصف المكسب وهو غارق في الديون` },
+            { you: () => `المافيوسو يملك صوراً تدينك، وهددك بنشرها إن لم تساعده`, them: () => `المافيوسو كان يهدده بصور تدينه` },
+            { you: () => `المافيوسو أنقذ حياتك قبل سنوات، وأقسمت ألا تخذله`, them: () => `المافيوسو أنقذ حياته قبل سنوات فلم يستطع خذلانه` },
+            { you: v => `لك أنت أيضاً ثأراً قديماً مع ${v}، فاتفقتما على الانتقام معاً`, them: v => `له ثأراً قديماً مع ${v}، فاتفقا على الانتقام معاً` }
         ];
 
         // ===================== تفاصيل مسرح الجريمة لكل قضية =====================
@@ -1563,6 +1644,26 @@
             const witness = takeInn();
             if (witness) witness.isWitness = true;
 
+            // 3.5) الدوافع: المافيوسو، والبريء المورَّط، والمتستّر، ومشتبه إضافي — كلها قوية
+            const vName = ex.kind === 'm' ? esc(ex.item) : 'صاحب المكان';
+            const itName = esc(ex.item);
+            const mPool = shuffle(ex.kind === 'm' ? murderMotives : theftMotives);
+            const mk = M => ({ tag: M.tag, hint: M.hint, you: M.you(vName, itName), them: M.them(vName, itName),
+                clue: X => M.clue(vName, X, itName), visit: M.visit(vName, itName), visitThem: M.visitThem(vName, itName) });
+            let mi = 0;
+            maf.bigMotive = mk(mPool[mi++]);
+            framed.bigMotive = mk(mPool[mi++]);
+            if (hider.isInnocentHider) {
+                hider.bigMotive = mk(mPool[mi++]);
+                hider.hiderReason = hider.bigMotive.visit;
+                hider.hiderReasonThem = hider.bigMotive.visitThem;
+            }
+            const extraPool = innocents.filter(p => !p.bigMotive && p !== witness && p !== liar);
+            const extraSuspect = innocents.length >= 4 && extraPool.length ? pick(extraPool) : null;
+            if (extraSuspect) extraSuspect.bigMotive = mk(mPool[mi++]);
+            if (acc) { const ar = pick(accompliceReasons); acc.accReason = ar.you(vName); acc.accReasonThem = ar.them(vName); }
+            const redHerrings = P.filter(p => p.bigMotive && !p.isMafioso);
+
             // 4) الأماكن والجدول الزمني
             const places = shuffle(ex.places);
             const extra = shuffle(genericPlaces);
@@ -1624,7 +1725,7 @@
             // 7) الأدلة اللي بيكشفها الحكم بالتدريج
             const hiderNote = hiderMode === 'mafioso' ? 'المافيوسو نفسه هو من أخفى الآثار'
                 : hiderMode === 'accomplice' ? `شريك المافيوسو ${esc(acc.name)} هو من أخفى الآثار`
-                : `بريء متستّر (${esc(hider.name)}) أخفى الآثار لأنه كان في المكان قبل الجريمة لسبب خاص، لكنه ليس المجرم!`;
+                : `بريء متستّر (${esc(hider.name)}) أخفى الآثار لأنه دخل المكان قبل الجريمة ولديه دافع معروف (${hider.bigMotive ? hider.bigMotive.hint : ''})، فخاف أن تُتّهمه بصماته، لكنه ليس المجرم!`;
 
             const sceneClue = { label: 'تقرير مسرح الجريمة', truth: true,
                 text: `${esc(c.desc)}<br>بحسب الطب الشرعي، وقعت الجريمة نحو الساعة <strong>${fmtTime(T)}</strong> في <strong>${esc(ex.scene)}</strong>.${deathTxt(ex)}<br>والغريب أن ${esc(ex.trace)} مُسحت بعد الجريمة، أي أن أحدهم عبث بمسرح الجريمة.`,
@@ -1649,7 +1750,15 @@
             if (liar) early.push({ label: 'إفادة عامل الصيانة', truth: true,
                 text: `كان عامل الصيانة في ${esc(liarClaim)} طوال الوقت، وأكّد أنه لم يرَ ${who(liar)} هناك وقت الجريمة إطلاقاً.`,
                 note: `${esc(liar.name)} بريء لكنه يخفي سراً: ${esc(liar.secretThem)}.` });
-            const late = [contraClue, traitClue];
+            early.push({ label: 'وثيقة تكشف دافعاً', truth: true,
+                text: framed.bigMotive.clue(who(framed)),
+                note: `${esc(framed.name)} بريء رغم دافعه (${framed.bigMotive.hint}). اختاره المافيوسو ليورّطه لأن دافعه معروف.` });
+            redHerrings.filter(p => p !== framed).forEach(p => early.push({ label: 'دافع آخر يظهر', truth: true,
+                text: p.bigMotive.clue(who(p)),
+                note: `${esc(p.name)} بريء رغم دافعه (${p.bigMotive.hint})${p.isInnocentHider ? '، وهذا الدافع هو سبب دخوله المكان قبل الجريمة ثم إخفائه الآثار' : ''}.` }));
+            const late = [contraClue, traitClue, { label: 'دافع خفي', truth: true,
+                text: maf.bigMotive.clue(who(maf)),
+                note: `هذا هو الدافع الحقيقي للمافيوسو ${esc(maf.name)}.` }];
             if (acc) late.push({ label: 'رسالة مريبة', truth: true,
                 text: `عُثر في هاتف ${who(acc)} على رسالة من رقم مجهول الساعة ${fmtTime(T + 5)}: "انتهى الأمر. التزم بالقصة كما اتفقنا."`,
                 note: `${esc(acc.name)} هو شريك المافيوسو.` });
@@ -1658,12 +1767,12 @@
             // 8) بطاقة كل لاعب
             const motives = shuffle(motivePool);
             P.forEach((p, i) => {
-                if (p.isMafioso) { const mm = pick(mafiosoMotivePool); p.motive = mm.you; p.motiveThem = mm.them; }
+                if (p.isMafioso) { p.motive = p.bigMotive.you; p.motiveThem = p.bigMotive.them; }
                 else p.motive = motives[i % motives.length];
                 p.sections = buildCard(p, { T, ex, maf, acc, hider, hiderMode, framed, planted, mafClaim, placeFacts, P });
             });
 
-            return { T, ex, players: P, maf, acc, hider, hiderMode, framed, liar, witness, traitDecoy, trait, planted, mafClaim, liarClaim, liarReal, placeFacts, clues, accessGroup };
+            return { T, ex, players: P, maf, acc, hider, hiderMode, framed, liar, witness, traitDecoy, trait, planted, mafClaim, liarClaim, liarReal, placeFacts, clues, accessGroup, redHerrings };
         }
 
         // بطاقة كل لاعب: قصيرة جداً — سطر الدور، ثم "قل للجميع"، ثم "احتفظ لنفسك"
@@ -1679,16 +1788,16 @@
                 const hide = hiderMode === 'mafioso' ? ' ثم مسحت آثارك.' : hiderMode === 'accomplice' ? ' ومسح شريكك آثارك.' : ' وشخص آخر مسح آثارك لسبب تجهله.';
                 return [
                     { cls: 'danger', title: '🔪 أنت المافيوسو', html: `ابقَ متخفياً حتى النهاية.${acc ? ` شريكك: ${who(acc)}.` : ''}` },
-                    { title: SAY, html: `كنت ${bi(mafClaim)} طوال الوقت${acc ? ` مع ${esc(acc.name)}` : ''}. وعندما يظهر ${planted} قرب الجريمة، اتّهم ${who(framed)}.` },
-                    { cls: 'warn', title: KEEP, html: `${deed} ${bi(ex.scene)}.${hide} احذر: ${esc(p.traitCard)}، ولا تعرف ما حدث ${bi(mafClaim)}، فتجنّب التحقق.` },
+                    { title: SAY, html: `كنت ${bi(mafClaim)} طوال الوقت${acc ? ` مع ${esc(acc.name)}` : ''}. هاجم ${who(framed)}: غرضه (${planted}) سيظهر قرب الجريمة، والكل يعرف أنه ${framed.bigMotive.hint}. وإن ظهر دافعك فقلّل من شأنه.` },
+                    { cls: 'warn', title: KEEP, html: `<strong>دافعك الحقيقي:</strong> ${p.motive}. لذلك ${deed} ${bi(ex.scene)}.${hide} احذر: ${esc(p.traitCard)}، ولا تعرف ما حدث ${bi(mafClaim)}، فتجنّب التحقق.` },
                     more([
                         `الساعة ${fmtTime(T - 30)} كنت فعلاً ${bi(mafClaim)}، وربما رآك أحدهم هناك، وهذا يقوّي قصتك.`,
                         `نحو الساعة ${fmtTime(T - 10)} تسللت ${li(ex.scene)} مستخدماً <strong>${esc(ex.tool)}</strong>، ووقعت الجريمة الساعة ${fmtTime(T)}.`,
                         hiderMode === 'mafioso' ? `مسحت ${esc(ex.trace)} بنفسك، وربما لمحك أحدهم وأنت تغادر.`
                             : hiderMode === 'accomplice' ? `شريكك هو من مسح ${esc(ex.trace)}، فإن انكشف أمره فابتعد عنه.`
                             : `عندما عدت وجدت ${esc(ex.trace)} ممسوحة، ولا تعرف من فعل ذلك ولا لماذا. استغل ذلك.`,
-                        `زرعت ${planted} تعود إلى ${who(framed)} قرب مكان الجريمة.`,
-                        `دافعك: ${esc(p.motive)}.`
+                        `زرعت ${planted} تعود إلى ${who(framed)} قرب مكان الجريمة، واخترته لأن دافعه معروف: ${framed.bigMotive.them}.`,
+                        `قد تظهر ورقة تكشف دافعك، فجهّز رداً يقلّل من شأنها.`
                     ])
                 ];
             }
@@ -1697,13 +1806,14 @@
                 return [
                     { cls: 'danger', title: '🤝 أنت شريك المافيوسو', html: `المافيوسو هو ${who(maf)}. ساعده ليبقى متخفياً.` },
                     { title: SAY, html: `كنت مع ${esc(maf.name)} ${bi(mafClaim)}، ورأيت ${who(framed)} قرب ${esc(ex.scene)}.` },
-                    { cls: 'warn', title: KEEP, html: `كنت تراقب الطريق للمافيوسو${hiderMode === 'accomplice' ? ' ثم مسحت آثاره' : ''}. في هاتفك رسالة قد تفضحك، وتجنّب التحقق.` },
+                    { cls: 'warn', title: KEEP, html: `تساعده لأن ${p.accReason}. كنت تراقب الطريق له${hiderMode === 'accomplice' ? ' ثم مسحت آثاره' : ''}. في هاتفك رسالة قد تفضحك، وتجنّب التحقق.` },
                     more([
                         `من الساعة ${fmtTime(T - 15)} حتى ${fmtTime(T + 10)} كنت تراقب الطريق قرب ${esc(ex.scene)}.`,
                         hiderMode === 'accomplice' ? `بعد أن انتهى المافيوسو دخلت ومسحت ${esc(ex.trace)} وأخفيت الغرض في كيس، وربما رآك أحدهم.` : '',
                         `المافيوسو زرع ${planted} تعود إلى ${who(framed)}، فساعده في توجيه الشك نحوه.`,
                         `الساعة ${fmtTime(T + 5)} وصلتك رسالة من المافيوسو: "انتهى الأمر. التزم بالقصة كما اتفقنا."`,
-                        `دافعك: أنك ${esc(p.motive)}.`
+                        `دافع المافيوسو الحقيقي: ${maf.bigMotive.them}.`,
+                        `ساعده في مهاجمة ${who(framed)}، فالكل يعرف أنه ${framed.bigMotive.hint}.`
                     ])
                 ];
             }
@@ -1721,8 +1831,12 @@
                 say.push(`دليلك إن اتهموك: ${esc(placeFacts[p.claim])}، اطلب من الحكم تأكيده.`);
             }
             if (p.keyObs) say.push(p.keyObs);
-            if (p.lostItem) say.push(`وإن ظهر ${p.lostItem}: أضعته اليوم.`);
-            if (p.isInnocentHider) keep.push(`دخلت ${esc(ex.scene)} قبل الجريمة، ثم عدت ومسحت آثارك خوفاً. لست المجرم.`);
+            if (p.lostItem) say.push(`وإن ظهر ${p.lostItem}: أضعته اليوم، وهناك من يحاول توريطك.`);
+            if (p.bigMotive) {
+                say.push(`وإن ظهر دافعك فلا تنكره: الدافع ليس دليلاً، وحجتك أين كنت.`);
+                keep.push(`<strong>🔥 لديك دافع قوي قد يُكشف:</strong> ${p.bigMotive.you}.`);
+            }
+            if (p.isInnocentHider) keep.push(`لذلك دخلت ${esc(ex.scene)} قبل الجريمة لكي ${p.hiderReason}، و${intactTxt(ex)} حينها. وبعد الجريمة عدت ومسحت آثارك، لأن دافعك معروف وبصماتك هناك ستجعلك المتهم الأول. لست المجرم.`);
             if (p.traitCard) keep.push(`${esc(p.traitCard)}، وهذا يشبه أثر المجرم.`);
             const cards = [
                 { cls: 'good', title: '✅ أنت بريء', html: 'اكشف المافيوسو وأخرجه بالتصويت.' },
@@ -1735,10 +1849,10 @@
             } else {
                 extra.push(`بقيت ${bi(p.claim)} من الساعة ${fmtTime(T - 30)} حتى ${fmtTime(T + 30)}.`);
             }
-            if (p.isInnocentHider) extra.push(`دخلت ${li(ex.scene)} قبل الجريمة بنحو 40 دقيقة لكي ${esc(p.hiderReason)}. ${p.sceneObs || ''} ثم عدت نحو الساعة ${fmtTime(T + 15)} ومسحت ${esc(ex.trace)}.`);
+            if (p.isInnocentHider) extra.push(`دخلت ${li(ex.scene)} نحو الساعة ${fmtTime(T - 40)}، ثم عدت نحو الساعة ${fmtTime(T + 15)} ومسحت ${esc(ex.trace)}.`);
             p.obs.filter(o => !o.startsWith('والأهم')).forEach(o => extra.push(o));
             p.risks.filter(r => r.includes('وسيلة الدخول')).forEach(r => extra.push(r));
-            extra.push(`قد يشكّون فيك لأنك ${esc(p.motive)}.`);
+            if (!p.bigMotive) extra.push(`قد يشكّون فيك لأنك ${esc(p.motive)}.`);
             cards.push(more(extra));
             return cards;
         }
@@ -2305,7 +2419,9 @@
                 🧹 من أخفى الآثار: ${modeTxt}<br>
                 🎯 البريء المورَّط: ${who(m.framed)}<br>
                 ${m.liar ? `🤫 بريء يكذب بشأن مكانه: ${who(m.liar)}<br>` : ''}
-                ${m.witness ? `🔦 الشاهد المهم: ${who(m.witness)}` : ''}`;
+                ${m.witness ? `🔦 الشاهد المهم: ${who(m.witness)}<br>` : ''}
+                🔥 دافع المافيوسو: ${esc(m.maf.bigMotive.tag)}${m.acc ? `، ويساعده الشريك لأن ${m.acc.accReasonThem}` : ''}<br>
+                🎭 دوافع مضلِّلة (أبرياء): ${m.redHerrings.map(p => `${who(p)} (${p.bigMotive.hint})`).join('، ')}`;
 
             document.getElementById('case-category-badge').innerText = c.category;
             document.getElementById('case-title').innerText = c.title;
@@ -2585,7 +2701,9 @@
                 : m.hiderMode === 'accomplice' ? `دخل الشريك ${who(m.acc)} ومسح ${esc(ex.trace)} وأخفى الغرض.`
                 : `عاد البريء ${who(m.hider)} خائفاً ومسح ${esc(ex.trace)} لأنه كان في المكان من قبل، فغطّى على المجرم الحقيقي دون أن يقصد!`;
             lines.push(`🕒 <strong>${fmtTime(T + 15)}</strong> — ${hideLine}`);
-            lines.push(`🔥 <strong>دافع المافيوسو:</strong> ${esc(m.maf.motiveThem)}.`);
+            lines.push(`🔥 <strong>الدافع الحقيقي:</strong> ${m.maf.bigMotive.them}، ولهذا ارتكب ${who(m.maf)} الجريمة.`);
+            if (m.acc) lines.push(`🤝 <strong>لماذا ساعده الشريك؟</strong> ساعده ${who(m.acc)} لأن ${m.acc.accReasonThem}.`);
+            m.redHerrings.forEach(p => lines.push(`🎭 <strong>دافع مضلِّل:</strong> ${who(p)} ${p.bigMotive.hint}${p === m.framed ? '، ولهذا اختاره المافيوسو ليورّطه' : ''}${p.isInnocentHider ? '، ولهذا أخفى الآثار خوفاً' : ''}، لكنه بريء.`));
 
             document.getElementById('final-scenario-section').style.display = 'block';
             document.getElementById('final-scenario-text').innerHTML = lines.join('<br><br>');
