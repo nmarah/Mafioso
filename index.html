@@ -268,6 +268,8 @@
         details.dossier { border-bottom: 1px dashed var(--rule); padding: 8px 0; text-align: right; }
         details.dossier summary { cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 8px; list-style: none; }
         details.dossier summary::-webkit-details-marker { display: none; }
+        ul.judge-info { margin: 8px 18px 4px 0; padding: 0; font-size: 0.92rem; line-height: 1.8; color: var(--ink); }
+        ul.judge-info li { margin-bottom: 3px; }
         .rules-box { font-size: 0.9rem; text-align: right; color: var(--ink-soft); line-height: 1.8; }
 
         .scenario-box {
@@ -590,7 +592,7 @@
                 <h3 id="my-story-role" style="color: var(--gold); font-size: 1.5rem; margin-bottom: 10px;">الشخصية</h3>
                 <div id="my-card"></div>
             </div>
-            <p style="font-size: 0.95rem; margin-bottom: 20px;">احفظ قصتك جيداً لأنك ستحتاجها في النقاش، ولا تُظهر البطاقة لأحد.</p>
+            <p style="font-size: 0.95rem; margin-bottom: 20px;">هذه قصتك، والباقي عليك: دافع عن نفسك واتّهم من تشاء، ولا تُظهر البطاقة لأحد.</p>
             <button class="btn" onclick="nextPlayerRole()">حفظت دوري، التالي</button>
         </div>
 
@@ -636,10 +638,6 @@
             <details class="script-step">
                 <summary>🗂️ ملفات اللاعبين (بطاقة كل لاعب)</summary>
                 <div class="assigned-roles-box" id="assigned-roles-list" style="max-height:none;"></div>
-            </details>
-            <details class="script-step">
-                <summary>🔎 جدول التحقق: ماذا حدث في كل مكان وقت الجريمة</summary>
-                <div class="assigned-roles-box" id="facts-table"></div>
             </details>
         </div>
 
@@ -1296,7 +1294,16 @@
               them: v => `كان مديناً لـ${v} بمبلغ ضخم، ورفع عليه قضية ستدخله السجن وتطرد عائلته من بيتها`,
               hint: 'كان مهدداً بالسجن وطرد عائلته بسبب دين',
               clue: (v, X) => `في درج ${v} إنذار قضائي باسم ${X}: "سداد كامل خلال أسبوع، وإلا الحبس وإخلاء المنزل."`,
-              visit: v => `تتوسل إلى ${v} أن يسحب القضية`, visitThem: v => `يتوسل إلى ${v} أن يسحب القضية` }
+              visit: v => `تتوسل إلى ${v} أن يسحب القضية`, visitThem: v => `يتوسل إلى ${v} أن يسحب القضية` },
+            { tag: 'الخيانة', them: v => `اكتشف قبل يومين أن ${v} على علاقة سرية بشريكة حياته`, hint: 'اكتشف خيانة تمسّ بيته', visitThem: v => `يواجه ${v} بالعلاقة السرية` },
+            { tag: 'الطرد والاتهام', them: v => `كان ${v} سيطرده غداً ويتّهمه علناً بسرقة لم يرتكبها`, hint: 'كان سيُطرد ويُتّهم ظلماً', visitThem: v => `يتوسل إلى ${v} ألا يطرده` },
+            { tag: 'تأمين الحياة', them: v => `هو المستفيد الوحيد من تأمين ضخم على حياة ${v}، وهو غارق في الديون`, hint: 'سيقبض تأميناً ضخماً على حياة الضحية', visitThem: v => `يتأكد من أوراق التأمين` },
+            { tag: 'المنصب', them: v => `كان ${v} العقبة الوحيدة أمام المنصب الذي ينتظره منذ عشرين عاماً`, hint: 'كانت الضحية تقف أمام منصبه', visitThem: v => `يقنع ${v} بالتنحي عن المنصب` },
+            { tag: 'أرض العائلة', them: v => `كان ${v} سيستولي غداً على أرض عائلته بحكم قضائي بعد نزاع طويل`, hint: 'كانت أرض عائلته ستضيع', visitThem: v => `يعرض على ${v} تسوية أخيرة على الأرض` },
+            { tag: 'الحادث المخفي', them: v => `كان ${v} يعرف أنه صدم شخصاً بسيارته وهرب، وهدده بالإبلاغ عنه`, hint: 'كان الضحية يعرف جريمته القديمة', visitThem: v => `يشتري صمت ${v}` },
+            { tag: 'الاختراع المسروق', them: v => `سجّل ${v} اختراعه باسمه وجنى منه الملايين وتركه مفلساً`, hint: 'سُرق اختراعه', visitThem: v => `يبحث عن أوراق تثبت أن الاختراع له` },
+            { tag: 'خراب الأب', them: v => `${v} هو من دمّر شركة والده ودفعه إلى الانهيار حتى مات قهراً`, hint: 'يحمّل الضحية موت والده', visitThem: v => `يواجه ${v} بما فعله بوالده` },
+            { tag: 'دين القمار', them: v => `خسر أمام ${v} على طاولة القمار مبلغاً ضخماً، و${v} هدده بالأذى إن لم يدفع الليلة`, hint: 'مهدَّد بسبب دين قمار', visitThem: v => `يطلب مهلة أخيرة من ${v}` }
         ];
 
         const theftMotives = [
@@ -1335,7 +1342,25 @@
               them: (v, it) => `كان سيقبض نصف مبلغ التأمين على ${it} إن اختفى`,
               hint: 'سيقبض مبلغ التأمين إن اختفى الغرض',
               clue: (v, X, it) => `وثيقة تأمين على ${it} يظهر فيها ${X} مستفيداً من نصف المبلغ.`,
-              visit: (v, it) => `تتأكد من أن ${it} ما زال في مكانه قبل تجديد التأمين`, visitThem: (v, it) => `يتأكد من ${it} قبل تجديد التأمين` }
+              visit: (v, it) => `تتأكد من أن ${it} ما زال في مكانه قبل تجديد التأمين`, visitThem: (v, it) => `يتأكد من ${it} قبل تجديد التأمين` },
+            { tag: 'خسارة القمار', them: () => `خسر كل مدخراته في القمار، وعليه سدادها قبل الفجر`, hint: 'خسر كل ماله في القمار', visitThem: () => `يطلب سلفة من صاحب المكان` },
+            { tag: 'الإفلاس', them: () => `مشروعه على وشك الإفلاس، وسيخسر بيته إن لم يجد المال هذا الأسبوع`, hint: 'على وشك الإفلاس', visitThem: () => `يعرض على صاحب المكان شراكة تنقذه` },
+            { tag: 'الرواتب المتأخرة', them: () => `لم يقبض راتبه منذ ستة أشهر، ويعتبر ما يأخذه من صاحب المكان حقاً له`, hint: 'يطالب برواتب متأخرة منذ أشهر', visitThem: () => `يطالب صاحب المكان برواتبه` },
+            { tag: 'جامع التحف', them: (v, it) => `وعده جامع تحف ثري بمبلغ خيالي إن أحضر له ${it}`, hint: 'وعده جامع تحف بثروة', visitThem: (v, it) => `يصوّر ${it} لجامع التحف` },
+            { tag: 'الفدية', them: () => `مجهولون خطفوا أخاه ويطالبون بفدية لا يملكها قبل الغد`, hint: 'يحتاج فدية لإنقاذ أخيه', visitThem: () => `يطلب المساعدة من صاحب المكان` },
+            { tag: 'المنصب', them: () => `كان سيُطرد، وأراد أن يثبت ضعف الحراسة ليأخذ مكان المسؤول عنها`, hint: 'أراد إثبات ضعف الحراسة ليأخذ المنصب', visitThem: () => `يتفقد ثغرات الحراسة` },
+            { tag: 'الهجرة', them: () => `حصل على تأشيرة هجرة، وينقصه المال ليرحل نهائياً هذا الأسبوع`, hint: 'يحتاج المال ليهاجر', visitThem: () => `يودّع المكان قبل سفره` },
+            { tag: 'فضح صاحب المكان', them: (v, it) => `يعرف أن صاحب المكان حصل على ${it} بطريقة غير قانونية، وأراد أن يفضحه`, hint: 'يريد فضح صاحب المكان', visitThem: (v, it) => `يبحث عن أوراق تثبت مصدر ${it}` },
+            { tag: 'النسخة المزوّرة', them: (v, it) => `يدير شبكة تبيع نسخاً مزوّرة، و${it} الأصلي هو صفقة عمره`, hint: 'يتاجر بالنسخ المزوّرة', visitThem: (v, it) => `يقارن ${it} بالنسخة المزوّرة` }
+        ];
+
+        // ماذا كان كل لاعب يفعل في مكانه (أنت / هو)
+        const activityPool = [
+            ['تشرب القهوة', 'يشرب القهوة'], ['تتحدث في الهاتف', 'يتحدث في الهاتف'], ['تقرأ كتاباً', 'يقرأ كتاباً'],
+            ['تُصلح جهازاً معطلاً', 'يُصلح جهازاً معطلاً'], ['ترتب بعض الأوراق', 'يرتب بعض الأوراق'], ['تتناول وجبة خفيفة', 'يتناول وجبة خفيفة'],
+            ['تشاهد التلفاز', 'يشاهد التلفاز'], ['تدخّن سيجارة', 'يدخّن سيجارة'], ['تنتظر شخصاً تأخر', 'ينتظر شخصاً تأخر'],
+            ['تكتب رسالة', 'يكتب رسالة'], ['تستريح قليلاً', 'يستريح قليلاً'], ['تبحث عن غرض أضعته', 'يبحث عن غرض أضاعه'],
+            ['تلعب الورق', 'يلعب الورق'], ['تراجع حسابات العمل', 'يراجع حسابات العمل'], ['تستمع إلى المذياع', 'يستمع إلى المذياع']
         ];
 
         // لماذا يساعد الشريك المافيوسو (تُقرأ بعد "لأن")
@@ -1648,14 +1673,12 @@
             const vName = ex.kind === 'm' ? esc(ex.item) : 'صاحب المكان';
             const itName = esc(ex.item);
             const mPool = shuffle(ex.kind === 'm' ? murderMotives : theftMotives);
-            const mk = M => ({ tag: M.tag, hint: M.hint, you: M.you(vName, itName), them: M.them(vName, itName),
-                clue: X => M.clue(vName, X, itName), visit: M.visit(vName, itName), visitThem: M.visitThem(vName, itName) });
+            const mk = M => ({ tag: M.tag, hint: M.hint, them: M.them(vName, itName), visitThem: M.visitThem(vName, itName) });
             let mi = 0;
             maf.bigMotive = mk(mPool[mi++]);
             framed.bigMotive = mk(mPool[mi++]);
             if (hider.isInnocentHider) {
                 hider.bigMotive = mk(mPool[mi++]);
-                hider.hiderReason = hider.bigMotive.visit;
                 hider.hiderReasonThem = hider.bigMotive.visitThem;
             }
             const extraPool = innocents.filter(p => !p.bigMotive && p !== witness && p !== liar);
@@ -1663,6 +1686,12 @@
             if (extraSuspect) extraSuspect.bigMotive = mk(mPool[mi++]);
             if (acc) { const ar = pick(accompliceReasons); acc.accReason = ar.you(vName); acc.accReasonThem = ar.them(vName); }
             const redHerrings = P.filter(p => p.bigMotive && !p.isMafioso);
+            // كل لاعب له دافع يعلنه الحكم للجميع، فالدافع وحده لا يكشف المجرم
+            P.forEach(p => { if (!p.bigMotive) p.bigMotive = mk(mPool[mi++ % mPool.length]); });
+            // ماذا كان كل لاعب يفعل (القصة التي يرويها)
+            const acts = shuffle(activityPool);
+            P.forEach((p, i) => { [p.activity, p.activityThem] = acts[i % acts.length]; });
+            if (acc) { acc.activity = `تتحدث مع ${esc(maf.name)}`; acc.activityThem = `يتحدث مع ${esc(maf.name)}`; }
 
             // 4) الأماكن والجدول الزمني
             const places = shuffle(ex.places);
@@ -1750,15 +1779,7 @@
             if (liar) early.push({ label: 'إفادة عامل الصيانة', truth: true,
                 text: `كان عامل الصيانة في ${esc(liarClaim)} طوال الوقت، وأكّد أنه لم يرَ ${who(liar)} هناك وقت الجريمة إطلاقاً.`,
                 note: `${esc(liar.name)} بريء لكنه يخفي سراً: ${esc(liar.secretThem)}.` });
-            early.push({ label: 'وثيقة تكشف دافعاً', truth: true,
-                text: framed.bigMotive.clue(who(framed)),
-                note: `${esc(framed.name)} بريء رغم دافعه (${framed.bigMotive.hint}). اختاره المافيوسو ليورّطه لأن دافعه معروف.` });
-            redHerrings.filter(p => p !== framed).forEach(p => early.push({ label: 'دافع آخر يظهر', truth: true,
-                text: p.bigMotive.clue(who(p)),
-                note: `${esc(p.name)} بريء رغم دافعه (${p.bigMotive.hint})${p.isInnocentHider ? '، وهذا الدافع هو سبب دخوله المكان قبل الجريمة ثم إخفائه الآثار' : ''}.` }));
-            const late = [contraClue, traitClue, { label: 'دافع خفي', truth: true,
-                text: maf.bigMotive.clue(who(maf)),
-                note: `هذا هو الدافع الحقيقي للمافيوسو ${esc(maf.name)}.` }];
+            const late = [contraClue, traitClue];
             if (acc) late.push({ label: 'رسالة مريبة', truth: true,
                 text: `عُثر في هاتف ${who(acc)} على رسالة من رقم مجهول الساعة ${fmtTime(T + 5)}: "انتهى الأمر. التزم بالقصة كما اتفقنا."`,
                 note: `${esc(acc.name)} هو شريك المافيوسو.` });
@@ -1767,94 +1788,48 @@
             // 8) بطاقة كل لاعب
             const motives = shuffle(motivePool);
             P.forEach((p, i) => {
-                if (p.isMafioso) { p.motive = p.bigMotive.you; p.motiveThem = p.bigMotive.them; }
-                else p.motive = motives[i % motives.length];
-                p.sections = buildCard(p, { T, ex, maf, acc, hider, hiderMode, framed, planted, mafClaim, placeFacts, P });
+                p.motiveThem = p.bigMotive.them;
+                p.sections = buildCard(p, { maf, acc, P });
+                p.judgeInfo = buildJudgeInfo(p, { T, ex, maf, acc, hiderMode, framed, planted, trait, traitDecoy, P });
             });
 
             return { T, ex, players: P, maf, acc, hider, hiderMode, framed, liar, witness, traitDecoy, trait, planted, mafClaim, liarClaim, liarReal, placeFacts, clues, accessGroup, redHerrings };
         }
 
-        // بطاقة كل لاعب: قصيرة جداً — سطر الدور، ثم "قل للجميع"، ثم "احتفظ لنفسك"
+        // بطاقة اللاعب: شخصيته، وهل هو بريء أم لا، وأين يقول إنه كان وماذا كان يفعل. والباقي ارتجال.
         function buildCard(p, ctx) {
-            const { T, ex, maf, acc, hiderMode, framed, planted, mafClaim, placeFacts, P } = ctx;
-            const SAY = '🗣️ قل للجميع';
-            // تفاصيل إضافية مطوية تحت البطاقة: القصة الكاملة لمن يحب التفاصيل
-            const more = items => ({ more: true, title: '📖 تفاصيل إضافية (اختياري)', html: `<ul>${items.filter(Boolean).map(t => `<li>${t}</li>`).join('')}</ul>` });
-            const KEEP = '🤫 احتفظ به لنفسك';
+            const { maf, acc, P } = ctx;
+            const mates = P.filter(o => o !== p && o.team === 'innocent' && !o.isLiar && p.team === 'innocent' && !p.isLiar && o.claim === p.claim);
+            const story = { title: '📍 قصتك', html: `كنت ${bi(p.claim)} ${p.activity}${mates.length ? `، ومعك ${joinAr(mates.map(o => `<strong>${esc(o.name)}</strong>`))}` : ''}.` };
+            if (p.isMafioso) return [
+                { cls: 'danger', title: '🔪 أنت المافيوسو', html: `أنت المجرم. ابقَ متخفياً حتى النهاية.${acc ? ` شريكك: ${who(acc)}.` : ''}` }, story ];
+            if (p.isAccomplice) return [
+                { cls: 'danger', title: '🤝 أنت شريك المافيوسو', html: `المافيوسو هو ${who(maf)}. ساعده ليبقى متخفياً.` }, story ];
+            return [ { cls: 'good', title: '✅ أنت بريء', html: 'اكشف المافيوسو وأخرجه بالتصويت.' }, story ];
+        }
 
+        // ملف اللاعب عند الحكم: الحقيقة الكاملة
+        function buildJudgeInfo(p, ctx) {
+            const { T, ex, maf, acc, hiderMode, framed, planted, trait, traitDecoy, P } = ctx;
+            const L = [];
+            L.push(`<strong>يقول:</strong> كان ${bi(p.claim)} ${p.activityThem}.`);
             if (p.isMafioso) {
-                const deed = ex.weapon ? `قتلت ${esc(ex.item)} (${esc(ex.weapon)})` : `سرقت ${esc(ex.item)}`;
-                const hide = hiderMode === 'mafioso' ? ' ثم مسحت آثارك.' : hiderMode === 'accomplice' ? ' ومسح شريكك آثارك.' : ' وشخص آخر مسح آثارك لسبب تجهله.';
-                return [
-                    { cls: 'danger', title: '🔪 أنت المافيوسو', html: `ابقَ متخفياً حتى النهاية.${acc ? ` شريكك: ${who(acc)}.` : ''}` },
-                    { title: SAY, html: `كنت ${bi(mafClaim)} طوال الوقت${acc ? ` مع ${esc(acc.name)}` : ''}. هاجم ${who(framed)}: غرضه (${planted}) سيظهر قرب الجريمة، والكل يعرف أنه ${framed.bigMotive.hint}. وإن ظهر دافعك فقلّل من شأنه.` },
-                    { cls: 'warn', title: KEEP, html: `<strong>دافعك الحقيقي:</strong> ${p.motive}. لذلك ${deed} ${bi(ex.scene)}.${hide} احذر: ${esc(p.traitCard)}، ولا تعرف ما حدث ${bi(mafClaim)}، فتجنّب التحقق.` },
-                    more([
-                        `الساعة ${fmtTime(T - 30)} كنت فعلاً ${bi(mafClaim)}، وربما رآك أحدهم هناك، وهذا يقوّي قصتك.`,
-                        `نحو الساعة ${fmtTime(T - 10)} تسللت ${li(ex.scene)} مستخدماً <strong>${esc(ex.tool)}</strong>، ووقعت الجريمة الساعة ${fmtTime(T)}.`,
-                        hiderMode === 'mafioso' ? `مسحت ${esc(ex.trace)} بنفسك، وربما لمحك أحدهم وأنت تغادر.`
-                            : hiderMode === 'accomplice' ? `شريكك هو من مسح ${esc(ex.trace)}، فإن انكشف أمره فابتعد عنه.`
-                            : `عندما عدت وجدت ${esc(ex.trace)} ممسوحة، ولا تعرف من فعل ذلك ولا لماذا. استغل ذلك.`,
-                        `زرعت ${planted} تعود إلى ${who(framed)} قرب مكان الجريمة، واخترته لأن دافعه معروف: ${framed.bigMotive.them}.`,
-                        `قد تظهر ورقة تكشف دافعك، فجهّز رداً يقلّل من شأنها.`
-                    ])
-                ];
-            }
-
-            if (p.isAccomplice) {
-                return [
-                    { cls: 'danger', title: '🤝 أنت شريك المافيوسو', html: `المافيوسو هو ${who(maf)}. ساعده ليبقى متخفياً.` },
-                    { title: SAY, html: `كنت مع ${esc(maf.name)} ${bi(mafClaim)}، ورأيت ${who(framed)} قرب ${esc(ex.scene)}.` },
-                    { cls: 'warn', title: KEEP, html: `تساعده لأن ${p.accReason}. كنت تراقب الطريق له${hiderMode === 'accomplice' ? ' ثم مسحت آثاره' : ''}. في هاتفك رسالة قد تفضحك، وتجنّب التحقق.` },
-                    more([
-                        `من الساعة ${fmtTime(T - 15)} حتى ${fmtTime(T + 10)} كنت تراقب الطريق قرب ${esc(ex.scene)}.`,
-                        hiderMode === 'accomplice' ? `بعد أن انتهى المافيوسو دخلت ومسحت ${esc(ex.trace)} وأخفيت الغرض في كيس، وربما رآك أحدهم.` : '',
-                        `المافيوسو زرع ${planted} تعود إلى ${who(framed)}، فساعده في توجيه الشك نحوه.`,
-                        `الساعة ${fmtTime(T + 5)} وصلتك رسالة من المافيوسو: "انتهى الأمر. التزم بالقصة كما اتفقنا."`,
-                        `دافع المافيوسو الحقيقي: ${maf.bigMotive.them}.`,
-                        `ساعده في مهاجمة ${who(framed)}، فالكل يعرف أنه ${framed.bigMotive.hint}.`
-                    ])
-                ];
-            }
-
-            // ---- الأبرياء ----
-            const companions = P.filter(o => o !== p && o.team === 'innocent' && !o.isLiar && o.claim === p.claim);
-            const say = [];
-            const keep = [];
-            if (p.isLiar) {
-                say.push(`كنت ${bi(p.claim)}.`);
-                say.push(`وإن انكشفت كذبتك فاعترف بسرك، ودليلك: ${esc(placeFacts[p.real])}.`);
-                keep.push(`كنت في الحقيقة ${bi(p.real)} لأنك ${esc(p.secret)}.`);
+                L.push(`<strong>الحقيقة:</strong> نحو الساعة ${fmtTime(T - 10)} تسلل ${li(ex.scene)} مستخدماً ${esc(ex.tool)}، و${ex.weapon ? `قتل ${esc(ex.item)} (${esc(ex.weapon)})` : `سرق ${esc(ex.item)}`} الساعة ${fmtTime(T)}، ثم زرع ${planted} تعود إلى ${who(framed)}.${hiderMode === 'mafioso' ? ' ومسح آثاره بنفسه.' : ''}`);
+                L.push(`<strong>ما يكشفه:</strong> ${trait.clue}، وأن ${esc(p.claim)} كان مغلقاً وقت الجريمة.`);
+            } else if (p.isAccomplice) {
+                L.push(`<strong>الحقيقة:</strong> كان يراقب الطريق للمافيوسو قرب ${esc(ex.scene)}${hiderMode === 'accomplice' ? '، ثم مسح الآثار' : ''}. ويساعده لأن ${p.accReasonThem}.`);
+            } else if (p.isLiar) {
+                L.push(`<strong>الحقيقة:</strong> يكذب؛ كان ${bi(p.real)} لأنه ${esc(p.secretThem)}. لكنه بريء.`);
             } else {
-                say.push(`كنت ${bi(p.claim)}${companions.length ? ` مع ${joinAr(companions.map(who))}` : ' وحدك'}.`);
-                say.push(`دليلك إن اتهموك: ${esc(placeFacts[p.claim])}، اطلب من الحكم تأكيده.`);
+                const mates = P.filter(o => o !== p && o.team === 'innocent' && !o.isLiar && o.claim === p.claim);
+                L.push(`<strong>الحقيقة:</strong> صادق${mates.length ? `، ومعه ${joinAr(mates.map(o => esc(o.name)))}` : ''}.`);
             }
-            if (p.keyObs) say.push(p.keyObs);
-            if (p.lostItem) say.push(`وإن ظهر ${p.lostItem}: أضعته اليوم، وهناك من يحاول توريطك.`);
-            if (p.bigMotive) {
-                say.push(`وإن ظهر دافعك فلا تنكره: الدافع ليس دليلاً، وحجتك أين كنت.`);
-                keep.push(`<strong>🔥 لديك دافع قوي قد يُكشف:</strong> ${p.bigMotive.you}.`);
-            }
-            if (p.isInnocentHider) keep.push(`لذلك دخلت ${esc(ex.scene)} قبل الجريمة لكي ${p.hiderReason}، و${intactTxt(ex)} حينها. وبعد الجريمة عدت ومسحت آثارك، لأن دافعك معروف وبصماتك هناك ستجعلك المتهم الأول. لست المجرم.`);
-            if (p.traitCard) keep.push(`${esc(p.traitCard)}، وهذا يشبه أثر المجرم.`);
-            const cards = [
-                { cls: 'good', title: '✅ أنت بريء', html: 'اكشف المافيوسو وأخرجه بالتصويت.' },
-                { title: SAY, html: say.join(' ') }
-            ];
-            if (keep.length) cards.push({ cls: 'warn', title: KEEP, html: keep.join(' ') });
-            const extra = [];
-            if (p.isLiar) {
-                extra.push(`كنت فعلاً ${bi(p.claim)} الساعة ${fmtTime(T - 30)}، ثم تسللت ${li(p.real)} وبقيت هناك من ${fmtTime(T - 20)} حتى ${fmtTime(T + 15)}.`);
-            } else {
-                extra.push(`بقيت ${bi(p.claim)} من الساعة ${fmtTime(T - 30)} حتى ${fmtTime(T + 30)}.`);
-            }
-            if (p.isInnocentHider) extra.push(`دخلت ${li(ex.scene)} نحو الساعة ${fmtTime(T - 40)}، ثم عدت نحو الساعة ${fmtTime(T + 15)} ومسحت ${esc(ex.trace)}.`);
-            p.obs.filter(o => !o.startsWith('والأهم')).forEach(o => extra.push(o));
-            p.risks.filter(r => r.includes('وسيلة الدخول')).forEach(r => extra.push(r));
-            if (!p.bigMotive) extra.push(`قد يشكّون فيك لأنك ${esc(p.motive)}.`);
-            cards.push(more(extra));
-            return cards;
+            if (p.isInnocentHider) L.push(`<strong>سرّه:</strong> دخل ${esc(ex.scene)} قبل الجريمة لكي ${p.hiderReasonThem}، ثم عاد بعدها ومسح ${esc(ex.trace)} لأن دافعه معروف وخاف من بصماته.`);
+            if (p.isFramed) L.push(`<strong>مورَّط:</strong> ${planted} المزروعة قرب الجريمة تعود إليه.`);
+            if (p.isWitness) L.push(`<strong>شاهد:</strong> لمح شخصاً يسرع نحو مكان الجريمة قبيلها، ولم يتبيّن وجهه.`);
+            if (p === traitDecoy) L.push(`<strong>صدفة:</strong> ينطبق عليه الأثر الجسدي (${trait.clue}).`);
+            L.push(`<strong>دافعه المعلن:</strong> ${p.bigMotive.them}.`);
+            return L;
         }
 
         function renderSections(sections) {
@@ -2421,7 +2396,7 @@
                 ${m.liar ? `🤫 بريء يكذب بشأن مكانه: ${who(m.liar)}<br>` : ''}
                 ${m.witness ? `🔦 الشاهد المهم: ${who(m.witness)}<br>` : ''}
                 🔥 دافع المافيوسو: ${esc(m.maf.bigMotive.tag)}${m.acc ? `، ويساعده الشريك لأن ${m.acc.accReasonThem}` : ''}<br>
-                🎭 دوافع مضلِّلة (أبرياء): ${m.redHerrings.map(p => `${who(p)} (${p.bigMotive.hint})`).join('، ')}`;
+                🎭 أقوى المشتبه بهم الأبرياء: ${m.redHerrings.map(p => `${who(p)} (${p.bigMotive.hint})`).join('، ')}`;
 
             document.getElementById('case-category-badge').innerText = c.category;
             document.getElementById('case-title').innerText = c.title;
@@ -2438,8 +2413,7 @@
                 d.className = 'dossier';
                 if (isOut) d.style.opacity = '0.5';
                 d.innerHTML = `<summary><span>${who(p)}${isOut ? (gameState.killed.includes(p.name) ? ' <span style="color:var(--stamp);">(💀 مقتول)</span>' : ' <span style="color:var(--stamp);">(أُخرج بالتصويت)</span>') : ''}</span>${tag}</summary>
-                    <div style="font-size:0.85rem;margin:6px 0;color:var(--text-muted)">يدّعي أنه كان في: <strong>${esc(p.claim)}</strong></div>
-                    ${renderSections(p.sections)}`;
+                    <ul class="judge-info">${p.judgeInfo.map(t => `<li>${t}</li>`).join('')}</ul>`;
                 rolesList.appendChild(d);
             });
 
@@ -2451,10 +2425,6 @@
             const escEl = document.getElementById('hub-escape');
             escEl.classList.toggle('hidden', left === null);
             if (left !== null) escEl.innerText = `⏳ بقي ${left === 1 ? 'تصويت واحد' : left + ' تصويتات'} قبل أن يهرب المجرم!`;
-
-            // جدول التحقق
-            const fx = document.getElementById('facts-table');
-            fx.innerHTML = Object.entries(m.placeFacts).map(([pl, f]) => `<div class="assigned-role-row"><span><strong>${esc(pl)}</strong></span><span style="max-width:65%;text-align:left;color:var(--text-main)">${esc(f)}</span></div>`).join('');
 
             renderJudgeGuide();
             renderClues();
@@ -2469,15 +2439,15 @@
             const alive = m.players.filter(p => !gameState.eliminated.includes(p.name));
             document.getElementById('judge-cast').innerHTML = `
                 <div class="clue-box">
-                    <h4>👥 بعد الدليل الأول: من هو من</h4>
-                    <div class="say">🎙️ "هذه شخصياتكم في القصة، ويعرف كل منكم دوره من بطاقته:<br>${alive.map(p => `<strong>${esc(p.name)}</strong> ← ${esc(p.role)}`).join('<br>')}<br>والآن ليعرّف كل واحد بنفسه بدوره، ويذكر أين كان وقت الجريمة ومع من."</div>
+                    <h4>👥 بعد الدليل الأول: الشخصيات ودوافعها</h4>
+                    <div class="say">🎙️ "هذه شخصياتكم، ولكل واحد منكم سبب يجعله موضع شك:<br>${alive.map(p => `• <strong>${esc(p.name)}</strong> (${esc(p.role)}): ${p.bigMotive.them}.`).join('<br>')}<br>والآن ليقل كل واحد بدوره أين كان وقت الجريمة وماذا كان يفعل."</div>
                     <p class="judge-note">🔒 من سيكذبون بشأن أماكنهم: ${liars.join('، ')}. قارن كلامهم بملفاتهم في الأسفل.</p>
                 </div>`;
             document.getElementById('judge-rules').innerHTML = `<div class="say">🎙️ "بيننا مافيوسو، وقد يكون معه شريك، والبقية أبرياء. لكن بعض الأبرياء يخفون أسراراً ويكذبون، وليس كل دليل صحيحاً. ` +
-                `لا يُظهر أحدٌ بطاقته لأحد. ولكل لاعب طلب تحقق واحد طوال اللعبة: يذكر أمراً حدث في مكانه وقت الجريمة، وأخبره أنا إن كان صحيحاً أم خاطئاً. ` +
+                `لا يُظهر أحدٌ بطاقته لأحد. سأعلن دافع كل واحد منكم، فلكل منا ما يخفيه، والدافع وحده ليس دليلاً. ` +
                 `بعد كل نقاش نصوّت عند العدّ إلى ثلاثة، ويخرج من ينال أكثر الأصوات. وإن كان بريئاً يُكشف دليل جديد، وقد يقع حدث مفاجئ. ` +
                 `يفوز الأبرياء إذا أخرجوا المافيوسو، وتفوز المافيا إذا بقي متخفياً حتى يتساوى عدد الأبرياء مع عددها، أو إذا هرب."</div>` +
-                `<p class="judge-note">🔒 أجب عن طلبات التحقق من "جدول التحقق". اقرأ الدليل المزروع كأي دليل آخر. وإن تعادلت الأصوات فليدافع كل متهم عن نفسه 30 ثانية، ثم أعيدوا التصويت بينهم.</p>`;
+                `<p class="judge-note">🔒 اقرأ الدليل المزروع كأي دليل آخر. وإن تعادلت الأصوات فليدافع كل متهم عن نفسه 30 ثانية، ثم أعيدوا التصويت بينهم.</p>`;
         }
 
         function renderClues() {
