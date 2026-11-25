@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>غنّيها بالفصحى</title>
 <meta name="theme-color" content="#15110f">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
 <style>
 :root{
   --bg:#15110f; --panel:#211b17; --panel2:#2b231d; --line:#3a3029;
@@ -17,9 +14,8 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
-body{background:var(--bg);color:var(--text);font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;
+body{background:var(--bg);color:var(--text);font-family:Tahoma,"Segoe UI",Arial,system-ui,sans-serif;
   min-height:100dvh;overflow-x:hidden;user-select:none;-webkit-user-select:none}
-h1,h2,.kufi{font-family:"Reem Kufi","IBM Plex Sans Arabic",sans-serif}
 button{font:inherit;color:inherit;cursor:pointer;border:0}
 input{font:inherit}
 .hidden{display:none!important}
@@ -59,18 +55,30 @@ input{font:inherit}
 .toggle.on{background:var(--gold);border-color:var(--gold)}
 .toggle.on::after{right:25px;background:#1a1307}
 .start{display:flex;justify-content:center;margin:22px 0 10px}
+.seg{display:flex;gap:8px}
+.seg button{flex:1;padding:14px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);font-weight:700;font-size:17px}
+.seg button.on{background:var(--gold);color:#1a1307;border-color:var(--gold)}
+.teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.team{background:var(--panel2);border-radius:14px;padding:12px;border-top:5px solid var(--c)}
+.team .tname{width:100%;background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:12px;font-size:19px;font-weight:700;outline:none;user-select:text;-webkit-user-select:text}
+.team .tname:focus{border-color:var(--gold)}
+.team .add{margin-top:10px}
+.team .add input{padding:10px;font-size:16px}
+.team .add .btn{padding:10px 14px}
+.team .chips{margin-top:10px}
+.team .hint{color:var(--muted);font-size:13px;margin-top:8px}
 
 /* ---------- game ---------- */
 #game{display:flex;flex-direction:column;min-height:100dvh}
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel)}
-.topbar .title{font-family:"Reem Kufi";color:var(--gold2);font-size:20px}
+.topbar .title{font-weight:700;color:var(--gold2);font-size:20px}
 .topbar .round{color:var(--muted);font-size:14px}
 .iconbtn{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:8px 12px;font-size:14px}
 
 .song{margin:12px 16px 0;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
 .song .lbl{color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:8px}
-.song .lyric{font-family:"Reem Kufi";font-size:clamp(20px,4.2vw,30px);line-height:1.7;margin:6px 0;color:var(--text);min-height:1.7em}
-.song .lyric{white-space:pre-line}
+.song .lyric{font-weight:700;font-size:clamp(20px,4.2vw,30px);line-height:1.7;margin:6px 0;color:var(--text);min-height:1.7em}
+.song .lyric{white-space:pre-line;font-size:clamp(19px,3.8vw,26px);line-height:1.9}
 .song .answer{border-top:1px dashed var(--line);margin-top:8px;padding-top:10px;animation:fade .35s}
 .song .answer.blur{display:none}
 .song .answer .t{color:var(--gold2);font-weight:700;font-size:19px}
@@ -83,7 +91,7 @@ input{font:inherit}
 
 .stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 16px;gap:14px}
 .status{text-align:center;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
-.status .msg{font-family:"Reem Kufi";font-size:clamp(20px,4.5vw,30px)}
+.status .msg{font-weight:700;font-size:clamp(20px,4.5vw,30px)}
 .status .sub{color:var(--muted);font-size:14px}
 
 .answering{display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center}
@@ -92,11 +100,11 @@ input{font:inherit}
 .timer circle{fill:none;stroke-width:10}
 .timer .bgc{stroke:var(--panel2)}
 .timer .fg{stroke:var(--ring);stroke-linecap:round;transition:stroke .3s}
-.timer .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:"Reem Kufi";font-size:44px}
+.timer .num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:44px}
 .timer.low .fg{stroke:var(--bad)}
 .timer.low .num{color:var(--bad);animation:pulse 1s infinite}
 @keyframes pulse{50%{transform:scale(1.12)}}
-.who{font-family:"Reem Kufi";font-size:clamp(28px,6vw,44px)}
+.who{font-weight:700;font-size:clamp(28px,6vw,44px)}
 .judge{display:flex;gap:10px}
 
 .bells{display:grid;gap:12px;width:100%;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
@@ -107,7 +115,7 @@ input{font:inherit}
   box-shadow:0 8px 0 rgba(0,0,0,.45),inset 0 -8px 18px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;font-size:40px}
 .bell .nm{font-weight:700;font-size:19px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bell .sc,.rank .s,.bell .delta{direction:ltr;unicode-bidi:isolate}
-.bell .sc{font-family:"Reem Kufi";font-size:26px;color:var(--gold2)}
+.bell .sc{font-weight:700;font-size:26px;color:var(--gold2)}
 .bell .key{position:absolute;top:8px;left:10px;font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:0 6px}
 .bell .adj{position:absolute;top:6px;right:6px;display:flex;gap:4px}
 .bell .adj button{width:26px;height:26px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);font-size:15px;line-height:1;color:var(--muted)}
@@ -120,17 +128,22 @@ input{font:inherit}
 .bell.first{border-color:var(--gold2);transform:scale(1.04);box-shadow:0 0 0 4px #d4af3755,0 0 40px #d4af3766;opacity:1}
 .bell.first .dome{animation:ring .5s ease-in-out 3}
 @keyframes ring{25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
-.bell .delta{position:absolute;top:40%;font-family:"Reem Kufi";font-size:40px;pointer-events:none;animation:float 1.1s ease-out forwards}
+.bell .delta{position:absolute;top:40%;font-weight:700;font-size:40px;pointer-events:none;animation:float 1.1s ease-out forwards}
 @keyframes float{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-60px)}}
 
+.bells.teams{grid-template-columns:repeat(2,1fr)}
+.bells.teams .dome{width:min(170px,34vw);font-size:60px}
+.bells.teams .nm{font-size:22px}
+.bells.teams .sc{font-size:34px}
+.bell .mem{color:var(--muted);font-size:13px;text-align:center;line-height:1.5}
 .host{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:0 16px 18px}
 
 /* ---------- end ---------- */
 .podium{display:flex;flex-direction:column;gap:10px;margin-top:10px}
 .rank{display:flex;align-items:center;gap:12px;background:var(--panel2);border-radius:14px;padding:12px 16px;font-size:20px}
-.rank .pos{font-family:"Reem Kufi";width:40px;text-align:center;font-size:26px}
+.rank .pos{font-weight:700;width:40px;text-align:center;font-size:26px}
 .rank .n{flex:1;font-weight:700}
-.rank .s{font-family:"Reem Kufi";color:var(--gold2);font-size:24px}
+.rank .s{font-weight:700;color:var(--gold2);font-size:24px}
 .rank.r1{background:linear-gradient(90deg,#d4af3733,var(--panel2));border:1px solid var(--gold)}
 
 @media (max-width:520px){
@@ -150,6 +163,16 @@ input{font:inherit}
   </div>
 
   <div class="card">
+    <h2>طريقة اللعب</h2>
+    <div class="seg" id="modeSeg"><button data-mode="solo">كل واحد لحاله</button><button data-mode="teams">فريقين</button></div>
+  </div>
+
+  <div class="card hidden" id="teamsCard">
+    <h2>الفريقين</h2>
+    <div class="teams" id="teamsBox"></div>
+  </div>
+
+  <div class="card" id="soloCard">
     <h2>اللاعبين</h2>
     <form class="row add" id="addForm" autocomplete="off">
       <input id="nameIn" placeholder="اكتب اسم اللاعب واضغط إضافة" maxlength="18">
@@ -205,7 +228,7 @@ input{font:inherit}
   <div class="card"><div class="podium" id="podium"></div></div>
   <div class="start" style="gap:10px">
     <button class="btn" id="resumeBtn">رجوع للعبة</button>
-    <button class="btn gold big" id="againBtn">جولة جديدة بنفس اللاعبين</button>
+    <button class="btn gold big" id="againBtn">جولة جديدة من الصفر</button>
   </div>
 </section>
 
@@ -219,173 +242,156 @@ const EMOJI = '🔔';
 /* أغاني مشهورة بالعامية: f = بالفصحى (للمقدّم يقرأها)، o = الكلام الأصلي، a = الأغنية والمغنّي */
 const BANK = [
   {a:'نور العين — عمرو دياب',
-   f:'حبيبي، يا ضياءَ العين، يا ساكنًا في خيالي\nأنا عاشقٌ منذ سنين، ولا أحدَ سواك في بالي',
-   o:'حبيبي يا نور العين، يا ساكن خيالي\nعاشق بقالي سنين، ولا غيرك في بالي'},
+   f:'حبيبي يا ضياءَ العين، يا ساكنًا في خيالي\nأنا عاشقٌ منذ سنين، ولا أحدَ غيرُك في بالي\nأجملُ عيونٍ في الكون قد رأيتُها\nاللهُ عليك، اللهُ على سِحرِها',
+   o:'حبيبي يا نور العين، يا ساكن خيالي\nعاشق بقالي سنين، ولا غيرك في بالي\nأجمل عيون في الكون أنا شفتها\nالله عليك الله، على سحرها'},
+  {a:'تملّي معاك — عمرو دياب',
+   f:'دائمًا معك، ولو كنتَ بعيدًا عنّي\nفي قلبي هواك، ودائمًا معك\nدائمًا في بالي وفي قلبي، ولا أنساك\nدائمًا أشتاقُ إليك، ولو كنتُ معك',
+   o:'تملّي معاك، ولو حتى بعيد عني\nفي قلبي هواك، وتملّي معاك\nتملّي في بالي وفي قلبي ولا بنساك\nتملّي واحشني، لو حتى أكون وياك'},
   {a:'شايف البحر شو كبير — فيروز',
-   f:'أترى البحرَ ما أكبرَه؟ بقدرِ كِبَرِ البحرِ أحبُّك\nأترى السماءَ ما أبعدَها؟ بقدرِ بُعدِ السماءِ أحبُّك',
-   o:'شايف البحر شو كبير؟ كبر البحر بحبك\nشايف السما شو بعيدة؟ بعد السما بحبك'},
+   f:'أترى البحرَ ما أكبرَه؟ بقدرِ كِبَرِ البحرِ أحبُّك\nأترى السماءَ ما أبعدَها؟ بقدرِ بُعدِ السماءِ أحبُّك\nبكِبَرِ البحرِ وبُعدِ السماء\nأحبُّك يا حبيبي، أحبُّك',
+   o:'شايف البحر شو كبير؟ كبر البحر بحبك\nشايف السما شو بعيدة؟ بعد السما بحبك\nكبر البحر وبعد السما\nبحبك يا حبيبي، بحبك'},
   {a:'بكتب اسمك يا حبيبي — فيروز',
-   f:'أكتبُ اسمَك يا حبيبي على شجرِ الحَوْرِ العتيق\nوتكتبُ اسمي يا حبيبي على رملِ الطريق',
-   o:'بكتب اسمك يا حبيبي عالحور العتيق\nبتكتب اسمي يا حبيبي عرمل الطريق'},
+   f:'أكتبُ اسمَك يا حبيبي على شجرِ الحَوْرِ العتيق\nوتكتبُ اسمي يا حبيبي على رملِ الطريق\nوغدًا تُمطرُ الدنيا على الحكاياتِ الجريحة\nفيبقى اسمُك يا حبيبي، ويُمحى اسمي',
+   o:'بكتب اسمك يا حبيبي عالحور العتيق\nبتكتب اسمي يا حبيبي عرمل الطريق\nوبكرا بتشتي الدني عالقصص المجرّحة\nبيبقى اسمك يا حبيبي، واسمي بينمحى'},
   {a:'نسّم علينا الهوى — فيروز',
-   f:'هبَّ علينا النسيمُ من مُنعطَفِ الوادي\nيا أيّها النسيم، خُذني إلى بلادي',
-   o:'نسّم علينا الهوى من مفرق الوادي\nيا هوى دخل الهوى، خدني على بلادي'},
+   f:'هبَّ علينا النسيمُ من مُنعطَفِ الوادي\nأيّها النسيمُ، خُذني إلى بلادي\nيا نسيمُ يا نسيم، يا مَن يطيرُ مع الريح\nهناك نافذةٌ صغيرةٌ وصورة، خُذني إليهم يا نسيم',
+   o:'نسّم علينا الهوى من مفرق الوادي\nيا هوى دخل الهوى، خدني على بلادي\nيا هوى يا هوى، يا اللي طاير بالهوى\nفي منتورة طاقة وصورة، خدني لعندن يا هوى'},
+  {a:'تعا ولا تجي — فيروز',
+   f:'تعالَ ولا تأتِ، واكذبْ عليّ\nفالكذبةُ ليست خطيئة\nعِدني بأنّك ستأتي\nثمّ تعالَ… أو لا تأتِ',
+   o:'تعا ولا تجي، واكذب عليّ\nالكذبة مش خطيّة\nاوعدني إنّو رح تجي\nوتعا ولا تجي'},
+  {a:'أنا لحبيبي — فيروز',
+   f:'أنا لحبيبي، وحبيبي لي\nيا عصفورةً بيضاء، كفاكِ سؤالًا\nلا يُعاتِبْ أحدٌ، ولا يغضبْ أحد\nأنا لحبيبي، وحبيبي لي',
+   o:'أنا لحبيبي وحبيبي إلي\nيا عصفورة بيضا، لا بقى تسألي\nلا يعتب حدا، ولا يزعل حدا\nأنا لحبيبي وحبيبي إلي'},
+  {a:'حبّيتك بالصيف — فيروز',
+   f:'أحببتُك في الصيف، أحببتُك في الشتاء\nانتظرتُك في الصيف، انتظرتُك في الشتاء\nعيناك هما الصيف، وعيناي هما الشتاء\nولقاؤنا يا حبيبي وراءَ الصيفِ ووراءَ الشتاء',
+   o:'حبّيتك بالصيف، حبّيتك بالشتي\nنطرتك بالصيف، نطرتك بالشتي\nوعيونك الصيف، وعيوني الشتي\nوملقانا يا حبيبي خلف الصيف وخلف الشتي'},
+  {a:'سألوني الناس — فيروز',
+   f:'سألني الناسُ عنك يا حبيبي\nكتبوا الرسائلَ فحملتها الريح\nيعزُّ عليّ أن أغنّي يا حبيبي\nولأوّلِ مرّةٍ لسنا معًا',
+   o:'سألوني الناس عنك يا حبيبي\nكتبوا المكاتيب وأخدها الهوا\nبيعزّ عليّ غنّي يا حبيبي\nولأوّل مرّة ما منكون سوا'},
+  {a:'يا دارة دوري فينا — فيروز',
+   f:'أيّتها الدوّامة، دوري بنا\nظلّي تدورين بنا\nحتى ينسَوا أسماءَهم\nوننسى أسماءَنا',
+   o:'يا دارة دوري فينا\nضلّي دوري فينا\nتا ينسوا أساميهن\nوننسى أسامينا'},
+  {a:'كيفك إنت — فيروز',
+   f:'كيف حالُك أنت؟ يا لَك من رجل!\nيقولون إنّه صار لديك أولاد\nوأنا واللهِ كنتُ أظنّك\nخارجَ البلاد',
+   o:'كيفك إنت؟ ملّا إنت\nبيقولوا صار عندك ولاد\nأنا والله كنت مفكّرتك\nبرّات البلاد'},
+  {a:'ع هدير البوسطة — فيروز',
+   f:'على هديرِ الحافلةِ التي كانت تُقلّنا\nمن قريةِ حملايا إلى قريةِ تنّورين\nتذكّرتُكِ يا عليا، وتذكّرتُ عينيكِ\nتبًّا لعينيكِ يا عليا، ما أجملَهما!',
+   o:'ع هدير البوسطة اللي كانت ناقلتنا\nمن ضيعة حملايا على ضيعة تنّورين\nتذكّرتك يا عليا، وتذكّرت عيونك\nيخرب بيت عيونك يا عليا، شو حلوين'},
+  {a:'قدّيش كان في ناس — فيروز',
+   f:'كم من أناسٍ كانوا عند المُنعطَفِ ينتظرون أناسًا\nوتُمطرُ الدنيا فيحملون المظلّات\nوأنا في أيّامِ الصحو\nلم ينتظرني أحد',
+   o:'قدّيش كان في ناس عالمفرق تنطر ناس\nوتشتي الدني ويحملوا شمسيّة\nوأنا بأيّام الصحو\nما حدا نطرني'},
+  {a:'حبّيتك تنسّيت النوم — فيروز',
+   f:'أحببتُك حتى نسيتُ النوم\nوكم أخشى أن تنساني\nتحبسُني خارجَ النوم\nوتتركُني ساهرة',
+   o:'حبّيتك تنسّيت النوم\nيا خوفي تنساني\nحابسني برّات النوم\nوتاركني سهرانة'},
+  {a:'بحبك يا لبنان — فيروز',
+   f:'أحبُّك يا لبنان، يا وطني أحبُّك\nبشمالِك، بجنوبِك، بسهلِك أحبُّك',
+   o:'بحبّك يا لبنان، يا وطني بحبّك\nبشمالك، بجنوبك، بسهلك بحبّك'},
   {a:'زوروني كل سنة مرة — فيروز / سيد درويش',
    f:'زوروني في كلِّ عامٍ مرّة\nفمن الحرامِ أن تنسوني تمامًا',
    o:'زوروني كل سنة مرة\nحرام تنسوني بالمرة'},
-  {a:'تعا ولا تجي — فيروز',
-   f:'تعالَ ولا تأتِ، واكذبْ عليّ\nفالكذبةُ ليست خطيئة',
-   o:'تعا ولا تجي، واكذب عليّ\nالكذبة مش خطيّة'},
-  {a:'أنا لحبيبي — فيروز',
-   f:'أنا لحبيبي، وحبيبي لي\nيا عصفورةً بيضاء، كفاكِ سؤالًا',
-   o:'أنا لحبيبي وحبيبي إلي\nيا عصفورة بيضا، لا بقى تسألي'},
-  {a:'حبّيتك بالصيف — فيروز',
-   f:'أحببتُك في الصيف، أحببتُك في الشتاء\nانتظرتُك في الصيف، انتظرتُك في الشتاء',
-   o:'حبّيتك بالصيف، حبّيتك بالشتي\nنطرتك بالصيف، نطرتك بالشتي'},
-  {a:'سألوني الناس — فيروز',
-   f:'سألني الناسُ عنك يا حبيبي\nكتبوا الرسائلَ فحملتها الريح',
-   o:'سألوني الناس عنك يا حبيبي\nكتبوا المكاتيب وأخدها الهوا'},
-  {a:'يا دارة دوري فينا — فيروز',
-   f:'يا دوّامةُ دوري بنا، ظلّي تدورين بنا\nحتى ينسوا أسماءَهم، وننسى أسماءَنا',
-   o:'يا دارة دوري فينا، ضلّي دوري فينا\nتا ينسوا أساميهن، وننسى أسامينا'},
-  {a:'كيفك إنت — فيروز',
-   f:'كيف حالُك أنت؟ يا لَك من رجل!\nيقولون صار لديك أولاد، وأنا واللهِ كنتُ أظنّك خارجَ البلاد',
-   o:'كيفك إنت؟ ملّا إنت\nبيقولوا صار عندك ولاد، أنا والله كنت مفكرتك برّات البلاد'},
-  {a:'عهدير البوسطة — فيروز',
-   f:'على هديرِ الحافلةِ التي كانت تنقلُنا\nمن قريةِ حملايا إلى قريةِ تنّورين',
-   o:'ع هدير البوسطة اللي كانت ناقلتنا\nمن ضيعة حملايا على ضيعة تنّورين'},
   {a:'إنت عمري — أم كلثوم',
-   f:'أعادتني عيناك إلى أيّامي التي مضت\nعلّمتاني أن أندمَ على الماضي وجراحه',
-   o:'رجّعوني عينيك لأيامي اللي راحوا\nعلّموني أندم على الماضي وجراحه'},
+   f:'أعادتني عيناك إلى أيّامي التي مضت\nعلّمتاني أن أندمَ على الماضي وجراحِه\nوما رأيتُه قبل أن تراك عيناي\nعمرٌ ضائع، فكيف يُحسَبُ عليّ؟',
+   o:'رجّعوني عينيك لأيامي اللي راحوا\nعلّموني أندم على الماضي وجراحه\nاللي شفته قبل ما تشوفك عينيّا\nعمر ضايع، يحسبوه إزاي عليّا'},
   {a:'ألف ليلة وليلة — أم كلثوم',
-   f:'يا حبيبي، الليلُ وسماؤه ونجومُه وقمرُه\nقمرُه وسهرُه، وأنتَ وأنا',
-   o:'يا حبيبي، الليل وسماه ونجومه وقمره\nقمره وسهره، وإنت وأنا'},
+   f:'يا حبيبي، الليلُ وسماؤه ونجومُه وقمرُه\nقمرُه وسهرُه، وأنتَ وأنا\nيا حبيبي، يا حياتي\nكلُّنا، كلُّنا في الحبِّ معًا',
+   o:'يا حبيبي، الليل وسماه ونجومه وقمره\nقمره وسهره، وإنت وأنا\nيا حبيبي أنا، يا حياتي أنا\nكلّنا، كلّنا في الحب سوا'},
   {a:'سيرة الحب — أم كلثوم',
-   f:'طوالَ عمري أخافُ من الحبِّ ومن ذِكرِ الحب',
-   o:'طول عمري بخاف من الحب وسيرة الحب'},
+   f:'طوالَ عمري أخافُ من الحبِّ ومن ذِكرِ الحب\nومن ظُلمِ الحبِّ لكلِّ أهلِه\nوأعرفُ حكاياتٍ مليئةً بالآهاتِ والدموعِ والأنين\nوالعاشقون ذابوا… وما تابوا',
+   o:'طول عمري بخاف من الحب وسيرة الحب\nوظلم الحب لكل أصحابه\nوأعرف حكايات مليانة آهات ودموع وأنين\nوالعاشقين دابوا ما تابوا'},
+  {a:'أنساك — أم كلثوم',
+   f:'أنساك؟ أهذا كلام؟\nأنساك؟ يا للعجب!\nهذا ما لا يمكنُ أبدًا\nولا أفكّرُ فيه أبدًا',
+   o:'أنساك؟ ده كلام؟\nأنساك؟ يا سلام!\nأهو ده اللي مش ممكن أبدًا\nولا أفكّر فيه أبدًا'},
+  {a:'هو صحيح الهوى غلّاب — أم كلثوم',
+   f:'أحقًّا أنّ الهوى غلّاب؟\nلا أعرفُ أنا\nوالهجرُ قالوا مرارةٌ وعذاب\nواليومُ فيه بسنة',
+   o:'هو صحيح الهوى غلّاب؟\nمعرفش أنا\nوالهجر قالوا مرار وعذاب\nواليوم بسنة'},
+  {a:'زي الهوى — عبد الحليم حافظ',
+   f:'مثلَ الهوى يا حبيبي، مثلَ الهوى\nوآهٍ من الهوى يا حبيبي، آهٍ من الهوى',
+   o:'زي الهوى يا حبيبي، زي الهوى\nوآه من الهوى يا حبيبي، آه من الهوى'},
+  {a:'أي دمعة حزن لا — عبد الحليم حافظ',
+   f:'أيُّ دمعةِ حزنٍ؟ لا، لا، لا\nأيُّ جُرحٍ في القلب؟ لا، لا، لا\nأيُّ لحظةِ حيرة؟ لا، لا، لا',
+   o:'أي دمعة حزن لا لا لا لا\nأي جرح في قلب لا لا لا لا\nأي لحظة حيرة لا لا لا لا'},
   {a:'جانا الهوى — عبد الحليم حافظ',
-   f:'جاءنا الهوى جاءنا\nورمانا الهوى رمانا',
+   f:'جاءنا الهوى، جاءنا\nورمانا الهوى، رمانا',
    o:'جانا الهوى جانا\nورمانا الهوى رمانا'},
   {a:'سوّاح — عبد الحليم حافظ',
    f:'رحّالٌ أنا، أمشي في البلادِ رحّالًا\nوالمسافةُ بيني وبين حبيبي واسعة',
    o:'سوّاح وأنا ماشي في البلاد سوّاح\nوالخطوة بيني وبين حبيبي براح'},
   {a:'يا مسافر وحدك — محمد عبد الوهاب',
-   f:'يا مسافرًا وحدَك وتاركي\nلماذا تبتعدُ عنّي وتُشغلُ بالي؟',
-   o:'يا مسافر وحدك وفايتني\nليه تبعد عني وتشغلني'},
+   f:'يا مسافرًا وحدَك وتاركي\nلماذا تبتعدُ عنّي وتُشغلُ بالي؟\nودّعتني دونَ أن تُسلِّم\nويكفي أنّ قلبي قد استسلم',
+   o:'يا مسافر وحدك وفايتني\nليه تبعد عني وتشغلني\nودّعني من غير ما تسلّم\nوكفاية قلبي أنا مسلّم'},
   {a:'الأماكن — محمد عبده',
-   f:'الأماكنُ كلُّها مشتاقةٌ إليك\nوالعيونُ التي ارتسمَ فيها خيالُك',
-   o:'الأماكن كلها مشتاقة لك\nوالعيون اللي انرسم فيها خيالك'},
-  {a:'تملّي معاك — عمرو دياب',
-   f:'دائمًا معك، ولو كنتَ بعيدًا عنّي\nفي قلبي هواك، ودائمًا معك',
-   o:'تملّي معاك، ولو حتى بعيد عني\nفي قلبي هواك، وتملّي معاك'},
+   f:'الأماكنُ كلُّها مشتاقةٌ إليك\nوالعيونُ التي ارتسمَ فيها خيالُك\nوالحنينُ الذي سرى في روحي وجاءك\nلستُ وحدي يا حبيبي… الأماكنُ كلُّها مشتاقةٌ إليك',
+   o:'الأماكن كلها مشتاقة لك\nوالعيون اللي انرسم فيها خيالك\nوالحنين اللي سرى بروحي وجالك\nما هو بس أنا حبيبي، الأماكن كلها مشتاقة لك'},
   {a:'أخاصمك آه — نانسي عجرم',
-   f:'أُخاصمُك نعم، أمّا أن أتركَك فلا\nفأنت حبيبي وروحي معك',
+   f:'أُخاصمُك نعم، أمّا أن أتركَك فلا\nفأنت حبيبي، وروحي معك',
    o:'أخاصمك آه، أسيبك لأ\nحبيبي إنت وروحي معاك'},
+  {a:'شخبط شخابيط — نانسي عجرم',
+   f:'خطَّ خطوطًا عشوائية\nوخلطَ الأشياءَ خلطًا\nأمسكَ الألوان\nورسمَ على الحائط',
+   o:'شخبط شخابيط\nلخبط لخابيط\nمسك الألوان\nورسم ع الحيط'},
+  {a:'بحبك وحشتيني — حسين الجسمي',
+   f:'أحبُّكِ، اشتقتُ إليكِ\nأحبُّكِ، وأنتِ ضياءُ عيني',
+   o:'بحبك وحشتيني\nبحبك وإنتي نور عيني'},
   {a:'سالمة يا سلامة — داليدا',
    f:'سالمةٌ يا سلامة\nذهبنا وعُدنا بالسلامة',
    o:'سالمة يا سلامة\nرحنا وجينا بالسلامة'},
   {a:'حلوة يا بلدي — داليدا',
-   f:'كلمةٌ جميلة، وكلمتان\nما أجملَكِ يا بلادي',
-   o:'كلمة حلوة وكلمتين\nحلوة يا بلدي'},
+   f:'كلمةٌ جميلة وكلمتان، ما أجملَكِ يا بلادي\nأغنيةٌ جميلة وأغنيتان، ما أجملَكِ يا بلادي\nكان أملي دائمًا يا بلادي أن أعودَ إليكِ يا بلادي\nوأبقى دائمًا بجانبِكِ إلى الأبد',
+   o:'كلمة حلوة وكلمتين، حلوة يا بلدي\nغنوة حلوة وغنوتين، حلوة يا بلدي\nأملي دايمًا كان يا بلدي، إني أرجع لك يا بلدي\nوأفضل دايمًا جنبك على طول'},
   {a:'طلعت يا محلا نورها — سيد درويش',
    f:'أشرقت، ما أجملَ نورَها، شمسُ الشموس\nهيّا بنا نملأُ ونحلبُ لبنَ الجاموسة',
    o:'طلعت يا محلا نورها شمس الشموسة\nيلّا بينا نملا ونحلب لبن الجاموسة'},
-  {a:'شبابيك — محمد منير',
-   f:'نوافذ…\nالدنيا كلُّها نوافذ',
-   o:'شبابيك…\nالدنيا كلها شبابيك'},
-  {a:'رجب — هيفاء وهبي',
-   f:'يا رجب، أبعِدْ صاحبَك عنّي',
-   o:'رجب، حوش صاحبك عني'},
-  {a:'بحبك وحشتيني — حسين الجسمي',
-   f:'أحبُّكِ، اشتقتُ إليكِ\nأحبُّكِ، وأنتِ ضياءُ عيني',
-   o:'بحبك وحشتيني\nبحبك وإنتي نور عيني'},
-  {a:'شخبط شخابيط — نانسي عجرم',
-   f:'خطَّ خطوطًا عشوائية، وخلطَ الأشياءَ خلطًا\nأمسكَ الألوانَ ورسمَ على الحائط',
-   o:'شخبط شخابيط، لخبط لخابيط\nمسك الألوان ورسم ع الحيط'},
-  {a:'بوس الواوا — هيفاء وهبي',
-   f:'قبِّلِ الجُرحَ الصغير',
-   o:'بوس الواوا'},
-  {a:'حبيبي ولا على باله — عمرو دياب',
-   f:'حبيبي، ولا يخطرُ ذلك في باله',
-   o:'حبيبي ولا على باله'},
-  {a:'ميّال — عمرو دياب',
-   f:'مائلٌ، مائلٌ… أنا مائل',
-   o:'ميّال، ميّال'},
-  {a:'ناسيني ليه — تامر حسني',
-   f:'لماذا نسيتَني؟',
-   o:'ناسيني ليه'},
-  {a:'عيش بشوقك — تامر حسني',
-   f:'عِشْ بشغفِك',
-   o:'عيش بشوقك'},
-  {a:'آه يا ليل — شيرين',
-   f:'آهٍ يا ليل، يا ليلُ يا ليل',
-   o:'آه يا ليل، يا ليل يا ليل'},
-  {a:'ع بالي حبيبي — إليسا',
-   f:'في خاطري يا حبيبي',
-   o:'ع بالي حبيبي'},
-  {a:'نمبر وان — محمد رمضان',
-   f:'أنا الرقمُ واحد',
-   o:'أنا نمبر وان'},
-  {a:'لمعلّم — سعد لمجرد',
-   f:'أنتَ المُعلِّم',
-   o:'إنت معلّم'},
-  {a:'يا ليلي ويا ليلة — بلطي',
-   f:'يا ليلي، ويا ليلة',
-   o:'يا ليلي ويا ليلة'},
+  {a:'الحلوة دي قامت تعجن — سيد درويش',
+   f:'هذه الجميلةُ نهضت تعجنُ في الفجرِ الباكر\nوالديكُ يصيحُ كوكو كوكو في الفجر\nهيّا بنا على بابِ الله يا أهلَ الحِرَف',
+   o:'الحلوة دي قامت تعجن في البدرية\nوالديك بيدّن كوكو كوكو في الفجرية\nيلّا بينا على باب الله يا صنايعية'},
+  {a:'يا عزيز عيني — سيد درويش',
+   f:'يا عزيزَ عيني، وأنا أريدُ أن أذهبَ إلى بلدي\nبلدي يا بلدي، والسُّلطةُ أخذت ولدي',
+   o:'يا عزيز عيني، وأنا بدّي أروّح بلدي\nبلدي يا بلدي، والسلطة خدت ولدي'},
+  {a:'أهو ده اللي صار — سيد درويش',
+   f:'ها هو ذا ما حدث، وذاك ما كان\nليس لك حقٌّ أن تلومَني',
+   o:'أهو ده اللي صار، وادي اللي كان\nمالكش حق تلوم عليّا'},
   {a:'زحمة يا دنيا زحمة — أحمد عدوية',
-   f:'زحامٌ يا دنيا زحام، زحامٌ وضاعَ الأحبّة\nزحامٌ ولم تعُد هناك رحمة',
-   o:'زحمة يا دنيا زحمة، زحمة وتاهوا الحبايب\nزحمة ولا عادش رحمة'},
+   f:'زحامٌ يا دنيا زحام\nزحامٌ وضاعَ الأحبّة\nزحامٌ ولم تعُد هناك رحمة\nاحتفالٌ وصاحبُه غائب',
+   o:'زحمة يا دنيا زحمة\nزحمة وتاهوا الحبايب\nزحمة ولا عادش رحمة\nمولد وصاحبه غايب'},
   {a:'بنت السلطان — أحمد عدوية',
    f:'يا ابنةَ السلطان\nارأفي بالمسكين',
    o:'يا بنت السلطان\nحنّي على الغلبان'},
-  {a:'سيب وأنا أسيب — أحمد عدوية',
-   f:'اترُكْ وأنا أترُك',
-   o:'سيب وأنا أسيب'},
   {a:'الطشت قالّي — أغنية شعبية',
    f:'قال لي إناءُ الغسيل: يا جميلةُ يا أنتِ\nانهضي واستحمّي',
    o:'الطشت قالّي يا حلوة يا اللي\nقومي استحمّي'},
-  {a:'بحبك يا حمار — سعد الصغير',
-   f:'أحبُّك يا حمار',
-   o:'بحبك يا حمار'},
   {a:'مافيش صاحب يتصاحب — أوكا وأورتيجا',
    f:'لا يوجدُ صديقٌ يُصادَق\nولم يعُد الرجلُ رجلًا',
    o:'مافيش صاحب يتصاحب\nمافيش راجل بقى راجل'},
-  {a:'لولاكي — علي حميدة',
-   f:'لولاكِ، لولاكِ',
-   o:'لولاكي، لولاكي'},
   {a:'على دلعونا — تراث شامي',
-   f:'على دلعونا، على دلعونا\nريحُ الشمالِ غيّرت لونَنا',
-   o:'على دلعونا على دلعونا\nهوا الشمالي غيّر اللونا'},
+   f:'على دلعونا، على دلعونا\nريحُ الشمالِ غيّرت لونَنا\nعلى دلعونا، على دلعونا\nرحلَ الأحبّةُ ولم يودّعونا',
+   o:'على دلعونا، على دلعونا\nهوا الشمالي غيّر اللونا\nعلى دلعونا، على دلعونا\nراحوا الحبايب ما ودّعونا'},
   {a:'عالروزانا — تراث شامي',
-   f:'على الروزانا، على الروزانا\nكلُّ الجمالِ فيها',
-   o:'عالروزانا عالروزانا\nكل الحلا فيها'},
+   f:'على الروزانا، على الروزانا\nكلُّ الجمالِ فيها\nماذا فعلتِ الروزانا؟\nاللهُ يُجازيها',
+   o:'عالروزانا، عالروزانا\nكل الحلا فيها\nشو عملت الروزانا\nالله يجازيها'},
   {a:'يا ظريف الطول — تراث فلسطيني',
-   f:'يا طويلَ القامةِ الظريف، قِفْ لأقولَ لك\nأنت ذاهبٌ إلى الغربة، وبلادُك أفضلُ لك',
-   o:'يا ظريف الطول وقّف تقلّك\nرايح عالغربة وبلادك أحسنلك'},
+   f:'يا طويلَ القامةِ الظريف، قِفْ لأقولَ لك\nأنت ذاهبٌ إلى الغربة، وبلادُك أفضلُ لك\nأخافُ أن تذهبَ فتستقرَّ هناك\nوتعاشرَ غيري وتنساني أنا',
+   o:'يا ظريف الطول، وقّف تقلّك\nرايح عالغربة، وبلادك أحسنلك\nخايف يا ظريف تروح وتتملّك\nوتعاشر الغير وتنساني أنا'},
   {a:'يمّا مويل الهوى — تراث فلسطيني',
    f:'يا أمّي، أنينُ الهوى، يا أمّي أنينُه\nطعنُ الخناجرِ ولا أن يحكمَني النذل',
-   o:'يمّا مويل الهوى يمّا مويليّا\nضرب الخناجر ولا حكم النذل فيّا'},
+   o:'يمّا مويل الهوى، يمّا مويليّا\nضرب الخناجر ولا حكم النذل فيّا'},
   {a:'يا مال الشام — تراث شامي',
    f:'يا مالَ الشام، يا الله يا مالي\nطال الانتظارُ يا جميلةُ فتعالي',
-   o:'يا مال الشام يا الله يا مالي\nطال المطال يا حلوة تعالي'},
+   o:'يا مال الشام، يا الله يا مالي\nطال المطال، يا حلوة تعالي'},
   {a:'هالأسمر اللون — تراث شامي',
    f:'هذا الأسمرُ اللون، هذا الأسمراني\nمُتعَبٌ يا قلبي، هواكَ رماني',
-   o:'هالأسمر اللون هالأسمراني\nتعبان يا قلبي هواك رماني'},
-  {a:'طلّوا حبابنا — تراث شامي',
-   f:'أطلَّ أحبابُنا، أطلّوا',
-   o:'طلّوا حبابنا طلّوا'},
-  {a:'عالعين موليتين — تراث لبناني',
-   f:'على العين يا موليّتين، على العين يا موليّا',
-   o:'عالعين يا موليّتين، عالعين يا موليّا'},
-  {a:'يا حلالي يا مالي — تراث',
-   f:'يا حلالي، يا مالي',
-   o:'يا حلالي يا مالي'},
+   o:'هالأسمر اللون، هالأسمراني\nتعبان يا قلبي، هواك رماني'},
+  {a:'فوق النخل — تراث عراقي',
+   f:'فوقَ النخلِ فوق، يا أبي فوقَ النخلِ فوق\nلا أدري أهو لمعانُ خدِّه يا أبي، أم القمرُ فوق',
+   o:'فوق النخل فوق، يابا فوق النخل فوق\nمدري لمع خدّه يابا، مدري القمر فوق'},
 ];
 
 /* ---------- state ---------- */
-const DEF = {players:[], settings:{time:30,right:1,wrong:1,timeout:1,reopen:true,bank:true}, round:1, songIdx:0, order:null};
+const DEF = {mode:'solo', players:[], teams:null, settings:{time:30,right:1,wrong:1,timeout:1,reopen:true,bank:true}, round:1, songIdx:0, order:null};
 let S;
 try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem('fusha-game')||'{}')); S.settings = Object.assign({}, DEF.settings, S.settings||{}); } catch(e){ S = JSON.parse(JSON.stringify(DEF)); }
+if (!Array.isArray(S.teams) || S.teams.length!==2) S.teams = [
+  {id:'t1', name:'الفريق الأحمر', score:0, members:[]},
+  {id:'t2', name:'الفريق الأزرق', score:0, members:[]}];
+if (S.mode!=='teams') S.mode='solo';
 if (!Array.isArray(S.order) || S.order.length !== BANK.length) S.order = shuffle([...BANK.keys()]);
 const save = () => { try { localStorage.setItem('fusha-game', JSON.stringify(S)); } catch(e){} };
 
@@ -396,7 +402,8 @@ let deadline = 0, raf = 0, lastTick = -1;
 
 function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]];} return a; }
 const uid = () => Math.random().toString(36).slice(2,9);
-const byId = id => S.players.find(p=>p.id===id);
+const units = () => S.mode==='teams' ? S.teams : S.players;
+const byId = id => units().find(p=>p.id===id);
 const esc = s => s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 /* ---------- sound ---------- */
@@ -425,7 +432,12 @@ function renderSetup(){
   $('#emptyMsg').classList.toggle('hidden', S.players.length>0);
   $('#emptyMsg').textContent = S.players.length===1 ? 'ضيف لاعب كمان على الأقل.' : 'ضيف لاعبين على الأقل لتبدأ.';
   if (S.players.length===1) $('#emptyMsg').classList.remove('hidden');
-  $('#startBtn').disabled = S.players.length < 2;
+  const teams = S.mode==='teams';
+  document.querySelectorAll('#modeSeg button').forEach(b=>b.classList.toggle('on', b.dataset.mode===S.mode));
+  $('#soloCard').classList.toggle('hidden', teams);
+  $('#teamsCard').classList.toggle('hidden', !teams);
+  if(teams) renderTeams();
+  $('#startBtn').disabled = teams ? false : S.players.length < 2;
   document.querySelectorAll('.step').forEach(el=>{ el.querySelector('b').textContent = S.settings[el.dataset.k]; });
   document.querySelectorAll('.toggle').forEach(el=>el.classList.toggle('on', !!S.settings[el.dataset.t]));
 }
@@ -448,6 +460,27 @@ document.querySelectorAll('.step').forEach(el=>{
   plus.onclick  = ()=>{ S.settings[k] = Math.min(mx, S.settings[k]+st); save(); renderSetup(); };
 });
 document.querySelectorAll('.toggle').forEach(el=>el.onclick=()=>{ S.settings[el.dataset.t] = !S.settings[el.dataset.t]; save(); renderSetup(); });
+function renderTeams(){
+  $('#teamsBox').innerHTML = S.teams.map((t,i)=>`<div class="team" style="--c:${COLORS[i]}">
+    <input class="tname" data-ti="${i}" value="${esc(t.name)}" maxlength="20" aria-label="اسم الفريق">
+    <form class="row add" data-ti="${i}" autocomplete="off"><input placeholder="ضيف عضو للفريق" maxlength="18"><button class="btn" type="submit">إضافة</button></form>
+    <div class="chips">${t.members.map((m,j)=>`<div class="chip">${esc(m)}<button data-ti="${i}" data-mj="${j}" aria-label="حذف">×</button></div>`).join('')}</div>
+    ${t.members.length?'':'<div class="hint">الأعضاء اختياري، بس بيبيّنوا تحت جرس الفريق.</div>'}
+  </div>`).join('');
+}
+$('#modeSeg').addEventListener('click', e=>{ const m=e.target.dataset.mode; if(!m) return; S.mode=m; save(); renderSetup(); });
+$('#teamsBox').addEventListener('input', e=>{ if(e.target.classList.contains('tname')){ const i=+e.target.dataset.ti; S.teams[i].name = e.target.value.trim() || ('الفريق '+(i+1)); save(); } });
+$('#teamsBox').addEventListener('submit', e=>{
+  e.preventDefault();
+  const i=+e.target.dataset.ti, inp=e.target.querySelector('input'), n=inp.value.trim();
+  if(!n) return;
+  S.teams[i].members.push(n); save(); renderTeams();
+  $(`#teamsBox form[data-ti="${i}"] input`).focus();
+});
+$('#teamsBox').addEventListener('click', e=>{
+  const b=e.target.closest('[data-mj]'); if(!b) return;
+  S.teams[+b.dataset.ti].members.splice(+b.dataset.mj,1); save(); renderTeams();
+});
 $('#startBtn').onclick = ()=>{ audio(); show('game'); newSong(false); };
 
 /* ---------- screens ---------- */
@@ -455,7 +488,7 @@ function show(id){ ['setup','game','end'].forEach(s=>$('#'+s).classList.toggle('
 $('#backBtn').onclick = ()=>{ stopTimer(); phase='idle'; show('setup'); };
 $('#endBtn').onclick = ()=>{ stopTimer(); phase='idle'; renderEnd(); show('end'); };
 $('#resumeBtn').onclick = ()=>{ show('game'); render(); };
-$('#againBtn').onclick = ()=>{ S.players.forEach(p=>p.score=0); S.round=1; save(); show('game'); newSong(false); };
+$('#againBtn').onclick = ()=>{ units().forEach(p=>p.score=0); S.round=1; save(); show('game'); newSong(false); };
 
 /* ---------- song bank ---------- */
 function renderSong(){
@@ -493,15 +526,16 @@ function judge(kind){ // 'right' | 'wrong' | 'timeout'
   const d = kind==='right' ? S.settings.right : -S.settings[kind];
   p.score += d; save();
   kind==='right' ? SND.good() : SND.bad();
-  const others = S.players.some(q=>!locked.has(q.id));
+  const others = units().some(q=>!locked.has(q.id));
   const name = p.name;
+  const ds = d ? '\u2066'+(d>0?'+':'')+d+'\u2069' : '';
   if(kind==='right'){
-    phase='result'; render({msg:`✅ صح! ${name} +${d}`, delta:[p.id,d]});
+    phase='result'; render({msg:`✅ صح! ${name} ${ds}`, delta:[p.id,d]});
   } else if(S.settings.reopen && others){
     phase='armed'; const who=current; current=null;
-    render({msg: (kind==='timeout'?`⏰ خلص الوقت! ${name} ${d||''}`:`❌ غلط! ${name} ${d||''}`), sub:'الجرس مفتوح للباقيين', delta:[who,d]});
+    render({msg: (kind==='timeout'?`⏰ خلص الوقت! ${name} ${ds}`:`❌ غلط! ${name} ${ds}`), sub: S.mode==='teams' ? 'الجرس مفتوح للفريق التاني' : 'الجرس مفتوح للباقيين', delta:[who,d]});
   } else {
-    phase='result'; render({msg: (kind==='timeout'?`⏰ خلص الوقت! ${name} ${d||''}`:`❌ غلط! ${name} ${d||''}`), sub:'ما حدا عرفها', delta:[p.id,d]});
+    phase='result'; render({msg: (kind==='timeout'?`⏰ خلص الوقت! ${name} ${ds}`:`❌ غلط! ${name} ${ds}`), sub:'ما حدا عرفها', delta:[p.id,d]});
   }
 }
 function stopTimer(){ cancelAnimationFrame(raf); raf=0; }
@@ -544,7 +578,8 @@ function render(info={}){
 
   const bells = $('#bells');
   bells.parentElement.classList.toggle('armed', phase==='armed');
-  bells.innerHTML = S.players.map((q,i)=>{
+  bells.classList.toggle('teams', S.mode==='teams');
+  bells.innerHTML = units().map((q,i)=>{
     const cls = ['bell'];
     if(q.id===current) cls.push('first');
     else if(phase==='answering' || (phase==='armed' && locked.has(q.id))) cls.push('out');
@@ -553,6 +588,7 @@ function render(info={}){
       <span class="adj"><button data-adj="1" data-pid="${q.id}">+</button><button data-adj="-1" data-pid="${q.id}">−</button></span>
       <div class="dome">${EMOJI}</div>
       <div class="nm">${esc(q.name)}</div>
+      ${q.members && q.members.length ? `<div class="mem">${q.members.map(esc).join('، ')}</div>` : ''}
       <div class="sc">${q.score}</div>
     </div>`;
   }).join('');
@@ -584,7 +620,7 @@ document.addEventListener('keydown', e=>{
   if($('#game').classList.contains('hidden') || e.repeat) return;
   const k = e.key.toUpperCase();
   const i = KEYS.indexOf(k);
-  if(i>=0 && i<S.players.length){ audio(); buzz(S.players[i].id); return; }
+  if(i>=0 && i<units().length){ audio(); buzz(units()[i].id); return; }
   if(e.key==='Enter' || e.key===' '){
     e.preventDefault();
     if(phase==='idle') arm(); else if(phase==='result') newSong(true);
@@ -593,7 +629,7 @@ document.addEventListener('keydown', e=>{
 
 /* ---------- end ---------- */
 function renderEnd(){
-  const sorted = [...S.players].sort((a,b)=>b.score-a.score);
+  const sorted = [...units()].sort((a,b)=>b.score-a.score);
   const medals = ['🥇','🥈','🥉'];
   let pos=0, prev=null;
   $('#podium').innerHTML = sorted.map((p,i)=>{ if(p.score!==prev){pos=i;prev=p.score;} return `<div class="rank ${pos===0?'r1':''}"><span class="pos">${medals[pos]||pos+1}</span><span class="n">${esc(p.name)}</span><span class="s">${p.score}</span></div>`; }).join('');
