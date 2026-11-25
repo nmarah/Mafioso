@@ -66,6 +66,14 @@ input{font:inherit}
 .team .add input{padding:10px;font-size:16px}
 .team .add .btn{padding:10px 14px}
 .team .chips{margin-top:10px}
+.songform{display:flex;flex-direction:column;gap:8px}
+.songform input,.songform textarea{background:var(--bg);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:12px;font:inherit;font-size:16px;outline:none;user-select:text;-webkit-user-select:text;resize:vertical}
+.songform input:focus,.songform textarea:focus{border-color:var(--gold)}
+.songform .btn{align-self:flex-start}
+.bankcount{color:var(--muted);margin-top:12px;font-size:14px}
+.cs{display:flex;justify-content:space-between;align-items:center;gap:8px;background:var(--panel2);border-radius:10px;padding:10px 12px;margin-top:8px}
+.cs .sub{color:var(--muted);font-size:13px;margin-top:2px}
+.cs .btn{padding:6px 12px;font-size:14px;flex:none}
 .team .hint{color:var(--muted);font-size:13px;margin-top:8px}
 
 /* ---------- game ---------- */
@@ -194,6 +202,18 @@ input{font:inherit}
     </div>
   </div>
 
+  <div class="card">
+    <h2>أغانيكم الخاصة</h2>
+    <form class="songform" id="songForm" autocomplete="off">
+      <input id="sfTitle" placeholder="اسم الأغنية — المغنّي" maxlength="80">
+      <textarea id="sfFusha" rows="3" placeholder="الكلام بالفصحى (كل سطر لحاله)"></textarea>
+      <textarea id="sfOrig" rows="3" placeholder="الكلام الأصلي بالعامية (اختياري)"></textarea>
+      <button class="btn gold" type="submit">إضافة الأغنية</button>
+    </form>
+    <div class="bankcount" id="bankCount"></div>
+    <div id="customList"></div>
+  </div>
+
   <div class="start"><button class="btn gold big" id="startBtn" disabled>ابدأ اللعبة</button></div>
 </section>
 
@@ -240,7 +260,7 @@ const KEYS = ['A','L','Q','P','Z','M','S','K','W','O','X','N'];
 const EMOJI = '🔔';
 
 /* أغاني مشهورة بالعامية: f = بالفصحى (للمقدّم يقرأها)، o = الكلام الأصلي، a = الأغنية والمغنّي */
-const BANK = [
+const BUILTIN = [
   {a:'نور العين — عمرو دياب',
    f:'حبيبي يا ضياءَ العين، يا ساكنًا في خيالي\nأنا عاشقٌ منذ سنين، ولا أحدَ غيرُك في بالي\nأجملُ عيونٍ في الكون قد رأيتُها\nاللهُ عليك، اللهُ على سِحرِها',
    o:'حبيبي يا نور العين، يا ساكن خيالي\nعاشق بقالي سنين، ولا غيرك في بالي\nأجمل عيون في الكون أنا شفتها\nالله عليك الله، على سحرها'},
@@ -382,16 +402,172 @@ const BANK = [
   {a:'فوق النخل — تراث عراقي',
    f:'فوقَ النخلِ فوق، يا أبي فوقَ النخلِ فوق\nلا أدري أهو لمعانُ خدِّه يا أبي، أم القمرُ فوق',
    o:'فوق النخل فوق، يابا فوق النخل فوق\nمدري لمع خدّه يابا، مدري القمر فوق'},
+  {a:'علّي صوتك — محمد منير',
+   f:'ارفعْ صوتَك بالغناء\nفما زالت الأغاني ممكنة',
+   o:'علّي صوتك بالغنا\nلسّه الأغاني ممكنة'},
+  {a:'إزاي — محمد منير',
+   f:'كيف ترضين لي يا حبيبتي؟',
+   o:'إزاي ترضيلي حبيبتي؟'},
+  {a:'علّي الكوفية — محمد عساف',
+   f:'ارفعِ الكوفيّة، ارفعْها ولوِّحْ بها\nوغنِّ العتابا والميجانا والسامر بها',
+   o:'علّي الكوفية، علّي ولوّح فيها\nوغنّي عتابا وميجانا وسامر فيها'},
+  {a:'كلام الناس — جورج وسوف',
+   f:'كلامُ الناس\nلا يُقدِّمُ ولا يُؤخِّر',
+   o:'كلام الناس\nلا بيقدّم ولا بيأخّر'},
+  {a:'غريبة الناس — وائل جسار',
+   f:'عجيبٌ أمرُ الناس\nعجيبةٌ هذه الدنيا',
+   o:'غريبة الناس\nغريبة الدنيا ديّه'},
+  {a:'أجمل إحساس — إليسا',
+   f:'أجملُ شعورٍ في الكون',
+   o:'أجمل إحساس في الكون'},
+  {a:'ليه بيداري كده — روبي',
+   f:'لماذا يُخفي الأمرَ هكذا؟',
+   o:'ليه بيداري كده؟'},
+  {a:'داري يا قلبي — حمزة نمرة',
+   f:'أخفِ ما بك يا قلبي',
+   o:'داري يا قلبي'},
+  {a:'يا الميدان — كايروكي',
+   f:'أيّها الميدان\nأين كنتَ منذ زمن؟',
+   o:'يا الميدان\nكنت فين من زمان؟'},
+  {a:'سيدي منصور — صابر الرباعي',
+   f:'يا سيّدي منصور يا أبي',
+   o:'سيدي منصور يا بابا'},
+  {a:'على قد الشوق — عبد الحليم حافظ',
+   f:'بقدرِ الشوقِ الذي في عينيّ\nيا جميلُ سلِّم',
+   o:'على قد الشوق اللي في عيوني\nيا جميل سلّم'},
+  {a:'أهواك — عبد الحليم حافظ',
+   f:'أهواك، وأتمنّى لو أنساك\nوأنسى نفسي معك',
+   o:'أهواك، وأتمنّى لو أنساك\nوأنسى روحي وياك'},
+  {a:'موعود — عبد الحليم حافظ',
+   f:'محكومٌ عليك بالعذابِ معي\nمحكومٌ يا قلبي',
+   o:'موعود معايا بالعذاب\nموعود يا قلبي'},
+  {a:'بتلوموني ليه — عبد الحليم حافظ',
+   f:'لماذا تلومونني؟\nلو رأيتم عينيه\nكم هما جميلتان!',
+   o:'بتلوموني ليه؟\nلو شفتم عينيه\nحلوين قد إيه'},
+  {a:'صافيني مرة — عبد الحليم حافظ',
+   f:'صالِحْني مرّة\nوخاصِمْني مرّة',
+   o:'صافيني مرة\nوجافيني مرة'},
+  {a:'توبة — عبد الحليم حافظ',
+   f:'أتوبُ… إن أحببتُك مرّةً أخرى\nأتوب',
+   o:'توبة… إن كنت أحبك تاني\nتوبة'},
+  {a:'جبّار — عبد الحليم حافظ',
+   f:'جبّارٌ أنت\nحتى في رقّتِك جبّار',
+   o:'جبّار\nفي رقّتك جبّار'},
+  {a:'حب إيه — أم كلثوم',
+   f:'أيُّ حبٍّ هذا\nالذي جئتَ تتحدّثُ عنه؟',
+   o:'حب إيه\nاللي إنت جاي تقول عليه؟'},
+  {a:'فكّروني — أم كلثوم',
+   f:'ذكّروني… كيف؟\nوهل نسيتُك أصلًا؟',
+   o:'فكّروني… إزاي؟\nهو أنا نسيتك؟'},
+  {a:'أمل حياتي — أم كلثوم',
+   f:'يا أملَ حياتي\nيا حبًّا غاليًا لا ينتهي',
+   o:'أمل حياتي\nيا حب غالي ما ينتهيش'},
+  {a:'بعيد عنك — أم كلثوم',
+   f:'بعيدًا عنك حياتي عذاب\nفلا تُبعدْني بعيدًا عنك',
+   o:'بعيد عنك حياتي عذاب\nما تبعدنيش بعيد عنك'},
+  {a:'أروح لمين — أم كلثوم',
+   f:'إلى مَن أذهبُ وأقولُ: يا تُرى مَن\nيُنصفُني منك؟',
+   o:'أروح لمين وأقول يا مين\nينصفني منك؟'},
+  {a:'الربيع — فريد الأطرش',
+   f:'ها هو الربيعُ\nقد عاد من جديد',
+   o:'آدي الربيع\nعاد من تاني'},
+  {a:'عيون القلب — نجاة',
+   f:'عيونُ القلبِ ساهرةٌ لا تنام\nفلا أنا مستيقظةٌ ولا نائمة',
+   o:'عيون القلب سهرانة ما بتنامشي\nلا أنا صاحية ولا نايمة'},
+  {a:'قولوا لعين الشمس — شادية',
+   f:'قولوا لعينِ الشمسِ ألّا تشتدّ\nفغزالُ البرِّ سيمشي في الصباح',
+   o:'قولوا لعين الشمس ما تحماشي\nلحسن غزال البرّ صابح ماشي'},
+  {a:'يا دبلة الخطوبة — شادية',
+   f:'يا خاتمَ الخطوبة\nعسى أن يأتيَ دورُنا جميعًا',
+   o:'يا دبلة الخطوبة\nعقبالنا كلّنا'},
+  {a:'عالبساطة — صباح',
+   f:'على البساطةِ، البساطة\nما أجملَ البساطة!',
+   o:'عالبساطة البساطة\nيا عيني عالبساطة'},
+  {a:'لبنان يا قطعة سما — وديع الصافي',
+   f:'يا لبنانُ\nيا قطعةً من السماء',
+   o:'لبنان\nيا قطعة سما'},
+  {a:'يا ريت — فيروز',
+   f:'ليتَك أنتَ وأنا في البيت\nفي بيتٍ ما، أبعدِ بيت',
+   o:'يا ريت إنت وأنا بالبيت\nشي بيت أبعد بيت'},
+  {a:'شتي يا دنيي — فيروز',
+   f:'أمطري يا دنيا\nليزيدَ موسمُنا ويحلو',
+   o:'شتي يا دنيي\nتيزيد موسمنا ويحلا'},
+  {a:'أنا وشادي — فيروز',
+   f:'منذ زمنٍ، وأنا صغيرة\nكان هناك صبيٌّ يأتي من الأحراش\nألعبُ أنا وإيّاه\nوكان اسمُه شادي',
+   o:'من زمان، أنا وزغيرة\nكان في صبي يجي من الأحراش\nألعب أنا وياه\nكان اسمه شادي'},
+  {a:'عودك رنّان — فيروز',
+   f:'عودُك رنّان\nورنّةُ عودِك لي',
+   o:'عودك رنّان\nرنّة عودك إلي'},
+  {a:'يا جبل البعيد — فيروز',
+   f:'يا أيّها الجبلُ البعيد\nخلفَك أحبّتُنا',
+   o:'يا جبل البعيد\nخلفك حبايبنا'},
+  {a:'رجعت الشتوية — فيروز',
+   f:'عاد الشتاء\nفظلَّ تذكّرْني',
+   o:'رجعت الشتوية\nضلّ افتكر فيّي'},
+  {a:'حبّوا بعضن — فيروز',
+   f:'أحبَّ أحدُهما الآخر\nثمّ تركَ أحدُهما الآخر',
+   o:'حبّوا بعضن\nوتركوا بعضن'},
+  {a:'طيري يا طيارة — فيروز',
+   f:'طيري يا طائرةَ الورقِ طيري\nيا ورقًا وخيوطًا',
+   o:'طيري يا طيّارة طيري\nيا ورق وخيطان'},
+  {a:'البنت الشلبية — فيروز',
+   f:'الفتاةُ الحسناء\nعيناها لوزيّتان',
+   o:'البنت الشلبية\nعيونها لوزية'},
+  {a:'يا حلو صبّح — محمد قنديل',
+   f:'يا جميلُ قُلْ صباحَ الخير، يا جميلُ أطِلّ\nيا جميلُ قُلْ صباحَ الخير، فنهارُنا كالفُلّ',
+   o:'يا حلو صبّح، يا حلو طُلّ\nيا حلو صبّح، نهارنا فُلّ'},
+  {a:'يا بهيّة — تراث مصري / الشيخ إمام',
+   f:'يا بهيّةُ أخبريني، آهٍ\nعمّن قتلَ ياسين',
+   o:'يا بهيّة وخبّريني يا بوي\nعاللي قتل ياسين'},
+  {a:'البحر بيضحك ليه — الشيخ إمام',
+   f:'لماذا يضحكُ البحر\nوأنا نازلةٌ أتدلّلُ لأملأَ الجِرار؟',
+   o:'البحر بيضحك ليه\nوأنا نازلة أدلّع أملا القلل'},
+  {a:'اتمخطري يا حلوة يا زينة — أغنية أفراح',
+   f:'تبختري يا جميلةُ يا زينة\nيا وردةً من داخلِ حديقة',
+   o:'اتمخطري يا حلوة يا زينة\nيا وردة من جوّا جنينة'},
+  {a:'الحنّة يا قطر الندى — أغنية أفراح',
+   f:'الحِنّاءُ الحِنّاء\nيا قطرةَ الندى',
+   o:'الحنّة الحنّة\nيا قطر الندى'},
+  {a:'رمضان جانا — محمد عبد المطلب',
+   f:'جاءنا رمضانُ ففرحنا به\nبعد غيابِه، وقد مضى عليه زمن',
+   o:'رمضان جانا وفرحنا به\nبعد غيابه، وبقاله زمان'},
+  {a:'المسحّراتي — سيد مكاوي',
+   f:'استيقظْ أيّها النائم\nووحِّدِ الدائم',
+   o:'اصحى يا نايم\nوحّد الدايم'},
+  {a:'الأرض بتتكلم عربي — سيد مكاوي',
+   f:'الأرضُ تتكلّمُ العربيّة',
+   o:'الأرض بتتكلّم عربي'},
+  {a:'ماما زمانها جاية — محمد فوزي',
+   f:'أمّي على وشكِ المجيء\nستأتي بعد قليل',
+   o:'ماما زمانها جاية\nجاية بعد شويّة'},
+  {a:'الدنيا ربيع — سعاد حسني',
+   f:'الدنيا ربيعٌ والجوُّ بديع\nفأغلِقْ لي كلَّ المواضيع',
+   o:'الدنيا ربيع والجو بديع\nقفّل لي على كل المواضيع'},
+  {a:'يا واد يا تقيل — سعاد حسني',
+   f:'يا أيّها الفتى الثقيل',
+   o:'يا واد يا تقيل'},
+  {a:'أنا قلبي دليلي — ليلى مراد',
+   f:'قلبي هو دليلي\nقال لي: ستُحبّين',
+   o:'أنا قلبي دليلي\nقال لي هتحبّي'},
+  {a:'سلامتها أم حسن — أغنية شعبية',
+   f:'عافاها الله، أمَّ حسن\nمن العينِ ومن الحسد',
+   o:'سلامتها أم حسن\nمن العين ومن الحسد'},
+  {a:'هيهات يا بو الزلف — تراث شامي',
+   f:'هيهاتَ يا صاحبَ الخُصلة\nيا عيني يا موليّا',
+   o:'هيهات يا بو الزلف\nعيني يا موليّا'},
 ];
+let BANK = BUILTIN;
 
 /* ---------- state ---------- */
-const DEF = {mode:'solo', players:[], teams:null, settings:{time:30,right:1,wrong:1,timeout:1,reopen:true,bank:true}, round:1, songIdx:0, order:null};
+const DEF = {mode:'solo', players:[], teams:null, settings:{time:30,right:1,wrong:1,timeout:1,reopen:true,bank:true}, round:1, songIdx:0, order:null, custom:[]};
 let S;
 try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem('fusha-game')||'{}')); S.settings = Object.assign({}, DEF.settings, S.settings||{}); } catch(e){ S = JSON.parse(JSON.stringify(DEF)); }
 if (!Array.isArray(S.teams) || S.teams.length!==2) S.teams = [
   {id:'t1', name:'الفريق الأحمر', score:0, members:[]},
   {id:'t2', name:'الفريق الأزرق', score:0, members:[]}];
 if (S.mode!=='teams') S.mode='solo';
+if (!Array.isArray(S.custom)) S.custom = [];
+BANK = BUILTIN.concat(S.custom);
 if (!Array.isArray(S.order) || S.order.length !== BANK.length) S.order = shuffle([...BANK.keys()]);
 const save = () => { try { localStorage.setItem('fusha-game', JSON.stringify(S)); } catch(e){} };
 
@@ -426,7 +602,36 @@ const SND = {
 function vibrate(p){ try{ navigator.vibrate && navigator.vibrate(p); }catch(e){} }
 
 /* ---------- setup screen ---------- */
+function renderCustom(){
+  $('#bankCount').textContent = `عدد الأغاني باللعبة: ${BANK.length}` + (S.custom.length ? ` (منها ${S.custom.length} من عندكم)` : '');
+  $('#customList').innerHTML = S.custom.map((c,i)=>`<div class="cs"><div><b>${esc(c.a)}</b><div class="sub">${esc(c.f.split('\n')[0])}</div></div><button class="btn" data-cdel="${i}">حذف</button></div>`).join('');
+}
+$('#songForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const a=$('#sfTitle').value.trim(), f=$('#sfFusha').value.trim(), o=$('#sfOrig').value.trim();
+  if(!a){ $('#sfTitle').focus(); return; }
+  if(!f){ $('#sfFusha').focus(); return; }
+  const oldLen = BANK.length;
+  S.custom.push({a, f, o});
+  BANK = BUILTIN.concat(S.custom);
+  // حطّ الأغنية الجديدة بمكان عشوائي من الأغاني اللي لسّا ما طلعت
+  const cur = S.songIdx % oldLen;
+  const pos = cur + 1 + Math.floor(Math.random() * (oldLen - cur));
+  S.order.splice(pos, 0, BANK.length - 1);
+  $('#sfTitle').value = $('#sfFusha').value = $('#sfOrig').value = '';
+  save(); renderCustom();
+});
+$('#customList').addEventListener('click', e=>{
+  const b = e.target.closest('[data-cdel]'); if(!b) return;
+  const i = +b.dataset.cdel;
+  if(!confirm(`حذف «${S.custom[i].a}»؟`)) return;
+  S.custom.splice(i,1);
+  BANK = BUILTIN.concat(S.custom);
+  S.order = shuffle([...BANK.keys()]); S.songIdx = 0;
+  save(); renderCustom();
+});
 function renderSetup(){
+  renderCustom();
   const chips = $('#chips');
   chips.innerHTML = S.players.map((p,i)=>`<div class="chip"><span class="dot" style="background:${COLORS[i%COLORS.length]}"></span>${esc(p.name)}<button data-del="${p.id}" aria-label="حذف">×</button></div>`).join('');
   $('#emptyMsg').classList.toggle('hidden', S.players.length>0);
@@ -496,7 +701,9 @@ function renderSong(){
   const s = BANK[S.order[S.songIdx % BANK.length]];
   $('#lyric').textContent = s.f;
   $('#ansTitle').textContent = '🎵 ' + s.a;
-  $('#ansOrig').textContent = s.o;
+  $('#ansOrig').textContent = s.o || '';
+  $('#ansOrig').classList.toggle('hidden', !s.o);
+  document.querySelector('#answer .ol').classList.toggle('hidden', !s.o);
   $('#answer').classList.add('blur');
   $('#revealBtn').textContent = 'إظهار الجواب';
   $('#songCount').textContent = `${(S.songIdx % BANK.length)+1} / ${BANK.length}`;
